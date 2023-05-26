@@ -2,6 +2,6 @@
 
 int main()
 {
-	std::cout << "brock obama" << std::endl;
+	std::cout << "world" << std::endl;
 	return 0;
 }
