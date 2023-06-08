@@ -1,19 +1,32 @@
 #include <iostream>
+#include <chrono>
+#include "Game.h"
 #include "SDL.h"
 int main(int argc, char* argv[])
 {
-	bool gameRunning = true;
+	Game& myGameInstance = Game::GetInstance();
+	int result = myGameInstance.Init("GAME1017", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 
-	SDL_Window* pWindow;
-	SDL_Renderer* pRenderer;
-	pWindow = SDL_CreateWindow("Aeon Cronicles", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1080, 780,0);
-
-	
-
-	while (gameRunning == true)
+	if (result == 0)
 	{
-		
+		auto lastFrameTime = std::chrono::high_resolution_clock::now();
+		while (myGameInstance.IsRunning())
+		{
+			auto thisFrameTime = std::chrono::high_resolution_clock::now();
+
+			std::chrono::duration<float> lastFrameDurration = thisFrameTime - lastFrameTime;
+
+			float deltaTime = lastFrameDurration.count();
+
+			lastFrameTime = thisFrameTime;
+
+			myGameInstance.HandleEvents();
+			myGameInstance.Update(deltaTime);
+			myGameInstance.Render();
+
+		}
+		myGameInstance.Clean();
 	}
-	std::cout << "world" << std::endl;
-	return 0;
+
+	return result;
 }
