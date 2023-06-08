@@ -1,5 +1,5 @@
 #pragma once
-#include <sdl.h>
+#include <SDL.h>
 class Game
 {
 public:
@@ -9,6 +9,7 @@ public:
 
 	int Init(const char* title, int Xpos, int Ypos);
 	bool IsRunning();
+	bool KeyDown(SDL_Scancode key);
 	void HandleEvents();
 	void Quit();
 	void Update(float deltaTime);

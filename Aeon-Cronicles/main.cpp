@@ -1,7 +1,10 @@
 #include <iostream>
+#include <SDL.h>
 #include <chrono>
 #include "Game.h"
-#include "SDL.h"
+#include "states.h"
+#include "stateManager.h"
+
 int main(int argc, char* argv[])
 {
 	Game& myGameInstance = Game::GetInstance();
