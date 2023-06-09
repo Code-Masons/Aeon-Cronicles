@@ -38,9 +38,11 @@ class GameState : public State//main game loop screen
 
 	//game objects 
 	GameObject* m_player;
+	GameObject* m_enemy;
 
 	//textures
 	SDL_Texture* m_pPlayerTexture;
+	SDL_Texture* m_pEnemyTexture;
 
 	//Mix_Music* m_pMusic;
 
@@ -61,5 +63,15 @@ public:
 	virtual void Render() override;
 	virtual void Exit() override;
 };
+
+class LoseState : public State//pause screen
+{
+public:
+	virtual void Enter() override;
+	virtual void Update(float deltaTime) override;
+	virtual void Render() override;
+	virtual void Exit() override;
+};
+
 
 

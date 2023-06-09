@@ -3,6 +3,7 @@
 #include "StateManager.h"
 #include "Game.h"
 #include "GameObject.h"
+#include "CollisionManager.h"
 #include "MathManager.h"
 
 void TitleState::Enter()
@@ -38,9 +39,11 @@ void GameState::Enter()
 
 	//define game objects here
 	m_player = new GameObject(Game::kWidth / 2, Game::kHeight / 2, 100, 100, 0, 200, 0, 255);
+	m_enemy = new GameObject(100, 100, 100, 100, 0, 200, 0, 255);
 
 	//load textures for game state here
 	m_pPlayerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/player.png");
+	m_pEnemyTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/enemy.png");
 	
 }
 
@@ -74,6 +77,14 @@ void GameState::Update(float deltaTime)
 		{
 			m_player->UpdatePositionX(kPlayerSpeed * deltaTime);
 		}
+
+		if (CollisionManager::AABBCheck(m_player->GetTransform(), m_enemy->GetTransform()))
+		{
+			std::cout << "player collides with enemy" << std::endl;
+			StateManager::PushState(new LoseState);
+
+		}
+
 	}
 }
 
@@ -89,6 +100,9 @@ void GameState::Render()
 	
 	SDL_Rect playerIntRect = MathManager::ConvertFRect2Rect(m_player->GetTransform());
 	SDL_RenderCopy(pRenderer, m_pPlayerTexture, nullptr, &playerIntRect);
+
+	SDL_Rect enemyintRect = MathManager::ConvertFRect2Rect(m_enemy->GetTransform());
+	SDL_RenderCopy(pRenderer, m_pEnemyTexture, nullptr, &enemyintRect);
 }
 
 void GameState::Resume()
@@ -103,7 +117,11 @@ void GameState::Exit()
 	delete m_player;
 	m_player = nullptr;
 
+	delete m_enemy;
+	m_enemy = nullptr;
+
 	SDL_DestroyTexture(m_pPlayerTexture);
+	SDL_DestroyTexture(m_pEnemyTexture);
 
 }
 
@@ -140,4 +158,32 @@ void PauseState::Render()
 void PauseState::Exit()
 {
 	std::cout << "exiting pause state" << std::endl;
+}
+
+void LoseState::Enter()
+{
+	std::cout << "entering lose state" << std::endl;
+}
+
+void LoseState::Update(float deltaTime)
+{
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))
+	{
+		std::cout << "changing to title state" << std::endl;
+		StateManager::ChangeState(new TitleState());
+	}
+}
+
+void LoseState::Render()
+{
+	SDL_Renderer* pRenderer = Game::GetInstance().GetRenderer();
+
+
+	SDL_SetRenderDrawColor(pRenderer, 200, 0, 0, 255);
+	SDL_RenderClear(pRenderer);
+}
+
+void LoseState::Exit()
+{
+	std::cout << "exiting lose state" << std::endl;
 }

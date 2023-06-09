@@ -157,6 +157,7 @@ copy "$(SolutionDir)lib\SDLImage\lib\W64\SDL2_image.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="main.cpp" />
@@ -166,6 +167,7 @@ copy "$(SolutionDir)lib\SDLImage\lib\W64\SDL2_image.dll" "$(OutDir)"</Command>
     <ClCompile Include="States.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="MathManager.h" />
