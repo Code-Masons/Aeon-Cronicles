@@ -2,6 +2,8 @@
 #include "States.h"
 #include "StateManager.h"
 #include "Game.h"
+#include "GameObject.h"
+#include "MathManager.h"
 
 void TitleState::Enter()
 {
@@ -33,6 +35,13 @@ void TitleState::Exit()
 void GameState::Enter()
 {
 	std::cout << "entering game state" << std::endl;
+
+	//define game objects here
+	m_player = new GameObject(Game::kWidth / 2, Game::kHeight / 2, 100, 100, 0, 200, 0, 255);
+
+	//load textures for game state here
+	m_pPlayerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/player.png");
+	
 }
 
 void GameState::Update(float deltaTime)
@@ -42,6 +51,30 @@ void GameState::Update(float deltaTime)
 	std::cout << "changing to pause state" << std::endl;
 	StateManager::PushState(new PauseState());
 	}
+
+	else
+	{
+		//PLAYER MOVEMENT
+		if (Game::GetInstance().KeyDown(SDL_SCANCODE_W))
+		{
+			m_player->UpdatePositionY(-kPlayerSpeed * deltaTime);
+		}
+
+		if (Game::GetInstance().KeyDown(SDL_SCANCODE_S))
+		{
+			m_player->UpdatePositionY(kPlayerSpeed * deltaTime);
+		}
+
+		if (Game::GetInstance().KeyDown(SDL_SCANCODE_A))
+		{
+			m_player->UpdatePositionX(-kPlayerSpeed * deltaTime);
+		}
+
+		if (Game::GetInstance().KeyDown(SDL_SCANCODE_D))
+		{
+			m_player->UpdatePositionX(kPlayerSpeed * deltaTime);
+		}
+	}
 }
 
 void GameState::Render()
@@ -49,8 +82,13 @@ void GameState::Render()
 	std::cout << "rendering game state..." << std::endl;
 
 	SDL_Renderer* pRenderer = Game::GetInstance().GetRenderer();
+
+
 	SDL_SetRenderDrawColor(pRenderer, 0, 0, 200, 255);
 	SDL_RenderClear(pRenderer);
+	
+	SDL_Rect playerIntRect = MathManager::ConvertFRect2Rect(m_player->GetTransform());
+	SDL_RenderCopy(pRenderer, m_pPlayerTexture, nullptr, &playerIntRect);
 }
 
 void GameState::Resume()
@@ -61,6 +99,12 @@ void GameState::Resume()
 void GameState::Exit()
 {
 	std::cout << "exiting game state" << std::endl;
+
+	delete m_player;
+	m_player = nullptr;
+
+	SDL_DestroyTexture(m_pPlayerTexture);
+
 }
 
 void PauseState::Enter()

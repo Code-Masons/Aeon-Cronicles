@@ -1,8 +1,10 @@
 #pragma once
 #include <SDL.h>
+#include "SDL_image.h"
 #include <vector>
 #include<string>
 #include <map>
+#include "GameObject.h"
 class State
 {
 public:
@@ -34,6 +36,11 @@ class GameState : public State//main game loop screen
 	static const int kPlayerSpeed = 200;
 	SDL_FRect m_rectangleTransform;
 
+	//game objects 
+	GameObject* m_player;
+
+	//textures
+	SDL_Texture* m_pPlayerTexture;
 
 	//Mix_Music* m_pMusic;
 
@@ -43,7 +50,6 @@ public:
 	virtual void Render() override;
 	virtual void Exit() override;
 	virtual void Resume() override;
-
 
 };
 
