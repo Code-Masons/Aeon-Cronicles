@@ -8,7 +8,7 @@
 int main(int argc, char* argv[])
 {
 	Game& myGameInstance = Game::GetInstance();
-	int result = myGameInstance.Init("GAME1017", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+	int result = myGameInstance.Init("GAME 1017", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 
 	if (result == 0)
 	{
