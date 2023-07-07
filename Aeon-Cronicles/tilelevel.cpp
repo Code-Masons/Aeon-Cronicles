@@ -46,7 +46,7 @@ bool TileLevel::loadLevel(SDL_Renderer* renderer)
         for (int col = 0; col < tiles[row].size(); ++col)
         {
             int tileID = tiles[row][col];
-            std::string imagePath = "tile" + std::to_string(tileID) + ".png";
+            std::string imagePath = "./assets/terrain.png";
 
             // Load the image using SDL_image
             SDL_Surface* surface = IMG_Load(imagePath.c_str());

@@ -5,6 +5,8 @@
 #include<string>
 #include <map>
 #include "GameObject.h"
+#include "tilelevel.h"
+
 class State
 {
 public:
@@ -39,6 +41,7 @@ class GameState : public State//main game loop screen
 	//game objects 
 	GameObject* m_player;
 	GameObject* m_enemy;
+	TileLevel* tileLevel;
 
 	//textures
 	SDL_Texture* m_pPlayerTexture;
