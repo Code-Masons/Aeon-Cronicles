@@ -36,25 +36,34 @@ void TitleState::Exit()
 
 void GameState::Enter()
 {
+
 	std::cout << "entering game state" << std::endl;
 
+	
+	
 	//define game objects here
 	m_player = new GameObject(Game::kWidth / 2, Game::kHeight / 2, 100, 100, 0, 200, 0, 255);
 	m_enemy = new GameObject(100, 100, 100, 100, 0, 200, 0, 255);
+  
 	tileLevel = new TileLevel();
+	m_background = new GameObject(0, 0, 2000, Game::kHeight);
 
 	//load textures for game state here
-	m_pPlayerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/player.png");
+	m_pPlayerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/playerbullet.png");
 	m_pEnemyTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/enemy.png");
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/background.png");
+
 	
 }
 
 void GameState::Update(float deltaTime)
 {
+	int levelWidth, levelHeight;
+	SDL_QueryTexture(m_pBackgroundTexture, NULL, NULL, &levelWidth, &levelHeight);
 	if (Game::GetInstance().KeyDown(SDL_SCANCODE_P))
 	{
-	std::cout << "changing to pause state" << std::endl;
-	StateManager::PushState(new PauseState());
+		std::cout << "changing to pause state" << std::endl;
+		StateManager::PushState(new PauseState());
 	}
 
 	else
@@ -88,6 +97,24 @@ void GameState::Update(float deltaTime)
 		}
 
 	}
+
+	camera.x = m_player->GetTransform().x - Game::kWidth / 2;
+	camera.y = m_player->GetTransform().y - Game::kHeight / 2;
+
+	//keep camera in bounds
+	if (camera.x < 0)
+		camera.x = 0;
+	if (camera.y < 0)
+		camera.y = 0;
+	if (camera.x > lWidth - camera.w)
+		camera.x = lWidth - camera.w;
+	if (camera.y > lHeight - camera.h)
+		camera.y = lHeight - camera.h;
+
+	if (camera.x + camera.w >= levelWidth)
+		camera.x = levelWidth - 2500;
+	if (camera.y + camera.h >= levelHeight)
+		camera.y = levelHeight - Game::kHeight;
 }
 
 void GameState::Render()
@@ -96,9 +123,11 @@ void GameState::Render()
 
 	SDL_Renderer* pRenderer = Game::GetInstance().GetRenderer();
 
-
 	SDL_SetRenderDrawColor(pRenderer, 0, 0, 200, 255);
 	SDL_RenderClear(pRenderer);
+
+	SDL_Rect backgroundIntRect = MathManager::ConvertFRect2Rect(m_background->GetTransform());
+	SDL_RenderCopy(pRenderer, m_pBackgroundTexture, &camera, &backgroundIntRect);
 	
 	SDL_Rect playerIntRect = MathManager::ConvertFRect2Rect(m_player->GetTransform());
 	SDL_RenderCopy(pRenderer, m_pPlayerTexture, nullptr, &playerIntRect);
@@ -108,6 +137,9 @@ void GameState::Render()
 
 	tileLevel->loadLevel(pRenderer);
 	tileLevel->render(pRenderer);
+  
+	playerIntRect.x = m_player->GetTransform().x - camera.x;
+	playerIntRect.y = m_player->GetTransform().y - camera.y;
 }
 
 void GameState::Resume()
@@ -127,12 +159,19 @@ void GameState::Exit()
 
 	delete tileLevel;
 	tileLevel = nullptr;
+  
+	delete m_background;
+	m_background = nullptr;
 
 	SDL_DestroyTexture(m_pPlayerTexture);
 	m_pPlayerTexture = nullptr;
 
 	SDL_DestroyTexture(m_pEnemyTexture);
+
 	m_pEnemyTexture = nullptr;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+
 
 }
 
