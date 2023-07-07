@@ -6,6 +6,7 @@
 #include "CollisionManager.h"
 #include "MathManager.h"
 
+
 void TitleState::Enter()
 {
 	std::cout << "entering title state " << std::endl;
@@ -43,6 +44,8 @@ void GameState::Enter()
 	//define game objects here
 	m_player = new GameObject(Game::kWidth / 2, Game::kHeight / 2, 100, 100, 0, 200, 0, 255);
 	m_enemy = new GameObject(100, 100, 100, 100, 0, 200, 0, 255);
+  
+	tileLevel = new TileLevel();
 	m_background = new GameObject(0, 0, 2000, Game::kHeight);
 
 	//load textures for game state here
@@ -132,6 +135,9 @@ void GameState::Render()
 	SDL_Rect enemyintRect = MathManager::ConvertFRect2Rect(m_enemy->GetTransform());
 	SDL_RenderCopy(pRenderer, m_pEnemyTexture, nullptr, &enemyintRect);
 
+	tileLevel->loadLevel(pRenderer);
+	tileLevel->render(pRenderer);
+  
 	playerIntRect.x = m_player->GetTransform().x - camera.x;
 	playerIntRect.y = m_player->GetTransform().y - camera.y;
 }
@@ -151,12 +157,21 @@ void GameState::Exit()
 	delete m_enemy;
 	m_enemy = nullptr;
 
+	delete tileLevel;
+	tileLevel = nullptr;
+  
 	delete m_background;
 	m_background = nullptr;
 
 	SDL_DestroyTexture(m_pPlayerTexture);
+	m_pPlayerTexture = nullptr;
+
 	SDL_DestroyTexture(m_pEnemyTexture);
+
+	m_pEnemyTexture = nullptr;
+
 	SDL_DestroyTexture(m_pBackgroundTexture);
+
 
 }
 
