@@ -10,8 +10,11 @@
 void TitleState::Enter()
 {
 	std::cout << "entering title state " << std::endl;
-}
 
+	GameName = new GameObject(Game::kWidth / 2 - 300, Game::kHeight / 3 - 200, 600, 400, 100, 100, 100, 255);
+
+	GameNameTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/GameName.png");
+}
 void TitleState::Update(float deltaTime)
 {
 
@@ -21,18 +24,23 @@ void TitleState::Update(float deltaTime)
 		StateManager::ChangeState(new GameState());//change to new game state
 	}
 }
-
 void TitleState::Render()
 {
 	std::cout << "rendering title state" << std::endl;
-	SDL_SetRenderDrawColor(Game::GetInstance().GetRenderer(), 255, 255, 0, 255);
-	SDL_RenderClear(Game::GetInstance().GetRenderer());
-}
 
+	SDL_Renderer* pRenderer = Game::GetInstance().GetRenderer();
+
+	SDL_SetRenderDrawColor(Game::GetInstance().GetRenderer(), 48, 25, 52, 255);
+	SDL_RenderClear(Game::GetInstance().GetRenderer());
+
+	SDL_Rect GameNameRect = MathManager::ConvertFRect2Rect(GameName->GetTransform());
+	SDL_RenderCopy(pRenderer, GameNameTexture, nullptr, &GameNameRect);
+}
 void TitleState::Exit()
 {
 	std::cout << "exiting title state" << std::endl;
 }
+
 
 void GameState::Enter()
 {
@@ -47,7 +55,7 @@ void GameState::Enter()
   
 	//tileLevel = new TileLevel();
 	m_background = new GameObject(0, 0, 2000, Game::kHeight);
-	tileLevel = new TileLevel();
+	tileLevel = new TileLevel(Game::kWidth, Game::kHeight);
 	tileLevel->loadLevelData();
 
 	//load textures for game state here
@@ -55,7 +63,6 @@ void GameState::Enter()
 	m_pEnemyTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/enemy.png");
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/background.png");
 }
-
 void GameState::Update(float deltaTime)
 {
 	int levelWidth, levelHeight;
@@ -66,18 +73,30 @@ void GameState::Update(float deltaTime)
 		StateManager::PushState(new PauseState());
 	}
 
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_1))
+	{
+		StateManager::PushState(new LoseState());
+	}
+	
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_2))
+	{
+		StateManager::PushState(new WinState());
+	}
+
 	else
 	{
+		int GRAVITY = 1;
+		int JUMP_FORCE = 15;
 		//PLAYER MOVEMENT
-		if (Game::GetInstance().KeyDown(SDL_SCANCODE_W))
-		{
-			m_player->UpdatePositionY(-kPlayerSpeed * deltaTime);
-		}
-
-		if (Game::GetInstance().KeyDown(SDL_SCANCODE_S))
-		{
-			m_player->UpdatePositionY(kPlayerSpeed * deltaTime);
-		}
+		//if (Game::GetInstance().KeyDown(SDL_SCANCODE_W))
+		//{
+		//	m_player->UpdatePositionY(-kPlayerSpeed * deltaTime);
+		//}
+		//
+		//if (Game::GetInstance().KeyDown(SDL_SCANCODE_S))
+		//{
+		//	m_player->UpdatePositionY(kPlayerSpeed * deltaTime);
+		//}
 
 		if (Game::GetInstance().KeyDown(SDL_SCANCODE_A))
 		{
@@ -89,15 +108,24 @@ void GameState::Update(float deltaTime)
 			m_player->UpdatePositionX(kPlayerSpeed * deltaTime);
 		}
 
+		if (Game::GetInstance().KeyDown(SDL_SCANCODE_SPACE))
+		{
+			m_player->UpdatePositionY(kPlayerJumpForce * deltaTime);
+		}
+
 		if (CollisionManager::AABBCheck(m_player->GetTransform(), m_enemy->GetTransform()))
 		{
 			std::cout << "player collides with enemy" << std::endl;
 			StateManager::PushState(new LoseState);
-
 		}
 
 	}
-
+	float gravity = 0.3;
+	if(m_player->UpdatePositionY(0)>Game::kHeight-m_player->GetObjectHeight())
+	{
+		m_player->UpdatePositionY(gravity);
+	}
+	m_player->UpdatePositionY(gravity);
 	camera.x = m_player->GetTransform().x - Game::kWidth / 2;
 	camera.y = m_player->GetTransform().y - Game::kHeight / 2;
 
@@ -116,7 +144,6 @@ void GameState::Update(float deltaTime)
 	if (camera.y + camera.h >= levelHeight)
 		camera.y = levelHeight - Game::kHeight;
 }
-
 void GameState::Render()
 {
 	std::cout << "rendering game state..." << std::endl;
@@ -141,12 +168,10 @@ void GameState::Render()
 	playerIntRect.x = m_player->GetTransform().x - camera.x;
 	playerIntRect.y = m_player->GetTransform().y - camera.y;
 }
-
 void GameState::Resume()
 {
 	std::cout << "resuming game state" << std::endl;
 }
-
 void GameState::Exit()
 {
 	std::cout << "exiting game state" << std::endl;
@@ -175,11 +200,11 @@ void GameState::Exit()
 
 }
 
+
 void PauseState::Enter()
 {
 	std::cout << "entering pause state" << std::endl;
 }
-
 void PauseState::Update(float deltaTime)
 {
 	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))
@@ -187,7 +212,6 @@ void PauseState::Update(float deltaTime)
 		StateManager::popState;
 	}
 }
-
 void PauseState::Render()
 {
 	std::cout << "rendering Pause State" << std::endl;
@@ -204,17 +228,42 @@ void PauseState::Render()
 		StateManager::PushState(new GameState());
 	}
 }
-
 void PauseState::Exit()
 {
 	std::cout << "exiting pause state" << std::endl;
 }
 
+
+void WinState::Enter()
+{
+	std::cout << "entering win state" << std::endl;
+}	 
+void WinState::Update(float deltaTime)
+{
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))
+	{
+		std::cout << "changing to title state" << std::endl;
+		StateManager::ChangeState(new TitleState());
+	}
+}
+void WinState::Render()
+{
+	SDL_Renderer* pRenderer = Game::GetInstance().GetRenderer();
+
+
+	SDL_SetRenderDrawColor(pRenderer, 0, 255, 0, 255);
+	SDL_RenderClear(pRenderer);
+}
+void WinState::Exit()
+{
+	std::cout << "exiting lose state" << std::endl;
+}
+
+
 void LoseState::Enter()
 {
 	std::cout << "entering lose state" << std::endl;
 }
-
 void LoseState::Update(float deltaTime)
 {
 	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))
@@ -223,16 +272,14 @@ void LoseState::Update(float deltaTime)
 		StateManager::ChangeState(new TitleState());
 	}
 }
-
 void LoseState::Render()
 {
 	SDL_Renderer* pRenderer = Game::GetInstance().GetRenderer();
 
 
-	SDL_SetRenderDrawColor(pRenderer, 200, 0, 0, 255);
+	SDL_SetRenderDrawColor(pRenderer, 255, 0, 0, 255);
 	SDL_RenderClear(pRenderer);
 }
-
 void LoseState::Exit()
 {
 	std::cout << "exiting lose state" << std::endl;

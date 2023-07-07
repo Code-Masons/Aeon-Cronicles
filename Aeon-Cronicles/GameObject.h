@@ -7,8 +7,10 @@ public:
 	GameObject(float x, float y, float w, float h, Uint8 r = 255, Uint8 g = 255, Uint8 b = 255, Uint8 a = 255);
 
 	void Draw(SDL_Renderer* pRenderer);
-	void UpdatePositionX(float x);
-	void UpdatePositionY(float y);
+	float UpdatePositionX(float x);
+	float UpdatePositionY(float y);
+	float GetObjectWidth();
+	float GetObjectHeight();
 
 	SDL_FRect& GetTransform()
 	{

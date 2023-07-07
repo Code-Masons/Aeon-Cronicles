@@ -13,11 +13,27 @@ void GameObject::Draw(SDL_Renderer* pRenderer)
 	SDL_RenderFillRectF(pRenderer, &m_Transform);
 }
 
-void GameObject::UpdatePositionX(float x)
+float GameObject::UpdatePositionX(float x)
 {
-	m_Transform.x += x;
+	float X = m_Transform.x;
+	X += x;
+	m_Transform.x = X;
+	return m_Transform.x;
 }
-void GameObject::UpdatePositionY(float y)
+float GameObject::UpdatePositionY(float y)
 {
-	m_Transform.y += y;
+	float Y = m_Transform.y;
+	Y += y;
+	m_Transform.y = Y;
+	return m_Transform.y;
+}
+
+float GameObject::GetObjectWidth()
+{
+	return m_Transform.w;
+}
+
+float GameObject::GetObjectHeight()
+{
+	return m_Transform.h;
 }

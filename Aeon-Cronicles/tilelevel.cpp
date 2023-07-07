@@ -1,9 +1,26 @@
 #include "tilelevel.h"
 #include <fstream>
 
-TileLevel::TileLevel()
+TileLevel::TileLevel(int screenWidth, int screenHeight)
 {
     tileSize = 32;  // Adjust this value according to your tile size
+
+    // Calculate the number of rows and columns for the tiles
+    int numCols = screenWidth / tileSize;
+    int numRows = screenHeight / tileSize;
+
+    // Resize the tiles vector to match the number of rows and columns
+    tiles.resize(numRows, std::vector<int>(numCols, 0));
+
+    // Set the tiles at the border as barriers (1)
+    for (int col = 0; col < numCols; ++col) {
+        tiles[0][col] = 1;                           // Top border
+        tiles[numRows - 1][col] = 1;                  // Bottom border
+    }
+    for (int row = 0; row < numRows; ++row) {
+        tiles[row][0] = 1;                           // Left border
+        tiles[row][numCols - 1] = 1;                 // Right border
+    }
 }
 
 TileLevel::~TileLevel()

@@ -26,6 +26,8 @@ public:
 
 class TitleState : public State//main menu screen
 {
+	GameObject* GameName;
+	SDL_Texture* GameNameTexture;
 public:
 	virtual void Enter() override;
 	virtual void Update(float deltaTime) override;
@@ -39,6 +41,7 @@ class GameState : public State//main game loop screen
 	 int lWidth = 2500;
 	 int lHeight = Game::kHeight;
 	static const int kPlayerSpeed = 200;
+	static const int kPlayerJumpForce = -2000;
 	SDL_Rect camera = { 0,0, Game::kWidth, Game::kHeight };
 	SDL_FRect m_rectangleTransform;
 
@@ -64,9 +67,6 @@ public:
 	virtual void Render() override;
 	virtual void Exit() override;
 	virtual void Resume() override;
-	
-	
-
 };
 
 class PauseState : public State//pause screen
@@ -78,7 +78,16 @@ public:
 	virtual void Exit() override;
 };
 
-class LoseState : public State//pause screen
+class WinState : public State//win screen
+{
+public:
+	virtual void Enter() override;
+	virtual void Update(float deltaTime) override;
+	virtual void Render() override;
+	virtual void Exit() override;
+};
+
+class LoseState : public State//lose screen
 {
 public:
 	virtual void Enter() override;

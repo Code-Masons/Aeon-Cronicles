@@ -10,7 +10,7 @@
 
 class TileLevel {
 public:
-    TileLevel();
+    TileLevel(int screenWidth, int screenHeight);
     ~TileLevel();
 
     bool loadLevelData();
@@ -23,4 +23,4 @@ private:
     int tileSize;
 };
 
-#endif  // TILE_LEVEL_H
+#endif
