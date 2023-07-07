@@ -12,6 +12,7 @@ TileLevel::~TileLevel()
     {
         SDL_DestroyTexture(texture);
     }
+    tileTextures.clear(); // Clear the vector after destroying the textures
 }
 
 bool TileLevel::loadLevel(SDL_Renderer* renderer)

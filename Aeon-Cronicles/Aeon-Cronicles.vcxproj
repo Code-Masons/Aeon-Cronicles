@@ -177,6 +177,9 @@ copy "$(SolutionDir)lib\SDLImage\lib\W64\SDL2_image.dll" "$(OutDir)"</Command>
     <ClInclude Include="States.h" />
     <ClInclude Include="tilelevel.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="TileData.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

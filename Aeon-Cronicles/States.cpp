@@ -129,7 +129,10 @@ void GameState::Exit()
 	tileLevel = nullptr;
 
 	SDL_DestroyTexture(m_pPlayerTexture);
+	m_pPlayerTexture = nullptr;
+
 	SDL_DestroyTexture(m_pEnemyTexture);
+	m_pEnemyTexture = nullptr;
 
 }
 
