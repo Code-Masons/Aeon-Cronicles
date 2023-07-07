@@ -63,4 +63,38 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="..\Music_and_image\Music and image\BGM.mp3">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="..\Music_and_image\Music and image\enemy die.mp3">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="..\Music_and_image\Music and image\enemy shooting.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="..\Music_and_image\Music and image\player died.mp3">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="..\Music_and_image\Music and image\player hit.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="..\Music_and_image\Music and image\player jumping.mp3">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="..\Music_and_image\Music and image\player shooting.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="..\Music_and_image\Music and image\title music.mp3">
+      <Filter>Resource Files</Filter>
+    </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Music_and_image\Music and image\name image.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Music_and_image\Music and image\title state.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

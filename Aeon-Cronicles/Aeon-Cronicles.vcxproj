@@ -175,6 +175,20 @@ copy "$(SolutionDir)lib\SDLImage\lib\W64\SDL2_image.dll" "$(OutDir)"</Command>
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="States.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="..\Music_and_image\Music and image\BGM.mp3" />
+    <Media Include="..\Music_and_image\Music and image\enemy die.mp3" />
+    <Media Include="..\Music_and_image\Music and image\enemy shooting.wav" />
+    <Media Include="..\Music_and_image\Music and image\player died.mp3" />
+    <Media Include="..\Music_and_image\Music and image\player hit.wav" />
+    <Media Include="..\Music_and_image\Music and image\player jumping.mp3" />
+    <Media Include="..\Music_and_image\Music and image\player shooting.wav" />
+    <Media Include="..\Music_and_image\Music and image\title music.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Music_and_image\Music and image\name image.png" />
+    <Image Include="..\Music_and_image\Music and image\title state.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
