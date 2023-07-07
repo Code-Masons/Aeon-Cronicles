@@ -98,12 +98,12 @@ void GameState::Update(float deltaTime)
 		//	m_player->UpdatePositionY(kPlayerSpeed * deltaTime);
 		//}
 
-		if (Game::GetInstance().KeyDown(SDL_SCANCODE_A))
+		if (Game::GetInstance().KeyDown(SDL_SCANCODE_A) && m_player->UpdatePositionX(0) > 0)
 		{
 			m_player->UpdatePositionX(-kPlayerSpeed * deltaTime);
 		}
 
-		if (Game::GetInstance().KeyDown(SDL_SCANCODE_D))
+		if (Game::GetInstance().KeyDown(SDL_SCANCODE_D) && m_player->UpdatePositionX(0) <= Game::kWidth - m_player->GetObjectWidth())
 		{
 			m_player->UpdatePositionX(kPlayerSpeed * deltaTime);
 		}
@@ -120,10 +120,14 @@ void GameState::Update(float deltaTime)
 		}
 
 	}
-	float gravity = 0.3;
+	float gravity;
 	if(m_player->UpdatePositionY(0)>Game::kHeight-m_player->GetObjectHeight())
 	{
-		m_player->UpdatePositionY(gravity);
+		gravity = 0;
+	}
+	else
+	{
+		gravity = 0.5;
 	}
 	m_player->UpdatePositionY(gravity);
 	camera.x = m_player->GetTransform().x - Game::kWidth / 2;
