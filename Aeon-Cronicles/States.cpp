@@ -45,15 +45,15 @@ void GameState::Enter()
 	m_player = new GameObject(Game::kWidth / 2, Game::kHeight / 2, 100, 100, 0, 200, 0, 255);
 	m_enemy = new GameObject(100, 100, 100, 100, 0, 200, 0, 255);
   
-	tileLevel = new TileLevel();
+	//tileLevel = new TileLevel();
 	m_background = new GameObject(0, 0, 2000, Game::kHeight);
+	tileLevel = new TileLevel();
+	tileLevel->loadLevelData();
 
 	//load textures for game state here
 	m_pPlayerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/playerbullet.png");
 	m_pEnemyTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/enemy.png");
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/background.png");
-
-	
 }
 
 void GameState::Update(float deltaTime)
@@ -135,7 +135,7 @@ void GameState::Render()
 	SDL_Rect enemyintRect = MathManager::ConvertFRect2Rect(m_enemy->GetTransform());
 	SDL_RenderCopy(pRenderer, m_pEnemyTexture, nullptr, &enemyintRect);
 
-	tileLevel->loadLevel(pRenderer);
+	tileLevel->loadLevelTextures(pRenderer);
 	tileLevel->render(pRenderer);
   
 	playerIntRect.x = m_player->GetTransform().x - camera.x;

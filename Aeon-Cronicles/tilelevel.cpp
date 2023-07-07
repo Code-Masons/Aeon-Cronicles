@@ -15,7 +15,7 @@ TileLevel::~TileLevel()
     tileTextures.clear(); // Clear the vector after destroying the textures
 }
 
-bool TileLevel::loadLevel(SDL_Renderer* renderer)
+bool TileLevel::loadLevelData()
 {
     std::ifstream file("TileData.txt");
     if (!file.is_open())
@@ -41,6 +41,11 @@ bool TileLevel::loadLevel(SDL_Renderer* renderer)
     }
     file.close();
 
+    return true;
+}
+
+bool TileLevel::loadLevelTextures(SDL_Renderer* renderer)
+{
     // Load tile textures based on tile IDs
     for (int row = 0; row < tiles.size(); ++row)
     {
@@ -49,28 +54,34 @@ bool TileLevel::loadLevel(SDL_Renderer* renderer)
             int tileID = tiles[row][col];
             std::string imagePath = "./assets/terrain.png";
 
-            // Load the image using SDL_image
-            SDL_Surface* surface = IMG_Load(imagePath.c_str());
-            if (!surface)
+            // Create a texture if it doesn't exist for the tileID
+            if (tileID >= tileTextures.size())
             {
-                // Error loading the image, handle accordingly
-                return false;
-            }
+                SDL_Surface* surface = IMG_Load(imagePath.c_str());
+                if (!surface)
+                {
+                    // Error loading the image, handle accordingly
+                    // You may want to return false here or handle the error in some way
+                    return false;
+                }
 
-            // Create a texture from the surface
-            SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-            if (!texture)
-            {
-                // Error creating texture, handle accordingly
+                // Create a texture from the surface
+                SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+                if (!texture)
+                {
+                    // Error creating texture, handle accordingly
+                    SDL_FreeSurface(surface);
+                    // You may want to return false here or handle the error in some way
+                    return false;
+                }
+
+                // Add the texture to the tileTextures vector
+                tileTextures.resize(tileID + 1);
+                tileTextures[tileID] = texture;
+
+                // Free the surface as it's no longer needed
                 SDL_FreeSurface(surface);
-                return false;
             }
-
-            // Add the texture to the tileTextures vector
-            tileTextures.push_back(texture);
-
-            // Free the surface as it's no longer needed
-            SDL_FreeSurface(surface);
         }
     }
 
@@ -79,11 +90,42 @@ bool TileLevel::loadLevel(SDL_Renderer* renderer)
 
 void TileLevel::render(SDL_Renderer* renderer)
 {
+    // Load tile textures based on tile IDs
     for (int row = 0; row < tiles.size(); ++row)
     {
         for (int col = 0; col < tiles[row].size(); ++col)
         {
             int tileID = tiles[row][col];
+            std::string imagePath = "./assets/terrain.png";
+
+            // Create a texture if it doesn't exist for the tileID
+            if (tileTextures.size() <= tileID)
+            {
+                SDL_Surface* surface = IMG_Load(imagePath.c_str());
+                if (!surface)
+                {
+                    // Error loading the image, handle accordingly
+                    // You may want to return false here or handle the error in some way
+                    return;
+                }
+
+                // Create a texture from the surface
+                SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+                if (!texture)
+                {
+                    // Error creating texture, handle accordingly
+                    SDL_FreeSurface(surface);
+                    // You may want to return false here or handle the error in some way
+                    return;
+                }
+
+                // Add the texture to the tileTextures vector
+                tileTextures.push_back(texture);
+
+                // Free the surface as it's no longer needed
+                SDL_FreeSurface(surface);
+            }
+
             SDL_Texture* texture = tileTextures[tileID];
 
             int x = col * tileSize;

@@ -13,7 +13,8 @@ public:
     TileLevel();
     ~TileLevel();
 
-    bool loadLevel(SDL_Renderer* renderer);
+    bool loadLevelData();
+    bool loadLevelTextures(SDL_Renderer* renderer);
     void render(SDL_Renderer* renderer);
 
 private:
