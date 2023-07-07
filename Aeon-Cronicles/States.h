@@ -41,6 +41,7 @@ class GameState : public State//main game loop screen
 	 int lWidth = 2500;
 	 int lHeight = Game::kHeight;
 	static const int kPlayerSpeed = 200;
+	static const int kEnemySpeed = 80;
 	static const int kPlayerJumpForce = -1000;
 	SDL_Rect camera = { 0,0, Game::kWidth, Game::kHeight };
 	SDL_FRect m_rectangleTransform;

@@ -60,7 +60,7 @@ void GameState::Enter()
 
 	//load textures for game state here
 	m_pPlayerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/playerbullet.png");
-	m_pEnemyTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/enemy.png");
+	m_pEnemyTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/enemybullet.png");
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/background.png");
 }
 void GameState::Update(float deltaTime)
@@ -73,31 +73,27 @@ void GameState::Update(float deltaTime)
 		StateManager::PushState(new PauseState());
 	}
 
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_1))
-	{
-		StateManager::PushState(new LoseState());
-	}
-	
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_2))
-	{
-		StateManager::PushState(new WinState());
-	}
-
 	else
 	{
-		int GRAVITY = 1;
-		int JUMP_FORCE = 15;
-		//PLAYER MOVEMENT
-		//if (Game::GetInstance().KeyDown(SDL_SCANCODE_W))
-		//{
-		//	m_player->UpdatePositionY(-kPlayerSpeed * deltaTime);
-		//}
-		//
-		//if (Game::GetInstance().KeyDown(SDL_SCANCODE_S))
-		//{
-		//	m_player->UpdatePositionY(kPlayerSpeed * deltaTime);
-		//}
+		//ENEMY UPDATE
+		if (m_player->UpdatePositionX(0) > m_enemy->UpdatePositionX(0))
+		{
+			m_enemy->UpdatePositionX(kEnemySpeed * deltaTime);
+		}
+		else
+		{
+			m_enemy->UpdatePositionX(-kEnemySpeed * deltaTime);
+		}
+		if (m_player->UpdatePositionY(0) > m_enemy->UpdatePositionY(0))
+		{
+			m_enemy->UpdatePositionY(kEnemySpeed * deltaTime);
+		}
+		else
+		{
+			m_enemy->UpdatePositionY(-kEnemySpeed * deltaTime);
+		}
 
+		//PLAYER UPDATE
 		if (Game::GetInstance().KeyDown(SDL_SCANCODE_A) && m_player->UpdatePositionX(0) > 0)
 		{
 			m_player->UpdatePositionX(-kPlayerSpeed * deltaTime);
@@ -119,6 +115,11 @@ void GameState::Update(float deltaTime)
 			StateManager::PushState(new LoseState);
 		}
 
+		if (Game::GetInstance().KeyDown(SDL_SCANCODE_W))
+		{
+			std::cout << "changing to win state" << std::endl;
+			StateManager::PushState(new WinState());
+		}
 	}
 	float gravity;
 	if(m_player->UpdatePositionY(0)>Game::kHeight-m_player->GetObjectHeight())
