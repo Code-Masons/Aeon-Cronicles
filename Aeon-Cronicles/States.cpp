@@ -13,7 +13,7 @@ void TitleState::Enter()
 
 	GameName = new GameObject(Game::kWidth / 2 - 300, Game::kHeight / 3 - 200, 600, 400, 100, 100, 100, 255);
 
-	GameNameTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/GameName.png");
+	TitleStateTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/titleState.png");
 }
 void TitleState::Update(float deltaTime)
 {
@@ -33,8 +33,7 @@ void TitleState::Render()
 	SDL_SetRenderDrawColor(Game::GetInstance().GetRenderer(), 48, 25, 52, 255);
 	SDL_RenderClear(Game::GetInstance().GetRenderer());
 
-	SDL_Rect GameNameRect = MathManager::ConvertFRect2Rect(GameName->GetTransform());
-	SDL_RenderCopy(pRenderer, GameNameTexture, nullptr, &GameNameRect);
+	SDL_RenderCopy(pRenderer, TitleStateTexture, nullptr, nullptr);
 }
 void TitleState::Exit()
 {

@@ -27,7 +27,7 @@ public:
 class TitleState : public State//main menu screen
 {
 	GameObject* GameName;
-	SDL_Texture* GameNameTexture;
+	SDL_Texture* TitleStateTexture;
 public:
 	virtual void Enter() override;
 	virtual void Update(float deltaTime) override;
