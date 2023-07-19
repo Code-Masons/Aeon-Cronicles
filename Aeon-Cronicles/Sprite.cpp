@@ -6,7 +6,10 @@ Sprite::Sprite()
 	, m_angle{ 0 }
 {
 
+
 }
+
+
 Sprite::Sprite(SDL_Rect sourceTranform, SDL_FRect destinationTransform, int angle)
 	:m_sourceTransform{ sourceTranform }
 	, m_destinationTransform{ destinationTransform }

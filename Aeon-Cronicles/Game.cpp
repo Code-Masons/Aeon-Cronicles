@@ -1,6 +1,8 @@
 #include "Game.h"
 #include "StateManager.h"
 #include "States.h"
+#include "EventManager.h"
+#include "TextureManager.h"
 #include <iostream>
 
 Game::Game()
@@ -61,6 +63,8 @@ int Game::Init(const char* title, int xpos, int ypos)
 		return -1;
 	}
 
+	EventManager::Init();
+
 	std::cout << "initialization successful" << std::endl;
 
 	StateManager::PushState(new TitleState());
@@ -78,19 +82,7 @@ bool Game::IsRunning()
 
 void Game::HandleEvents()
 {
-
-	SDL_Event event;
-
-	while (SDL_PollEvent(&event))
-	{
-		switch (event.type)
-		{
-		case SDL_QUIT:
-			m_running = false;
-			break;
-		}
-
-	}
+	EventManager::HandleEvents();
 }
 
 void Game::Quit()
@@ -122,8 +114,8 @@ void Game::Clean()
 {
 	std::cout << "cleaning engine" << std::endl;
 	StateManager::Quit();
-	//EventManager::Quit();
-	//TextureManager::Quit();
+	EventManager::Quit();
+	TextureManager::Quit();
 	SDL_DestroyRenderer(m_pRenderer);
 	SDL_DestroyWindow(m_pWindow);
 	SDL_Quit();

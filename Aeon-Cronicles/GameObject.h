@@ -12,6 +12,9 @@ public:
 	float GetObjectWidth();
 	float GetObjectHeight();
 
+	//virtual void Update(float deltaTime) = 0;
+	//virtual void Render() = 0;
+
 	SDL_FRect& GetTransform()
 	{
 		return m_Transform;
