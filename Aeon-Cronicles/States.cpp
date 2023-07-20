@@ -43,17 +43,15 @@ void TitleState::Exit()
 
 void GameState::Enter()
 {
-
 	std::cout << "entering game state" << std::endl;
-
-	
 	
 	//define game objects here
 	m_player = new GameObject(Game::kWidth / 2, Game::kHeight / 2, 100, 100, 0, 200, 0, 255);
 	m_enemy = new GameObject(100, 100, 100, 100, 0, 200, 0, 255);
-  
+	m_background = new GameObject(-500, 0, 2000, Game::kHeight);
+	
+
 	//tileLevel = new TileLevel();
-	m_background = new GameObject(0, 0, 2000, Game::kHeight);
 	tileLevel = new TileLevel(Game::kWidth, Game::kHeight);
 	tileLevel->loadLevelData();
 
@@ -96,11 +94,13 @@ void GameState::Update(float deltaTime)
 		if (Game::GetInstance().KeyDown(SDL_SCANCODE_A) && m_player->UpdatePositionX(0) > 0)
 		{
 			m_player->UpdatePositionX(-kPlayerSpeed * deltaTime);
+			m_background->UpdatePositionX(kBackgroundSpeed * deltaTime);
 		}
 
 		if (Game::GetInstance().KeyDown(SDL_SCANCODE_D) && m_player->UpdatePositionX(0) <= Game::kWidth - m_player->GetObjectWidth())
 		{
 			m_player->UpdatePositionX(kPlayerSpeed * deltaTime);
+			m_background->UpdatePositionX(-kBackgroundSpeed * deltaTime);
 		}
 
 		if (Game::GetInstance().KeyDown(SDL_SCANCODE_SPACE))
@@ -130,23 +130,7 @@ void GameState::Update(float deltaTime)
 		gravity = 0.5;
 	}
 	m_player->UpdatePositionY(gravity);
-	camera.x = m_player->GetTransform().x - Game::kWidth / 2;
-	camera.y = m_player->GetTransform().y - Game::kHeight / 2;
-
-	//keep camera in bounds
-	if (camera.x < 0)
-		camera.x = 0;
-	if (camera.y < 0)
-		camera.y = 0;
-	if (camera.x > lWidth - camera.w)
-		camera.x = lWidth - camera.w;
-	if (camera.y > lHeight - camera.h)
-		camera.y = lHeight - camera.h;
-
-	if (camera.x + camera.w >= levelWidth)
-		camera.x = levelWidth - 2500;
-	if (camera.y + camera.h >= levelHeight)
-		camera.y = levelHeight - Game::kHeight;
+	
 }
 void GameState::Render()
 {
@@ -158,7 +142,7 @@ void GameState::Render()
 	SDL_RenderClear(pRenderer);
 
 	SDL_Rect backgroundIntRect = MathManager::ConvertFRect2Rect(m_background->GetTransform());
-	SDL_RenderCopy(pRenderer, m_pBackgroundTexture, &camera, &backgroundIntRect);
+	SDL_RenderCopy(pRenderer, m_pBackgroundTexture, nullptr, &backgroundIntRect);
 	
 	SDL_Rect playerIntRect = MathManager::ConvertFRect2Rect(m_player->GetTransform());
 	SDL_RenderCopy(pRenderer, m_pPlayerTexture, nullptr, &playerIntRect);
@@ -168,9 +152,6 @@ void GameState::Render()
 
 	tileLevel->loadLevelTextures(pRenderer);
 	tileLevel->render(pRenderer);
-  
-	playerIntRect.x = m_player->GetTransform().x - camera.x;
-	playerIntRect.y = m_player->GetTransform().y - camera.y;
 }
 void GameState::Resume()
 {

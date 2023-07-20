@@ -43,6 +43,7 @@ class GameState : public State//main game loop screen
 	static const int kPlayerSpeed = 200;
 	static const int kEnemySpeed = 80;
 	static const int kPlayerJumpForce = -1000;
+	static const int kBackgroundSpeed = 170;
 	SDL_Rect camera = { 0,0, Game::kWidth, Game::kHeight };
 	SDL_FRect m_rectangleTransform;
 
