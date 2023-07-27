@@ -35,7 +35,7 @@ public:
 
 };
 
-class OfficeState : public State//main game loop screen
+class OfficeState : public State//first scene of prologue
 {
 	 int lWidth = 2500;
 	 int lHeight = Game::kHeight;
@@ -73,6 +73,22 @@ public:
 	virtual void Exit() override;
 	virtual void Resume() override;
 };
+
+class StreetState : public State//win screen
+{
+
+	GameObject* m_background;
+	GameObject* m_text;
+
+	SDL_Texture* m_pBackground;
+	SDL_Texture* m_pTextTexture;
+public:
+	virtual void Enter() override;
+	virtual void Update(float deltaTime) override;
+	virtual void Render() override;
+	virtual void Exit() override;
+};
+
 
 class PauseState : public State//pause screen
 {

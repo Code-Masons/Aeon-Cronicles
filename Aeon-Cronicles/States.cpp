@@ -46,14 +46,6 @@ void OfficeState::Enter()
 
 	std::cout << "entering game state" << std::endl;
 
-	
-	
-	//define game objects here
-	m_player = new GameObject(Game::kWidth / 2, Game::kHeight / 2, 100, 100, 0, 200, 0, 255);
-	m_womanWorker = new GameObject(100, 100, 100, 100, 0, 200, 0, 255);
-	m_womanWorker = new GameObject(100, 100, 100, 100, 0, 200, 0, 255);
-  
-	//tileLevel = new TileLevel();
 	m_background = new GameObject(0, 0, 2000, Game::kHeight);
 
 	//load textures for game state here
@@ -75,24 +67,12 @@ void OfficeState::Update(float deltaTime)
 		StateManager::PushState(new PauseState());
 	}
 
-	
-	camera.x = m_player->GetTransform().x - Game::kWidth / 2;
-	camera.y = m_player->GetTransform().y - Game::kHeight / 2;
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_C))//press C to go to game state
+	{
+		std::cout << "changing to street state" << std::endl;
+		StateManager::ChangeState(new StreetState());//change to new game state
+	}
 
-	//keep camera in bounds
-	if (camera.x < 0)
-		camera.x = 0;
-	if (camera.y < 0)
-		camera.y = 0;
-	if (camera.x > lWidth - camera.w)
-		camera.x = lWidth - camera.w;
-	if (camera.y > lHeight - camera.h)
-		camera.y = lHeight - camera.h;
-
-	if (camera.x + camera.w >= levelWidth)
-		camera.x = levelWidth - 2500;
-	if (camera.y + camera.h >= levelHeight)
-		camera.y = levelHeight - Game::kHeight;
 }
 void OfficeState::Render()
 {
@@ -123,9 +103,7 @@ void OfficeState::Render()
 
 	SDL_Rect continueRect = { 700,700,500,350 };
 	SDL_RenderCopy(pRenderer, m_pContinueTexture, nullptr, &continueRect);
-  
-	playerIntRect.x = m_player->GetTransform().x - camera.x;
-	playerIntRect.y = m_player->GetTransform().y - camera.y;
+ 
 }
 void OfficeState::Resume()
 {
@@ -150,6 +128,9 @@ void OfficeState::Exit()
 	delete m_text;
 	m_text = nullptr;
 
+	delete m_continue;
+	m_continue = nullptr;
+
   
 	delete m_background;
 	m_background = nullptr;
@@ -171,6 +152,9 @@ void OfficeState::Exit()
 
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pContinueTexture);
+	m_pContinueTexture = nullptr;
 
 }
 
@@ -207,6 +191,34 @@ void PauseState::Exit()
 	std::cout << "exiting pause state" << std::endl;
 }
 
+void StreetState::Enter()
+{
+	std::cout << "entering street state.. " << std::endl;
+
+	m_pBackground = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/street/streetBackground.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/street/streetText.png");
+}
+
+void StreetState::Update(float deltaTime)
+{
+	
+}
+
+void StreetState::Render()
+{
+	std::cout << "rendering street state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0, Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackground, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 250,150, 600,450 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+}
+
+void StreetState::Exit()
+{
+	std::cout << "exiting street state.." << std::endl;
+}
 
 void WinState::Enter()
 {
