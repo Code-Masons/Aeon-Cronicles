@@ -67,7 +67,7 @@ void OfficeState::Update(float deltaTime)
 		StateManager::PushState(new PauseState());
 	}
 
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_C))//press C to go to game state
+	if (Game::GetInstance().KeyReleased(SDL_SCANCODE_C))//press C to go to game state
 	{
 		std::cout << "changing to street state" << std::endl;
 		StateManager::ChangeState(new StreetState());//change to new game state
@@ -197,11 +197,19 @@ void StreetState::Enter()
 
 	m_pBackground = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/street/streetBackground.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/street/streetText.png");
+	m_pContinueTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/street/pressCWhite.png");
 }
 
 void StreetState::Update(float deltaTime)
 {
 	
+
+	if (Game::GetInstance().KeyReleased (SDL_SCANCODE_C))//press C to go to game state
+	{
+		std::cout << "changing to car state" << std::endl;
+		StateManager::ChangeState(new CarState());//change to new game state
+	}
+
 }
 
 void StreetState::Render()
@@ -213,11 +221,53 @@ void StreetState::Render()
 
 	SDL_Rect textRect = { 250,150, 600,450 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect continueRect = { 700,700, 600,450 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pContinueTexture, NULL, &continueRect);
 }
 
 void StreetState::Exit()
 {
 	std::cout << "exiting street state.." << std::endl;
+
+	delete m_background;
+	m_background = nullptr;
+
+	delete m_text;
+	m_text = nullptr;
+
+	SDL_DestroyTexture(m_pBackground);
+	m_pBackground = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
+
+}
+
+void CarState::Enter()
+{
+	std::cout << "entering car state.." << std::endl;
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/carDash/background.png");
+	
+}
+
+void CarState::Update(float deltaTime)
+{
+
+}
+
+void CarState::Render()
+{
+	std::cout << "rendering car state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+}
+
+void CarState::Exit()
+{
+	std::cout << "exiting car state.." << std::endl;
 }
 
 void WinState::Enter()

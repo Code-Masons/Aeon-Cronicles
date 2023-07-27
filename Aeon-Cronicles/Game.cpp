@@ -118,6 +118,15 @@ bool Game::KeyDown(SDL_Scancode key)
 	return false;
 }
 
+bool Game::KeyReleased(SDL_Scancode key)
+{
+	if (m_keyStates)
+	{
+		return m_keyStates[key] == 0;
+	}
+	return false;
+}
+
 void Game::Clean()
 {
 	std::cout << "cleaning engine" << std::endl;

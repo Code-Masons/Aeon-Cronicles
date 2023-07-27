@@ -79,7 +79,9 @@ class StreetState : public State//win screen
 
 	GameObject* m_background;
 	GameObject* m_text;
+	GameObject* m_continue;
 
+	SDL_Texture* m_pContinueTexture;
 	SDL_Texture* m_pBackground;
 	SDL_Texture* m_pTextTexture;
 public:
@@ -89,6 +91,21 @@ public:
 	virtual void Exit() override;
 };
 
+
+class CarState : public State//win screen
+{
+
+	GameObject* m_background;
+	GameObject* m_text;
+
+	SDL_Texture* m_pBackgroundTexture;
+	SDL_Texture* m_pTextTexture;
+public:
+	virtual void Enter() override;
+	virtual void Update(float deltaTime) override;
+	virtual void Render() override;
+	virtual void Exit() override;
+};
 
 class PauseState : public State//pause screen
 {

@@ -10,6 +10,7 @@ public:
 	int Init(const char* title, int Xpos, int Ypos);
 	bool IsRunning();
 	bool KeyDown(SDL_Scancode key);
+	bool KeyReleased(SDL_Scancode key);
 	void HandleEvents();
 	void Quit();
 	void Update(float deltaTime);
