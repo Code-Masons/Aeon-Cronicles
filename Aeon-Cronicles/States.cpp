@@ -21,7 +21,7 @@ void TitleState::Update(float deltaTime)
 	if (Game::GetInstance().KeyDown(SDL_SCANCODE_G))//press g to go to game state
 	{
 		std::cout << "changing to game state" << std::endl;
-		StateManager::ChangeState(new GameState());//change to new game state
+		StateManager::ChangeState(new OfficeState());//change to new game state
 	}
 }
 void TitleState::Render()
@@ -41,7 +41,7 @@ void TitleState::Exit()
 }
 
 
-void GameState::Enter()
+void OfficeState::Enter()
 {
 
 	std::cout << "entering game state" << std::endl;
@@ -55,16 +55,17 @@ void GameState::Enter()
   
 	//tileLevel = new TileLevel();
 	m_background = new GameObject(0, 0, 2000, Game::kHeight);
-	tileLevel = new TileLevel(Game::kWidth, Game::kHeight);
-	tileLevel->loadLevelData();
 
 	//load textures for game state here
-	m_pPlayerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/playerPrologue.png");
-	m_pWomanWorkerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/womanWorker.png");
-	m_pMaleWorkerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/maleOfficeWorker.png");
-	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/officebackground.png");
-}
-void GameState::Update(float deltaTime)
+	m_pPlayerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/office/playerPrologue.png");
+	m_pTrophyTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/office/prideItem.png");
+	m_pWomanWorkerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/office/womanWorker.png");
+	m_pMaleWorkerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/office/maleOfficeWorker.png");
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/office/officebackground.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/office/officeText.png");
+	m_pContinueTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/office/pressC.png");
+}	
+void OfficeState::Update(float deltaTime)
 {
 	int levelWidth, levelHeight;
 	SDL_QueryTexture(m_pBackgroundTexture, NULL, NULL, &levelWidth, &levelHeight);
@@ -93,9 +94,9 @@ void GameState::Update(float deltaTime)
 	if (camera.y + camera.h >= levelHeight)
 		camera.y = levelHeight - Game::kHeight;
 }
-void GameState::Render()
+void OfficeState::Render()
 {
-	std::cout << "rendering game state..." << std::endl;
+	std::cout << "rendering office state..." << std::endl;
 
 	SDL_Renderer* pRenderer = Game::GetInstance().GetRenderer();
 
@@ -108,34 +109,47 @@ void GameState::Render()
 	SDL_Rect playerIntRect = {50,400,250,250};
 	SDL_RenderCopy(pRenderer, m_pPlayerTexture, nullptr, &playerIntRect);
 
+	SDL_Rect trophyRect = { 235,480,50,50 };
+	SDL_RenderCopy(pRenderer, m_pTrophyTexture, nullptr, &trophyRect);
+
 	SDL_Rect womanWorkerRect = {300,400,250,250};
 	SDL_RenderCopy(pRenderer, m_pWomanWorkerTexture, nullptr, &womanWorkerRect);
 
 	SDL_Rect maleWorkerRect = { 550,400,250,250 };
 	SDL_RenderCopy(pRenderer, m_pMaleWorkerTexture, nullptr, &maleWorkerRect);
 
-	tileLevel->loadLevelTextures(pRenderer);
-	tileLevel->render(pRenderer);
+	SDL_Rect officeTextRect = { 250,20,500,350 };
+	SDL_RenderCopy(pRenderer, m_pTextTexture, nullptr, &officeTextRect);
+
+	SDL_Rect continueRect = { 700,700,500,350 };
+	SDL_RenderCopy(pRenderer, m_pContinueTexture, nullptr, &continueRect);
   
 	playerIntRect.x = m_player->GetTransform().x - camera.x;
 	playerIntRect.y = m_player->GetTransform().y - camera.y;
 }
-void GameState::Resume()
+void OfficeState::Resume()
 {
-	std::cout << "resuming game state" << std::endl;
+	std::cout << "resuming office state" << std::endl;
 }
-void GameState::Exit()
+void OfficeState::Exit()
 {
-	std::cout << "exiting game state" << std::endl;
+	std::cout << "exiting office state" << std::endl;
 
 	delete m_player;
 	m_player = nullptr;
 
+	delete m_trophy;
+	m_trophy = nullptr;
+
+	delete m_maleWorker;
+	m_maleWorker = nullptr;
+
 	delete m_womanWorker;
 	m_womanWorker = nullptr;
 
-	delete tileLevel;
-	tileLevel = nullptr;
+	delete m_text;
+	m_text = nullptr;
+
   
 	delete m_background;
 	m_background = nullptr;
@@ -143,12 +157,20 @@ void GameState::Exit()
 	SDL_DestroyTexture(m_pPlayerTexture);
 	m_pPlayerTexture = nullptr;
 
-	SDL_DestroyTexture(m_pWomanWorkerTexture);
+	SDL_DestroyTexture(m_pTrophyTexture);
+	m_pTrophyTexture = nullptr;
 
+	SDL_DestroyTexture(m_pMaleWorkerTexture);
+	m_pMaleWorkerTexture = nullptr;
+
+	SDL_DestroyTexture(m_pWomanWorkerTexture);
 	m_pWomanWorkerTexture = nullptr;
 
 	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
 
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
 
 }
 
@@ -177,7 +199,7 @@ void PauseState::Render()
 
 	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))
 	{
-		StateManager::PushState(new GameState());
+		StateManager::PushState(new OfficeState());
 	}
 }
 void PauseState::Exit()

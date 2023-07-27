@@ -5,7 +5,6 @@
 #include<string>
 #include <map>
 #include "GameObject.h"
-#include "tilelevel.h"
 #include "Game.h"
 
 class State
@@ -36,7 +35,7 @@ public:
 
 };
 
-class GameState : public State//main game loop screen
+class OfficeState : public State//main game loop screen
 {
 	 int lWidth = 2500;
 	 int lHeight = Game::kHeight;
@@ -50,17 +49,20 @@ class GameState : public State//main game loop screen
 	GameObject* m_player;
 	GameObject* m_womanWorker;
 	GameObject* m_maleWorker;
-
-	TileLevel* tileLevel;
+	GameObject* m_trophy;
+	GameObject* m_text;
+	GameObject* m_continue;
 
 	GameObject* m_background;
-
 
 	//textures
 	SDL_Texture* m_pPlayerTexture;
 	SDL_Texture* m_pWomanWorkerTexture;
 	SDL_Texture* m_pMaleWorkerTexture;
 	SDL_Texture* m_pBackgroundTexture;
+	SDL_Texture* m_pTrophyTexture;
+	SDL_Texture* m_pTextTexture;
+	SDL_Texture* m_pContinueTexture;
 
 	//Mix_Music* m_pMusic;
 

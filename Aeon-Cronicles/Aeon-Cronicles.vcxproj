@@ -165,7 +165,6 @@ copy "$(SolutionDir)lib\SDLImage\lib\W64\SDL2_image.dll" "$(OutDir)"</Command>
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="States.cpp" />
-    <ClCompile Include="tilelevel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionManager.h" />
@@ -175,7 +174,6 @@ copy "$(SolutionDir)lib\SDLImage\lib\W64\SDL2_image.dll" "$(OutDir)"</Command>
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="States.h" />
-    <ClInclude Include="tilelevel.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TileData.txt" />
