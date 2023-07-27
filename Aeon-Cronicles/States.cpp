@@ -12,8 +12,10 @@ void TitleState::Enter()
 	std::cout << "entering title state " << std::endl;
 
 	GameName = new GameObject(Game::kWidth / 2 - 300, Game::kHeight / 3 - 200, 600, 400, 100, 100, 100, 255);
+	TitleButton = new UIButton(Game::kWidth / 2 - 100, Game::kHeight * 3 / 4 - 100, 200, 200, "assets/playerbullet.png");
 
 	TitleStateTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/titleState.png");
+	TitleButtonTexture= IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/playerbullet.png");
 }
 void TitleState::Update(float deltaTime)
 {
@@ -34,6 +36,9 @@ void TitleState::Render()
 	SDL_RenderClear(Game::GetInstance().GetRenderer());
 
 	SDL_RenderCopy(pRenderer, TitleStateTexture, nullptr, nullptr);
+
+	SDL_Rect TitleButtonRect = MathManager::ConvertFRect2Rect(TitleButton->GetTransform());
+	SDL_RenderCopy(pRenderer, TitleButtonTexture, nullptr, &TitleButtonRect);
 }
 void TitleState::Exit()
 {

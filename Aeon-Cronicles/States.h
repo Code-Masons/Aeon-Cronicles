@@ -7,6 +7,7 @@
 #include "GameObject.h"
 #include "tilelevel.h"
 #include "Game.h"
+#include "UI_Button.h"
 
 class State
 {
@@ -28,6 +29,8 @@ class TitleState : public State//main menu screen
 {
 	GameObject* GameName;
 	SDL_Texture* TitleStateTexture;
+	UIButton* TitleButton;
+	SDL_Texture* TitleButtonTexture;
 public:
 	virtual void Enter() override;
 	virtual void Update(float deltaTime) override;

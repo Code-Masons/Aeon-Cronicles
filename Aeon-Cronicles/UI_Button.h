@@ -25,3 +25,21 @@
 //	virtual void Execute() = 0;
 //};
 //
+
+#pragma once
+#include "GameObject.h"
+#include <string>
+
+class UIButton : public GameObject
+{
+public:
+    UIButton(float x, float y, float w, float h, const std::string& imagePath);
+
+    void HandleEvent(const SDL_Event& event);
+    void Render(SDL_Renderer* pRenderer);
+
+private:
+    SDL_Texture* m_Texture;
+    bool m_IsHovered;
+    bool m_IsClicked;
+};
