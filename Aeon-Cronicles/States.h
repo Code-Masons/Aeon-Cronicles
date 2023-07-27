@@ -48,7 +48,8 @@ class GameState : public State//main game loop screen
 
 	//game objects 
 	GameObject* m_player;
-	GameObject* m_enemy;
+	GameObject* m_womanWorker;
+	GameObject* m_maleWorker;
 
 	TileLevel* tileLevel;
 
@@ -57,7 +58,8 @@ class GameState : public State//main game loop screen
 
 	//textures
 	SDL_Texture* m_pPlayerTexture;
-	SDL_Texture* m_pEnemyTexture;
+	SDL_Texture* m_pWomanWorkerTexture;
+	SDL_Texture* m_pMaleWorkerTexture;
 	SDL_Texture* m_pBackgroundTexture;
 
 	//Mix_Music* m_pMusic;

@@ -50,7 +50,8 @@ void GameState::Enter()
 	
 	//define game objects here
 	m_player = new GameObject(Game::kWidth / 2, Game::kHeight / 2, 100, 100, 0, 200, 0, 255);
-	m_enemy = new GameObject(100, 100, 100, 100, 0, 200, 0, 255);
+	m_womanWorker = new GameObject(100, 100, 100, 100, 0, 200, 0, 255);
+	m_womanWorker = new GameObject(100, 100, 100, 100, 0, 200, 0, 255);
   
 	//tileLevel = new TileLevel();
 	m_background = new GameObject(0, 0, 2000, Game::kHeight);
@@ -58,9 +59,10 @@ void GameState::Enter()
 	tileLevel->loadLevelData();
 
 	//load textures for game state here
-	m_pPlayerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/playerbullet.png");
-	m_pEnemyTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/enemybullet.png");
-	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/background.png");
+	m_pPlayerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/playerPrologue.png");
+	m_pWomanWorkerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/womanWorker.png");
+	m_pMaleWorkerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/maleOfficeWorker.png");
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/officebackground.png");
 }
 void GameState::Update(float deltaTime)
 {
@@ -72,64 +74,7 @@ void GameState::Update(float deltaTime)
 		StateManager::PushState(new PauseState());
 	}
 
-	else
-	{
-		//ENEMY UPDATE
-		if (m_player->UpdatePositionX(0) > m_enemy->UpdatePositionX(0))
-		{
-			m_enemy->UpdatePositionX(kEnemySpeed * deltaTime);
-		}
-		else
-		{
-			m_enemy->UpdatePositionX(-kEnemySpeed * deltaTime);
-		}
-		if (m_player->UpdatePositionY(0) > m_enemy->UpdatePositionY(0))
-		{
-			m_enemy->UpdatePositionY(kEnemySpeed * deltaTime);
-		}
-		else
-		{
-			m_enemy->UpdatePositionY(-kEnemySpeed * deltaTime);
-		}
-
-		//PLAYER UPDATE
-		if (Game::GetInstance().KeyDown(SDL_SCANCODE_A) && m_player->UpdatePositionX(0) > 0)
-		{
-			m_player->UpdatePositionX(-kPlayerSpeed * deltaTime);
-		}
-
-		if (Game::GetInstance().KeyDown(SDL_SCANCODE_D) && m_player->UpdatePositionX(0) <= Game::kWidth - m_player->GetObjectWidth())
-		{
-			m_player->UpdatePositionX(kPlayerSpeed * deltaTime);
-		}
-
-		if (Game::GetInstance().KeyDown(SDL_SCANCODE_SPACE))
-		{
-			m_player->UpdatePositionY(kPlayerJumpForce * deltaTime);
-		}
-
-		if (CollisionManager::AABBCheck(m_player->GetTransform(), m_enemy->GetTransform()))
-		{
-			std::cout << "player collides with enemy" << std::endl;
-			StateManager::PushState(new LoseState);
-		}
-
-		if (Game::GetInstance().KeyDown(SDL_SCANCODE_W))
-		{
-			std::cout << "changing to win state" << std::endl;
-			StateManager::PushState(new WinState());
-		}
-	}
-	float gravity;
-	if(m_player->UpdatePositionY(0)>Game::kHeight-m_player->GetObjectHeight())
-	{
-		gravity = 0;
-	}
-	else
-	{
-		gravity = 0.5;
-	}
-	m_player->UpdatePositionY(gravity);
+	
 	camera.x = m_player->GetTransform().x - Game::kWidth / 2;
 	camera.y = m_player->GetTransform().y - Game::kHeight / 2;
 
@@ -157,14 +102,17 @@ void GameState::Render()
 	SDL_SetRenderDrawColor(pRenderer, 0, 0, 200, 255);
 	SDL_RenderClear(pRenderer);
 
-	SDL_Rect backgroundIntRect = MathManager::ConvertFRect2Rect(m_background->GetTransform());
-	SDL_RenderCopy(pRenderer, m_pBackgroundTexture, &camera, &backgroundIntRect);
+	SDL_Rect backgroundIntRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(pRenderer, m_pBackgroundTexture, NULL, &backgroundIntRect);
 	
-	SDL_Rect playerIntRect = MathManager::ConvertFRect2Rect(m_player->GetTransform());
+	SDL_Rect playerIntRect = {50,400,250,250};
 	SDL_RenderCopy(pRenderer, m_pPlayerTexture, nullptr, &playerIntRect);
 
-	SDL_Rect enemyintRect = MathManager::ConvertFRect2Rect(m_enemy->GetTransform());
-	SDL_RenderCopy(pRenderer, m_pEnemyTexture, nullptr, &enemyintRect);
+	SDL_Rect womanWorkerRect = {300,400,250,250};
+	SDL_RenderCopy(pRenderer, m_pWomanWorkerTexture, nullptr, &womanWorkerRect);
+
+	SDL_Rect maleWorkerRect = { 550,400,250,250 };
+	SDL_RenderCopy(pRenderer, m_pMaleWorkerTexture, nullptr, &maleWorkerRect);
 
 	tileLevel->loadLevelTextures(pRenderer);
 	tileLevel->render(pRenderer);
@@ -183,8 +131,8 @@ void GameState::Exit()
 	delete m_player;
 	m_player = nullptr;
 
-	delete m_enemy;
-	m_enemy = nullptr;
+	delete m_womanWorker;
+	m_womanWorker = nullptr;
 
 	delete tileLevel;
 	tileLevel = nullptr;
@@ -195,9 +143,9 @@ void GameState::Exit()
 	SDL_DestroyTexture(m_pPlayerTexture);
 	m_pPlayerTexture = nullptr;
 
-	SDL_DestroyTexture(m_pEnemyTexture);
+	SDL_DestroyTexture(m_pWomanWorkerTexture);
 
-	m_pEnemyTexture = nullptr;
+	m_pWomanWorkerTexture = nullptr;
 
 	SDL_DestroyTexture(m_pBackgroundTexture);
 
