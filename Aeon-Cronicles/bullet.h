@@ -8,6 +8,7 @@ public:
 
 	float bulletDelay = 0.5f;
 	std::vector velocity;
+	sprite sprite;
 
 	void playerShoot();
 	void enemyShoot();
