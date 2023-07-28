@@ -85,9 +85,9 @@ public:
 
 class WinState : public State//win screen
 {
+	SDL_Texture* WinStateTexture;
 	//UIButton* RetryButton;
 	//SDL_Texture* RetryButtonTexture;
-
 	UIButton* MainMenuButton;
 	SDL_Texture* MainMenuButtonTexture;
 public:
@@ -99,9 +99,9 @@ public:
 
 class LoseState : public State//lose screen
 {
+	SDL_Texture* LoseStateTexture;
 	//UIButton* RetryButton;
 	//SDL_Texture* RetryButtonTexture;
-
 	UIButton* MainMenuButton;
 	SDL_Texture* MainMenuButtonTexture;
 public:

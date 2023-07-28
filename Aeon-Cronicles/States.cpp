@@ -14,7 +14,7 @@ void TitleState::Enter()
 	StartGameButton = new UIButton(Game::kWidth / 2 - 100, Game::kHeight * 3 / 4 - 100, 200, 200);
 
 	TitleStateTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/titleState.png");
-	StartGameButtonTexture= IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/playerbullet.png");
+	StartGameButtonTexture= IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/start.png");
 }
 void TitleState::Update(float deltaTime)
 {
@@ -253,10 +253,11 @@ void WinState::Enter()
 {
 	std::cout << "entering win state" << std::endl;
 
+	WinStateTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/Win.png");
 	//RetryButton = new UIButton(Game::kWidth / 2 - 100, Game::kHeight / 2 - 200, 200, 200);
 	//RetryButtonTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/playerbullet.png");
-	MainMenuButton = new UIButton(Game::kWidth / 2 - 100, Game::kHeight / 2, 200, 200);
-	MainMenuButtonTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/playerbullet.png");
+	MainMenuButton = new UIButton(Game::kWidth / 2 - 100, Game::kHeight / 2 + 100, 200, 200);
+	MainMenuButtonTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/mainmenu.png");
 }	 
 void WinState::Update(float deltaTime)
 {
@@ -293,6 +294,7 @@ void WinState::Render()
 	SDL_SetRenderDrawColor(pRenderer, 0, 255, 0, 255);
 	SDL_RenderClear(pRenderer);
 
+	SDL_RenderCopy(pRenderer, WinStateTexture, nullptr, nullptr);
 	//SDL_Rect RetryButtonRect = MathManager::ConvertFRect2Rect(RetryButton->GetTransform());
 	//SDL_RenderCopy(pRenderer, RetryButtonTexture, nullptr, &RetryButtonRect);
 	SDL_Rect MainMenuButtonRect = MathManager::ConvertFRect2Rect(MainMenuButton->GetTransform());
@@ -308,10 +310,11 @@ void LoseState::Enter()
 {
 	std::cout << "entering lose state" << std::endl;
 
+	LoseStateTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/Lose.png");
 	//RetryButton = new UIButton(Game::kWidth / 2 - 100, Game::kHeight / 2 - 200, 200, 200);
 	//RetryButtonTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/playerbullet.png");
-	MainMenuButton = new UIButton(Game::kWidth / 2 - 100, Game::kHeight / 2, 200, 200);
-	MainMenuButtonTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/playerbullet.png");
+	MainMenuButton = new UIButton(Game::kWidth / 2 - 100, Game::kHeight / 2 + 100, 200, 200);
+	MainMenuButtonTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/mainmenu.png");
 }
 void LoseState::Update(float deltaTime)
 {
@@ -347,6 +350,7 @@ void LoseState::Render()
 	SDL_SetRenderDrawColor(pRenderer, 255, 0, 0, 255);
 	SDL_RenderClear(pRenderer);
 
+	SDL_RenderCopy(pRenderer, LoseStateTexture, nullptr, nullptr);
 	//SDL_Rect RetryButtonRect = MathManager::ConvertFRect2Rect(RetryButton->GetTransform());
 	//SDL_RenderCopy(pRenderer, RetryButtonTexture, nullptr, &RetryButtonRect);
 	SDL_Rect MainMenuButtonRect = MathManager::ConvertFRect2Rect(MainMenuButton->GetTransform());
