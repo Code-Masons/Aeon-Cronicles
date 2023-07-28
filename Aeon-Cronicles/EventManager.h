@@ -3,6 +3,8 @@
 class EventManager
 {
 public:
+	
+
 	static void Init();
 	static void HandleEvents();
 

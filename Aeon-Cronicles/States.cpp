@@ -1,10 +1,9 @@
 #include <iostream>
 #include "States.h"
 #include "StateManager.h"
-#include "Game.h"
-#include "GameObject.h"
 #include "CollisionManager.h"
 #include "MathManager.h"
+#include "EventManager.h"
 
 
 void TitleState::Enter()
@@ -12,18 +11,27 @@ void TitleState::Enter()
 	std::cout << "entering title state " << std::endl;
 
 	GameName = new GameObject(Game::kWidth / 2 - 300, Game::kHeight / 3 - 200, 600, 400, 100, 100, 100, 255);
-	TitleButton = new UIButton(Game::kWidth / 2 - 100, Game::kHeight * 3 / 4 - 100, 200, 200, "assets/playerbullet.png");
+	StartGameButton = new UIButton(Game::kWidth / 2 - 100, Game::kHeight * 3 / 4 - 100, 200, 200);
 
 	TitleStateTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/titleState.png");
-	TitleButtonTexture= IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/playerbullet.png");
+	StartGameButtonTexture= IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/playerbullet.png");
 }
 void TitleState::Update(float deltaTime)
 {
+	//if (Game::GetInstance().KeyDown(SDL_SCANCODE_G))//press g to go to game state
+	//{
+	//	std::cout << "changing to game state" << std::endl;
+	//	StateManager::ChangeState(new GameState());//change to new game state
+	//}
 
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_G))//press g to go to game state
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to game state" << std::endl;
-		StateManager::ChangeState(new GameState());//change to new game state
+		StartGameButton->HandleEvent();
+		if (StartGameButton->CheckIsHovered())
+		{
+			std::cout << "changing to game state" << std::endl;
+			StateManager::ChangeState(new GameState());//change to new game state
+		}
 	}
 }
 void TitleState::Render()
@@ -37,8 +45,8 @@ void TitleState::Render()
 
 	SDL_RenderCopy(pRenderer, TitleStateTexture, nullptr, nullptr);
 
-	SDL_Rect TitleButtonRect = MathManager::ConvertFRect2Rect(TitleButton->GetTransform());
-	SDL_RenderCopy(pRenderer, TitleButtonTexture, nullptr, &TitleButtonRect);
+	SDL_Rect TitleButtonRect = MathManager::ConvertFRect2Rect(StartGameButton->GetTransform());
+	SDL_RenderCopy(pRenderer, StartGameButtonTexture, nullptr, &TitleButtonRect);
 }
 void TitleState::Exit()
 {
@@ -50,8 +58,6 @@ void GameState::Enter()
 {
 
 	std::cout << "entering game state" << std::endl;
-
-	
 	
 	//define game objects here
 	m_player = new GameObject(Game::kWidth / 2, Game::kHeight / 2, 100, 100, 0, 200, 0, 255);
@@ -246,13 +252,37 @@ void PauseState::Exit()
 void WinState::Enter()
 {
 	std::cout << "entering win state" << std::endl;
+
+	//RetryButton = new UIButton(Game::kWidth / 2 - 100, Game::kHeight / 2 - 200, 200, 200);
+	//RetryButtonTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/playerbullet.png");
+	MainMenuButton = new UIButton(Game::kWidth / 2 - 100, Game::kHeight / 2, 200, 200);
+	MainMenuButtonTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/playerbullet.png");
 }	 
 void WinState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))
+	//if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))
+	//{
+	//	std::cout << "changing to title state" << std::endl;
+	//	StateManager::ChangeState(new TitleState());
+	//}
+
+	//if (EventManager::MousePressed(1))
+	//{
+	//	RetryButton->HandleEvent();
+	//	if (RetryButton->CheckIsHovered())
+	//	{
+	//		std::cout << "changing to game state" << std::endl;
+	//		StateManager::ChangeState(new GameState());//change to new game state
+	//	}
+	//}
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to title state" << std::endl;
-		StateManager::ChangeState(new TitleState());
+		MainMenuButton->HandleEvent();
+		if (MainMenuButton->CheckIsHovered())
+		{
+			std::cout << "changing to title state" << std::endl;
+			StateManager::ChangeState(new TitleState());//change to new title state
+		}
 	}
 }
 void WinState::Render()
@@ -262,6 +292,11 @@ void WinState::Render()
 
 	SDL_SetRenderDrawColor(pRenderer, 0, 255, 0, 255);
 	SDL_RenderClear(pRenderer);
+
+	//SDL_Rect RetryButtonRect = MathManager::ConvertFRect2Rect(RetryButton->GetTransform());
+	//SDL_RenderCopy(pRenderer, RetryButtonTexture, nullptr, &RetryButtonRect);
+	SDL_Rect MainMenuButtonRect = MathManager::ConvertFRect2Rect(MainMenuButton->GetTransform());
+	SDL_RenderCopy(pRenderer, MainMenuButtonTexture, nullptr, &MainMenuButtonRect);
 }
 void WinState::Exit()
 {
@@ -272,13 +307,36 @@ void WinState::Exit()
 void LoseState::Enter()
 {
 	std::cout << "entering lose state" << std::endl;
+
+	//RetryButton = new UIButton(Game::kWidth / 2 - 100, Game::kHeight / 2 - 200, 200, 200);
+	//RetryButtonTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/playerbullet.png");
+	MainMenuButton = new UIButton(Game::kWidth / 2 - 100, Game::kHeight / 2, 200, 200);
+	MainMenuButtonTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/playerbullet.png");
 }
 void LoseState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))
+	//if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))
+	//{
+	//	std::cout << "changing to title state" << std::endl;
+	//	StateManager::ChangeState(new TitleState());
+	//}
+	//if (EventManager::MousePressed(1))
+	//{
+	//	RetryButton->HandleEvent();
+	//	if (RetryButton->CheckIsHovered())
+	//	{
+	//		std::cout << "changing to game state" << std::endl;
+	//		StateManager::ChangeState(new GameState());//change to new game state
+	//	}
+	//}
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to title state" << std::endl;
-		StateManager::ChangeState(new TitleState());
+		MainMenuButton->HandleEvent();
+		if (MainMenuButton->CheckIsHovered())
+		{
+			std::cout << "changing to title state" << std::endl;
+			StateManager::ChangeState(new TitleState());//change to new title state
+		}
 	}
 }
 void LoseState::Render()
@@ -288,6 +346,11 @@ void LoseState::Render()
 
 	SDL_SetRenderDrawColor(pRenderer, 255, 0, 0, 255);
 	SDL_RenderClear(pRenderer);
+
+	//SDL_Rect RetryButtonRect = MathManager::ConvertFRect2Rect(RetryButton->GetTransform());
+	//SDL_RenderCopy(pRenderer, RetryButtonTexture, nullptr, &RetryButtonRect);
+	SDL_Rect MainMenuButtonRect = MathManager::ConvertFRect2Rect(MainMenuButton->GetTransform());
+	SDL_RenderCopy(pRenderer, MainMenuButtonTexture, nullptr, &MainMenuButtonRect);
 }
 void LoseState::Exit()
 {

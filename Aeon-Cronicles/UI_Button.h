@@ -33,13 +33,12 @@
 class UIButton : public GameObject
 {
 public:
-    UIButton(float x, float y, float w, float h, const std::string& imagePath);
+    UIButton(float x, float y, float w, float h);
 
-    void HandleEvent(const SDL_Event& event);
-    void Render(SDL_Renderer* pRenderer);
+    bool CheckIsHovered() { return m_IsHovered; }
+    void HandleEvent();
 
 private:
     SDL_Texture* m_Texture;
     bool m_IsHovered;
-    bool m_IsClicked;
 };

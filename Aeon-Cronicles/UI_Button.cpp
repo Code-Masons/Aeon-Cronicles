@@ -61,70 +61,19 @@
 #include <SDL_image.h>
 #include <iostream>
 #include "Game.h"
+#include "EventManager.h"
+#include "MathManager.h"
 
-UIButton::UIButton(float x, float y, float w, float h, const std::string& imagePath)
+UIButton::UIButton(float x, float y, float w, float h)
     : GameObject(x, y, w, h)
-    , m_Texture(nullptr)
     , m_IsHovered(false)
-    , m_IsClicked(false)
+{}
+
+void UIButton::HandleEvent()
 {
-    SDL_Surface* surface = IMG_Load(imagePath.c_str());
-    if (!surface)
-    {
-        std::cerr << "Failed to load image: " << imagePath << ". Error: " << IMG_GetError() << std::endl;
-        return;
-    }
+    SDL_Point mousePos = EventManager::GetMousePos(); // Use GetMousePos function from EventManager
+    SDL_Rect button = MathManager::ConvertFRect2Rect(GetTransform());
+    bool isInside = SDL_PointInRect(&mousePos, &button);
 
-    SDL_Renderer* renderer = Game::GetInstance().GetRenderer();
-    m_Texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_FreeSurface(surface);
-}
-
-void UIButton::HandleEvent(const SDL_Event& event)
-{
-    if (event.type == SDL_MOUSEMOTION || event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP)
-    {
-        int mouseX, mouseY;
-        SDL_GetMouseState(&mouseX, &mouseY);
-
-        bool isInside = mouseX >= static_cast<int>(GetTransform().x) && mouseX <= static_cast<int>(GetTransform().x + GetTransform().w)
-            && mouseY >= static_cast<int>(GetTransform().y) && mouseY <= static_cast<int>(GetTransform().y + GetTransform().h);
-
-        if (isInside)
-        {
-            if (event.type == SDL_MOUSEBUTTONDOWN)
-            {
-                m_IsClicked = true;
-            }
-            else if (event.type == SDL_MOUSEBUTTONUP)
-            {
-                m_IsClicked = false;
-            }
-
-            m_IsHovered = true;
-        }
-        else
-        {
-            m_IsHovered = false;
-            m_IsClicked = false;
-        }
-    }
-}
-
-void UIButton::Render(SDL_Renderer* pRenderer)
-{
-    if (m_IsClicked)
-    {
-        SDL_SetTextureColorMod(m_Texture, 100, 100, 100); // Darken the button when clicked
-    }
-    else if (m_IsHovered)
-    {
-        SDL_SetTextureColorMod(m_Texture, 255, 255, 255); // Reset the color modulation when hovered
-    }
-    else
-    {
-        SDL_SetTextureColorMod(m_Texture, 200, 200, 200); // Apply a slight color modulation when not hovered
-    }
-
-    SDL_RenderCopyF(pRenderer, m_Texture, nullptr, &GetTransform());
+    m_IsHovered = isInside;
 }
