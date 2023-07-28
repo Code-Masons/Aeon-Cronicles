@@ -40,6 +40,18 @@ public:
 
 };
 
+class CreditState :public State//credit screen
+{
+	SDL_Texture* CreditStateTexture;
+	UIButton* MainMenuButton;
+	SDL_Texture* MainMenuButtonTexture;
+public:
+	virtual void Enter() override;
+	virtual void Update(float deltaTime) override;
+	virtual void Render() override;
+	virtual void Exit() override;
+};
+
 class GameState : public State//main game loop screen
 {
 	int lWidth = 2500;
@@ -86,8 +98,8 @@ public:
 class WinState : public State//win screen
 {
 	SDL_Texture* WinStateTexture;
-	//UIButton* RetryButton;
-	//SDL_Texture* RetryButtonTexture;
+	UIButton* RetryButton;
+	SDL_Texture* RetryButtonTexture;
 	UIButton* MainMenuButton;
 	SDL_Texture* MainMenuButtonTexture;
 public:
@@ -100,8 +112,8 @@ public:
 class LoseState : public State//lose screen
 {
 	SDL_Texture* LoseStateTexture;
-	//UIButton* RetryButton;
-	//SDL_Texture* RetryButtonTexture;
+	UIButton* RetryButton;
+	SDL_Texture* RetryButtonTexture;
 	UIButton* MainMenuButton;
 	SDL_Texture* MainMenuButtonTexture;
 public:

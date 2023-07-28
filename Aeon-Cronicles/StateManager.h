@@ -11,7 +11,7 @@ public:
 	static void Update(float deltaTime);
 	static void Render();
 	static void PushState(State* pState);
-	static void popState();
+	static void PopState();
 	static void ChangeState(State* pState);
 	static void Quit();
 	static std::vector<State*>& GetStates();

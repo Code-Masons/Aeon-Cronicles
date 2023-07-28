@@ -25,7 +25,7 @@ void StateManager::PushState(State* pState)
 	s_states.back()->Enter();
 }
 
-void StateManager::popState()
+void StateManager::PopState()
 {
 	if (s_states.size() <= 1)
 	{
