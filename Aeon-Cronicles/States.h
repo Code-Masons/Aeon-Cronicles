@@ -94,7 +94,7 @@ public:
 
 class CarState : public State//win screen
 {
-
+	
 	GameObject* m_background;
 	GameObject* m_text;
 
@@ -105,6 +105,7 @@ public:
 	virtual void Update(float deltaTime) override;
 	virtual void Render() override;
 	virtual void Exit() override;
+
 };
 
 class PauseState : public State//pause screen

@@ -3,6 +3,7 @@
 #include "StateManager.h"
 #include "Game.h"
 #include "GameObject.h"
+#include "EventManager.h"
 #include "CollisionManager.h"
 #include "MathManager.h"
 
@@ -67,7 +68,7 @@ void OfficeState::Update(float deltaTime)
 		StateManager::PushState(new PauseState());
 	}
 
-	if (Game::GetInstance().KeyReleased(SDL_SCANCODE_C))//press C to go to game state
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_C))//press C to go to game state
 	{
 		std::cout << "changing to street state" << std::endl;
 		StateManager::ChangeState(new StreetState());//change to new game state
@@ -181,7 +182,7 @@ void PauseState::Render()
 	SDL_Rect rect = { 256, 128, 512, 512 };
 	SDL_RenderFillRect(Game::GetInstance().GetRenderer(), &rect);
 
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))
+	if (EventManager::KeyPressed(SDL_SCANCODE_R))
 	{
 		StateManager::PushState(new OfficeState());
 	}
@@ -197,19 +198,18 @@ void StreetState::Enter()
 
 	m_pBackground = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/street/streetBackground.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/street/streetText.png");
-	m_pContinueTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/street/pressCWhite.png");
+	m_pContinueTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/street/pressX.png");
+
+
 }
 
 void StreetState::Update(float deltaTime)
 {
-	
-
-	if (Game::GetInstance().KeyReleased (SDL_SCANCODE_C))//press C to go to game state
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_X))//press X to go to game state
 	{
 		std::cout << "changing to car state" << std::endl;
 		StateManager::ChangeState(new CarState());//change to new game state
 	}
-
 }
 
 void StreetState::Render()
@@ -248,7 +248,8 @@ void CarState::Enter()
 {
 	std::cout << "entering car state.." << std::endl;
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/carDash/background.png");
-	
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/carDash/wrathText.png");
+
 }
 
 void CarState::Update(float deltaTime)
@@ -263,6 +264,9 @@ void CarState::Render()
 	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
 
+	SDL_Rect textRect = { 300,50,400,350 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
 }
 
 void CarState::Exit()
@@ -276,7 +280,7 @@ void WinState::Enter()
 }	 
 void WinState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))
+	if (EventManager::KeyPressed(SDL_SCANCODE_R))
 	{
 		std::cout << "changing to title state" << std::endl;
 		StateManager::ChangeState(new TitleState());

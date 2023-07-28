@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "StateManager.h"
 #include "States.h"
+#include "EventManager.h"
 #include <iostream>
 
 Game::Game()
@@ -61,6 +62,8 @@ int Game::Init(const char* title, int xpos, int ypos)
 		return -1;
 	}
 
+	EventManager::Init();
+
 	std::cout << "initialization successful" << std::endl;
 
 	StateManager::PushState(new TitleState());
@@ -114,15 +117,6 @@ bool Game::KeyDown(SDL_Scancode key)
 	if (m_keyStates)
 	{
 		return m_keyStates[key] == 1;
-	}
-	return false;
-}
-
-bool Game::KeyReleased(SDL_Scancode key)
-{
-	if (m_keyStates)
-	{
-		return m_keyStates[key] == 0;
 	}
 	return false;
 }
