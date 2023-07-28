@@ -51,6 +51,7 @@ void GameState::Enter()
 	//define game objects here
 	m_player = new GameObject(Game::kWidth / 2, Game::kHeight / 2, 100, 100, 0, 200, 0, 255);
 	m_enemy = new GameObject(100, 100, 100, 100, 0, 200, 0, 255);
+	m_playerBullet = new GameObject(m_player->GetTransform().x + 100, m_player->GetTransform().y, 100, 100);
   
 	//tileLevel = new TileLevel();
 	m_background = new GameObject(0, 0, 2000, Game::kHeight);
@@ -58,6 +59,7 @@ void GameState::Enter()
 	tileLevel->loadLevelData();
 
 	//load textures for game state here
+	m_playerBulletTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/playerbullet.png");
 	m_pPlayerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/playerbullet.png");
 	m_pEnemyTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/enemybullet.png");
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/background.png");
@@ -106,6 +108,11 @@ void GameState::Update(float deltaTime)
 		if (Game::GetInstance().KeyDown(SDL_SCANCODE_SPACE))
 		{
 			m_player->UpdatePositionY(kPlayerJumpForce * deltaTime);
+		}
+
+		if (Game::GetInstance().KeyDown(SDL_SCANCODE_E))
+		{
+			m_playerBullet->Draw(Game::GetInstance().GetRenderer());
 		}
 
 		if (CollisionManager::AABBCheck(m_player->GetTransform(), m_enemy->GetTransform()))
@@ -162,6 +169,9 @@ void GameState::Render()
 	
 	SDL_Rect playerIntRect = MathManager::ConvertFRect2Rect(m_player->GetTransform());
 	SDL_RenderCopy(pRenderer, m_pPlayerTexture, nullptr, &playerIntRect);
+
+	SDL_Rect playerBulletRect = MathManager::ConvertFRect2Rect(m_player->GetTransform());
+	SDL_RenderCopy(pRenderer, m_playerBulletTexture, nullptr, &playerBulletRect);
 
 	SDL_Rect enemyintRect = MathManager::ConvertFRect2Rect(m_enemy->GetTransform());
 	SDL_RenderCopy(pRenderer, m_pEnemyTexture, nullptr, &enemyintRect);

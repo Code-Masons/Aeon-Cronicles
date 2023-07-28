@@ -53,12 +53,14 @@ class GameState : public State//main game loop screen
 	TileLevel* tileLevel;
 
 	GameObject* m_background;
+	GameObject* m_playerBullet;
 
 
 	//textures
 	SDL_Texture* m_pPlayerTexture;
 	SDL_Texture* m_pEnemyTexture;
 	SDL_Texture* m_pBackgroundTexture;
+	SDL_Texture* m_playerBulletTexture;
 
 	//Mix_Music* m_pMusic;
 
