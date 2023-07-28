@@ -2,11 +2,13 @@
 #include <SDL.h>
 #include "SDL_image.h"
 #include <vector>
-#include<string>
+#include <string>
 #include <map>
 #include "GameObject.h"
 #include "tilelevel.h"
 #include "Game.h"
+#include "UI_Button.h"
+#include "StateManager.h"
 
 class State
 {
@@ -28,6 +30,8 @@ class TitleState : public State//main menu screen
 {
 	GameObject* GameName;
 	SDL_Texture* TitleStateTexture;
+	UIButton* StartGameButton;
+	SDL_Texture* StartGameButtonTexture;
 public:
 	virtual void Enter() override;
 	virtual void Update(float deltaTime) override;
@@ -38,8 +42,8 @@ public:
 
 class GameState : public State//main game loop screen
 {
-	 int lWidth = 2500;
-	 int lHeight = Game::kHeight;
+	int lWidth = 2500;
+	int lHeight = Game::kHeight;
 	static const int kPlayerSpeed = 200;
 	static const int kEnemySpeed = 80;
 	static const int kPlayerJumpForce = -1000;
@@ -81,6 +85,11 @@ public:
 
 class WinState : public State//win screen
 {
+	SDL_Texture* WinStateTexture;
+	//UIButton* RetryButton;
+	//SDL_Texture* RetryButtonTexture;
+	UIButton* MainMenuButton;
+	SDL_Texture* MainMenuButtonTexture;
 public:
 	virtual void Enter() override;
 	virtual void Update(float deltaTime) override;
@@ -90,6 +99,11 @@ public:
 
 class LoseState : public State//lose screen
 {
+	SDL_Texture* LoseStateTexture;
+	//UIButton* RetryButton;
+	//SDL_Texture* RetryButtonTexture;
+	UIButton* MainMenuButton;
+	SDL_Texture* MainMenuButtonTexture;
 public:
 	virtual void Enter() override;
 	virtual void Update(float deltaTime) override;
