@@ -341,8 +341,8 @@ void WinState::Render()
 	SDL_RenderClear(pRenderer);
 
 	SDL_RenderCopy(pRenderer, WinStateTexture, nullptr, nullptr);
-	SDL_Rect RetryButtonRect = MathManager::ConvertFRect2Rect(RetryButton->GetTransform());
-	SDL_RenderCopy(pRenderer, RetryButtonTexture, nullptr, &RetryButtonRect);
+	//SDL_Rect RetryButtonRect = MathManager::ConvertFRect2Rect(RetryButton->GetTransform());
+	//SDL_RenderCopy(pRenderer, RetryButtonTexture, nullptr, &RetryButtonRect);
 	SDL_Rect MainMenuButtonRect = MathManager::ConvertFRect2Rect(MainMenuButton->GetTransform());
 	SDL_RenderCopy(pRenderer, MainMenuButtonTexture, nullptr, &MainMenuButtonRect);
 }
@@ -392,8 +392,8 @@ void LoseState::Render()
 	SDL_RenderClear(pRenderer);
 
 	SDL_RenderCopy(pRenderer, LoseStateTexture, nullptr, nullptr);
-	SDL_Rect RetryButtonRect = MathManager::ConvertFRect2Rect(RetryButton->GetTransform());
-	SDL_RenderCopy(pRenderer, RetryButtonTexture, nullptr, &RetryButtonRect);
+	//SDL_Rect RetryButtonRect = MathManager::ConvertFRect2Rect(RetryButton->GetTransform());
+	//SDL_RenderCopy(pRenderer, RetryButtonTexture, nullptr, &RetryButtonRect);
 	SDL_Rect MainMenuButtonRect = MathManager::ConvertFRect2Rect(MainMenuButton->GetTransform());
 	SDL_RenderCopy(pRenderer, MainMenuButtonTexture, nullptr, &MainMenuButtonRect);
 }
