@@ -12,15 +12,42 @@ TileLevel::TileLevel(int screenWidth, int screenHeight)
     // Resize the tiles vector to match the number of rows and columns
     tiles.resize(numRows, std::vector<int>(numCols, 0));
 
-    // Set the tiles at the border as barriers (1)
+    // Set the tiles at the borders as barriers (1)
     for (int col = 0; col < numCols; ++col) {
-        tiles[0][col] = 1;                           // Top border
+        tiles[0][col] = 0;                           // Top border
         tiles[numRows - 1][col] = 1;                  // Bottom border
     }
     for (int row = 0; row < numRows; ++row) {
         tiles[row][0] = 1;                           // Left border
-        tiles[row][numCols - 1] = 1;                 // Right border
+        tiles[row][numCols - 1] = 0;                 // Right border
     }
+
+    // You can customize these values to design the platform map as you desire
+
+    // Platform 1
+    int platform1StartCol = 2;
+    int platform1EndCol = 8;
+    int platform1Row = numRows - 5;
+    for (int col = platform1StartCol; col <= platform1EndCol; ++col) {
+        tiles[platform1Row][col] = 2; // Platform tile
+    }
+
+    // Platform 2
+    int platform2StartCol = 12;
+    int platform2EndCol = 18;
+    int platform2Row = numRows - 8;
+    for (int col = platform2StartCol; col <= platform2EndCol; ++col) {
+        tiles[platform2Row][col] = 2; // Platform tile
+    }
+
+    // Platform 3
+    int platform3StartCol = 22;
+    int platform3EndCol = 28;
+    int platform3Row = numRows - 11;
+    for (int col = platform3StartCol; col <= platform3EndCol; ++col) {
+        tiles[platform3Row][col] = 2; // Platform tile
+    }
+
 }
 
 TileLevel::~TileLevel()
