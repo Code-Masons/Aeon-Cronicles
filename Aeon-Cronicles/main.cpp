@@ -4,6 +4,8 @@
 #include "Game.h"
 #include "states.h"
 #include "stateManager.h"
+#include "Sprite.cpp"
+#include "States.cpp"
 
 int main(int argc, char* argv[])
 {
