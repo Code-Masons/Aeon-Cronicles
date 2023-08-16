@@ -255,10 +255,10 @@ void CarState::Enter()
 
 void CarState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_C))//press X to go to game state
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_C))//press c to go to game state
 	{
 		std::cout << "changing to truck state" << std::endl;
-		StateManager::ChangeState(new TruckState());//change to new game state
+		StateManager::ChangeState(new TruckState());//change to new truck state
 	}
 }
 
@@ -287,11 +287,18 @@ void CarState::Exit()
 	delete m_text;
 	m_text = nullptr;
 
+	delete m_continue;
+	m_continue = nullptr;
+
 	SDL_DestroyTexture(m_pBackgroundTexture);
 	m_pBackgroundTexture = nullptr;
 
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pContinueTexture);
+	m_pContinueTexture = nullptr;
+
 
 }
 
@@ -307,11 +314,17 @@ void TruckState::Enter()
 
 void TruckState::Update(float deltaTime)
 {
-
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_X))//press X to go to hell start state state
+	{
+		std::cout << "changing to hell state" << std::endl;
+		StateManager::ChangeState(new HellState());//change to new hell start state
+	}
 }
 
 void TruckState::Render()
 {
+
+	std::cout << "rendering truck state.." << std::endl;
 
 	SDL_Rect truckRect = { 0,10,1200,750 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTruckTexture, NULL, &truckRect);
@@ -330,8 +343,66 @@ void TruckState::Render()
 void TruckState::Exit()
 {
 	std::cout << "exiting truck state.." << std::endl;
+
+	delete m_background;
+	m_background = nullptr;
+
+	delete m_text;
+	m_text = nullptr;
+
+	delete m_pressX;
+	m_pressX = nullptr;
+
+	delete m_truck;
+	m_truck = nullptr;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pPressXTexture);
+	m_pPressXTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTruckTexture);
+	m_pTruckTexture = nullptr;
 }
 
+//////////////////CHAPTER 1 STATES START////////////////////////////
+
+void HellState::Enter()
+{
+	std::cout << "entering hell state.." << std::endl;
+
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/enterHell/background.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/enterHell/text.png");
+	m_pPressCTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/enterHell/pressC.png");
+}
+
+void HellState::Update(float deltaTime)
+{
+	
+}
+
+void HellState::Render()
+{
+	std::cout << "rendering Hell state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 200,50,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect cRect = { 750,700,200,350 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pPressCTexture, NULL, &cRect);
+}
+
+void HellState::Exit()
+{
+	std::cout << "exiting hell state.." << std::endl;
+}
 
 void WinState::Enter()
 {

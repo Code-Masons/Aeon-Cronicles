@@ -130,6 +130,26 @@ public:
 
 };
 
+
+///////////////CHAPTER 1 STATES//////////////////////
+class HellState : public State//hell start screen
+{
+
+	GameObject* m_background;
+	GameObject* m_Text;
+	GameObject* m_PressC;
+
+	SDL_Texture* m_pBackgroundTexture;
+	SDL_Texture* m_pTextTexture;
+	SDL_Texture* m_pPressCTexture;
+public:
+	virtual void Enter() override;
+	virtual void Update(float deltaTime) override;
+	virtual void Render() override;
+	virtual void Exit() override;
+};
+
+
 class PauseState : public State//pause screen
 {
 public:
