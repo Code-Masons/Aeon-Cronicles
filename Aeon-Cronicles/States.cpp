@@ -249,12 +249,17 @@ void CarState::Enter()
 	std::cout << "entering car state.." << std::endl;
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/carDash/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/carDash/wrathText.png");
+	m_pContinueTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/carDash/pressC.png");
 
 }
 
 void CarState::Update(float deltaTime)
 {
-
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_C))//press X to go to game state
+	{
+		std::cout << "changing to truck state" << std::endl;
+		StateManager::ChangeState(new TruckState());//change to new game state
+	}
 }
 
 void CarState::Render()
@@ -267,16 +272,70 @@ void CarState::Render()
 	SDL_Rect textRect = { 300,50,400,350 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
 
+	SDL_Rect cRect = { 750,700,200,350 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pContinueTexture, NULL, &cRect);
+
 }
 
 void CarState::Exit()
 {
 	std::cout << "exiting car state.." << std::endl;
+
+	delete m_background;
+	m_background = nullptr;
+
+	delete m_text;
+	m_text = nullptr;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
+
 }
+
+void TruckState::Enter()
+{
+	std::cout << "entering truck state.." << std::endl;
+
+	m_pTruckTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/truck/truck.png");
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/truck/background.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/truck/truckText.png");
+	m_pPressXTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/truck/pressX.png");
+}
+
+void TruckState::Update(float deltaTime)
+{
+
+}
+
+void TruckState::Render()
+{
+
+	SDL_Rect truckRect = { 0,10,1200,750 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTruckTexture, NULL, &truckRect);
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 200,500,700,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect xRect = { 750,20,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pPressXTexture, NULL, &xRect);
+
+}
+
+void TruckState::Exit()
+{
+	std::cout << "exiting truck state.." << std::endl;
+}
+
 
 void WinState::Enter()
 {
-	std::cout << "entering win state" << std::endl;
+	std::cout << "entering win state.." << std::endl;
 }	 
 void WinState::Update(float deltaTime)
 {
@@ -296,7 +355,7 @@ void WinState::Render()
 }
 void WinState::Exit()
 {
-	std::cout << "exiting lose state" << std::endl;
+	std::cout << "exiting lose state.." << std::endl;
 }
 
 

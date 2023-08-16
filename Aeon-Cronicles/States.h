@@ -97,9 +97,31 @@ class CarState : public State//win screen
 	
 	GameObject* m_background;
 	GameObject* m_text;
+	GameObject* m_continue;
 
 	SDL_Texture* m_pBackgroundTexture;
 	SDL_Texture* m_pTextTexture;
+	SDL_Texture* m_pContinueTexture;
+
+public:
+	virtual void Enter() override;
+	virtual void Update(float deltaTime) override;
+	virtual void Render() override;
+	virtual void Exit() override;
+
+};
+
+class TruckState : public State//win screen
+{
+	GameObject* m_background;
+	GameObject* m_text;
+	GameObject* m_truck;
+	GameObject* m_pressX;
+
+	SDL_Texture* m_pBackgroundTexture;
+	SDL_Texture* m_pTextTexture;
+	SDL_Texture* m_pTruckTexture;
+	SDL_Texture* m_pPressXTexture;
 public:
 	virtual void Enter() override;
 	virtual void Update(float deltaTime) override;
