@@ -149,6 +149,26 @@ public:
 	virtual void Exit() override;
 };
 
+class CasinoState : public State//pause screen
+{
+public:
+
+	GameObject* m_background;
+	GameObject* m_devil;
+	GameObject* m_text;
+	GameObject* m_pressX;
+
+	SDL_Texture* m_pBackgroundTexture;
+	SDL_Texture* m_pDevilTexture;
+	SDL_Texture* m_pTextTexture;
+	SDL_Texture* m_pPressXTexture;
+
+
+	virtual void Enter() override;
+	virtual void Update(float deltaTime) override;
+	virtual void Render() override;
+	virtual void Exit() override;
+};
 
 class PauseState : public State//pause screen
 {

@@ -382,7 +382,11 @@ void HellState::Enter()
 
 void HellState::Update(float deltaTime)
 {
-	
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_C))//press X to go to hell start state state
+	{
+		std::cout << "changing to casino state" << std::endl;
+		StateManager::ChangeState(new CasinoState());//change to new hell start state
+	}
 }
 
 void HellState::Render()
@@ -402,6 +406,85 @@ void HellState::Render()
 void HellState::Exit()
 {
 	std::cout << "exiting hell state.." << std::endl;
+
+	delete m_background;
+	m_background = nullptr;
+
+	delete m_Text;
+	m_Text = nullptr;
+
+	delete m_PressC;
+	m_PressC = nullptr;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pPressCTexture);
+	m_pPressCTexture = nullptr;
+}
+
+void CasinoState::Enter()
+{
+	std::cout << "entering casino state.. " << std::endl;
+
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casino/background.png");
+	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casino/devil.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casino/text.png");
+	m_pPressXTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casino/pressX.png");
+}
+
+void CasinoState::Update(float deltaTime)
+{
+
+}
+
+void CasinoState::Render()
+{
+	std::cout << " rendering casino state.. " << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect devilRect = { 300,275,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pDevilTexture, NULL, &devilRect);
+
+	SDL_Rect textRect = { 300,10,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect xRect = { 750,700,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pPressXTexture, NULL, &xRect);
+}
+
+void CasinoState::Exit()
+{
+	std::cout << " exiting casino state.. " << std::endl;
+
+	delete m_background;
+	m_background = nullptr;
+
+	delete m_text;
+	m_text = nullptr;
+
+	delete m_devil;
+	m_devil = nullptr;
+
+	delete m_pressX;
+	m_pressX = nullptr;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pDevilTexture);
+	m_pDevilTexture = nullptr;
+
+	SDL_DestroyTexture(m_pPressXTexture);
+	m_pPressXTexture = nullptr;
 }
 
 void WinState::Enter()
