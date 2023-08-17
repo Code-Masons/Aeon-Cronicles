@@ -22,7 +22,7 @@ void TitleState::Update(float deltaTime)
 	if (Game::GetInstance().KeyDown(SDL_SCANCODE_G))//press g to go to office state
 	{
 		std::cout << "changing to game state" << std::endl;
-		StateManager::ChangeState(new SlothEnterState());//change to new office state
+		StateManager::ChangeState(new OfficeState());//change to new office state
 	}
 }
 void TitleState::Render()
@@ -505,6 +505,17 @@ void CasinoChoiceState::Enter()
 void CasinoChoiceState::Update(float deltaTime)
 {
 
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_1))//press C to go to casino lose state
+	{
+		std::cout << "changing to casino choice state" << std::endl;
+		StateManager::ChangeState(new CasinoLoseState());//change to new casino lose start state
+	}
+
+	else if (Game::GetInstance().KeyDown(SDL_SCANCODE_2))//press C to go to casino exit state
+	{
+		std::cout << "changing to casino choice state" << std::endl;
+		StateManager::ChangeState(new CasinoExitState());//change to new casino exit start state
+	}
 }
 
 void CasinoChoiceState::Render()
@@ -560,6 +571,77 @@ void CasinoChoiceState::Exit()
 
 	SDL_DestroyTexture(m_pPress2Texture);
 	m_pPress2Texture = nullptr;
+}
+
+void CasinoExitState::Enter()
+{
+	std::cout << "entering casino exit state.." << std::endl;
+
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casinoExit/background.png");
+	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casino/devil.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casinoExit/text.png");
+}
+
+void CasinoExitState::Update(float deltaTime)
+{
+	
+
+}
+
+void CasinoExitState::Render()
+{
+	std::cout << "rendering casino exit state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect devilRect = { 300,275,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pDevilTexture, NULL, &devilRect);
+
+	SDL_Rect textRect = { 300,10,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+}
+
+void CasinoExitState::Exit()
+{
+	std::cout << "exiting casino exit state.." << std::endl;
+}
+
+void CasinoLoseState::Enter()
+{
+	std::cout << "entering casino lose state.." << std::endl;
+
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casinoExit/background.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casinoLose/text.png");
+	m_pPlayerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casinoLose/player.png");
+}
+
+void CasinoLoseState::Update(float deltaTime)
+{
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))//press R to go to title state
+	{
+		std::cout << "changing to casino choice state" << std::endl;
+		StateManager::ChangeState(new TitleState());//change to new title state
+	}
+}
+
+void CasinoLoseState::Render()
+{
+	std::cout << "rendering casino lose state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 300,10,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect playerRect = { 270,300,300,300 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pPlayerTexture, NULL, &playerRect);
+}
+
+void CasinoLoseState::Exit()
+{
+	std::cout << "exiting casino lose state.." << std::endl;
 }
 
 ////////////////////CHAPTER 7 START//////////////////////////////////
