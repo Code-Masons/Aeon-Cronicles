@@ -827,7 +827,7 @@ void PrideExitState::Exit()
 void PrideLoseState::Enter()
 {
 	std::cout << "enter pride lose state.." << std::endl;
-	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideEnter/background.png");
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideLose/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideLose/text.png");
 	m_pPlayerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideLose/player.png");
 }
@@ -884,7 +884,11 @@ void LustEnterState::Enter()
 
 void LustEnterState::Update(float deltaTime)
 {
-
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_X))
+	{
+		std::cout << "changing to lust choice state" << std::endl;
+		StateManager::ChangeState(new LustChoiceState());
+	}
 }
 
 void LustEnterState::Render()
@@ -904,6 +908,58 @@ void LustEnterState::Render()
 void LustEnterState::Exit()
 {
 	std::cout << "exiting lust enter state.." << std::endl;
+
+	delete m_background;
+	m_background = nullptr;
+
+	delete m_text;
+	m_text = nullptr;
+
+	delete m_devil;
+	m_devil = nullptr;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pDevilTexture);
+	m_pDevilTexture = nullptr;
+}
+
+void LustChoiceState::Enter()
+{
+	std::cout << "entering lust choice state.." << std::endl;
+
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/background.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/LustChoice/text.png");
+	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/devil.png");
+}
+
+void LustChoiceState::Update(float deltaTime)
+{
+	
+}
+
+void LustChoiceState::Render()
+{
+	std::cout << "rendering lust choice state.." << std::endl;
+
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 250,50,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect devilRect = { 700,475,200,200 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pDevilTexture, NULL, &devilRect);
+}
+
+void LustChoiceState::Exit()
+{
+	std::cout << "exiting lust choice state" << std::endl;
 
 	delete m_background;
 	m_background = nullptr;
