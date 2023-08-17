@@ -1132,7 +1132,11 @@ void EnvyChoiceState::Enter()
 
 void EnvyChoiceState::Update(float deltaTime)
 {
-
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_2))
+	{
+		std::cout << "changing to envy exit state" << std::endl;
+		StateManager::ChangeState(new EnvyExitState());
+	}
 }
 
 void EnvyChoiceState::Render()
@@ -1152,6 +1156,57 @@ void EnvyChoiceState::Render()
 void EnvyChoiceState::Exit()
 {
 	std::cout << "exiting envy choice state" << std::endl;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pDevilTexture);
+	m_pDevilTexture = nullptr;
+}
+
+void EnvyExitState::Enter()
+{
+	std::cout << "entering envy exit state.." << std::endl;
+
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/background.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/envyExit/text.png");
+	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/devil.png");
+}
+
+void EnvyExitState::Update(float deltaTime)
+{
+
+}
+
+void EnvyExitState::Render()
+{
+	std::cout << "rendering envy exit state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 250,50,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect devilRect = { 350,270,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pDevilTexture, NULL, &devilRect);
+}
+
+void EnvyExitState::Exit()
+{
+	std::cout << "exiting envy exit state" << std::endl;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pDevilTexture);
+	m_pDevilTexture = nullptr;
 }
 
 ////////////////////CHAPTER 7 START//////////////////////////////////
