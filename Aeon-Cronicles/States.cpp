@@ -858,6 +858,18 @@ void PrideLoseState::Render()
 void PrideLoseState::Exit()
 {
 	std::cout << "exiting pride lose state.." << std::endl;
+
+	delete m_background;
+	m_background = nullptr;
+
+	delete m_text;
+	m_text = nullptr;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
 }
 
 ////////////////////CHAPTER 3 START//////////////////////////////////
@@ -867,7 +879,7 @@ void LustEnterState::Enter()
 
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/LustEnter/text.png");
-	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/LustEnter/devil.png");
+	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/devil.png");
 }
 
 void LustEnterState::Update(float deltaTime)
@@ -892,6 +904,24 @@ void LustEnterState::Render()
 void LustEnterState::Exit()
 {
 	std::cout << "exiting lust enter state.." << std::endl;
+
+	delete m_background;
+	m_background = nullptr;
+
+	delete m_text;
+	m_text = nullptr;
+
+	delete m_devil;
+	m_devil = nullptr;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pDevilTexture);
+	m_pDevilTexture = nullptr;
 }
 
 ////////////////////CHAPTER 7 START//////////////////////////////////

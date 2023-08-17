@@ -149,7 +149,7 @@ public:
 	virtual void Exit() override;
 };
 
-class CasinoState : public State//pause screen
+class CasinoState : public State
 {
 public:
 
@@ -170,7 +170,7 @@ public:
 	virtual void Exit() override;
 };
 
-class CasinoChoiceState : public State//pause screen
+class CasinoChoiceState : public State
 {
 
 	GameObject* m_background;
@@ -193,7 +193,7 @@ public:
 };
 
 
-class CasinoExitState : public State//pause screen
+class CasinoExitState : public State
 {
 
 	GameObject* m_background;
@@ -212,7 +212,7 @@ public:
 	virtual void Exit() override;
 };
 
-class CasinoLoseState : public State//pause screen
+class CasinoLoseState : public State
 {
 
 	GameObject* m_background;
@@ -231,7 +231,7 @@ public:
 };
 
 //////////////////////////CHAPTER 2////////////////////////////// 
-class PrideEnterState : public State//pause screen
+class PrideEnterState : public State
 {
 
 	GameObject* m_background;
@@ -247,7 +247,7 @@ public:
 	virtual void Exit() override;
 };
 
-class PrideChoiceState : public State//pause screen
+class PrideChoiceState : public State
 {
 
 	GameObject* m_background;
@@ -263,7 +263,7 @@ public:
 	virtual void Exit() override;
 };
 
-class PrideExitState : public State//pause screen
+class PrideExitState : public State
 {
 
 	GameObject* m_background;
@@ -279,7 +279,7 @@ public:
 	virtual void Exit() override;
 };
 
-class PrideLoseState : public State//pause screen
+class PrideLoseState : public State
 {
 
 	GameObject* m_background;
@@ -298,7 +298,25 @@ public:
 };
 
 //////////////////////////CHAPTER 7////////////////////////////// 
-class LustEnterState : public State//pause screen
+class LustEnterState : public State//lust screen
+{
+
+	GameObject* m_background;
+	GameObject* m_text;
+	GameObject* m_devil;
+
+	SDL_Texture* m_pBackgroundTexture;
+	SDL_Texture* m_pTextTexture;
+	SDL_Texture* m_pDevilTexture;
+
+public:
+	virtual void Enter() override;
+	virtual void Update(float deltaTime) override;
+	virtual void Render() override;
+	virtual void Exit() override;
+};
+
+class LustChoiceState : public State
 {
 
 	GameObject* m_background;
