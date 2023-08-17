@@ -649,6 +649,26 @@ void SlothChoiceState::Exit()
 	m_devil = nullptr;
 }
 
+void SlothExitState::Enter()
+{
+	std::cout << "entering sloth exit state.." << std::endl;
+}
+
+void SlothExitState::Update(float deltaTime)
+{
+
+}
+
+void SlothExitState::Render()
+{
+	std::cout << "rendering sloth exit state.." << std::endl;
+}
+
+void SlothExitState::Exit()
+{
+	std::cout << "exiting sloth exit state.." << std::endl;
+}
+
 void WinState::Enter()
 {
 	std::cout << "entering win state.." << std::endl;
