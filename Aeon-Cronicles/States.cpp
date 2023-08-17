@@ -988,7 +988,7 @@ void LustChoiceState::Exit()
 	SDL_DestroyTexture(m_pDevilTexture);
 	m_pDevilTexture = nullptr;
 }
-////////////////////CHAPTER 7 START//////////////////////////////////
+////////////////////CHAPTER 3 START//////////////////////////////////
 void LustExitState::Enter()
 {
 	std::cout << "entering lust exit state.." << std::endl;
@@ -1086,7 +1086,11 @@ void EnvyEnterState::Enter()
 
 void EnvyEnterState::Update(float deltaTime)
 {
-
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_X))
+	{
+		std::cout << "changing to envy choice state" << std::endl;
+		StateManager::ChangeState(new EnvyChoiceState());
+	}
 }
 
 void EnvyEnterState::Render()
@@ -1106,6 +1110,48 @@ void EnvyEnterState::Render()
 void EnvyEnterState::Exit()
 {
 	std::cout << "exiting envy enter state.." << std::endl;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pDevilTexture);
+	m_pDevilTexture = nullptr;
+}
+
+void EnvyChoiceState::Enter()
+{
+	std::cout << "entering envy choice state.. " << std::endl;
+
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/background.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/envyChoice/text.png");
+	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/devil.png");
+}
+
+void EnvyChoiceState::Update(float deltaTime)
+{
+
+}
+
+void EnvyChoiceState::Render()
+{
+	std::cout << "rendering envy choice state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 250,50,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect devilRect = { 350,270,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pDevilTexture, NULL, &devilRect);
+}
+
+void EnvyChoiceState::Exit()
+{
+	std::cout << "exiting envy choice state" << std::endl;
 }
 
 ////////////////////CHAPTER 7 START//////////////////////////////////
