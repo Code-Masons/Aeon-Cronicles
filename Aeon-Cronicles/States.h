@@ -303,9 +303,11 @@ class LustEnterState : public State//pause screen
 
 	GameObject* m_background;
 	GameObject* m_text;
+	GameObject* m_devil;
 
 	SDL_Texture* m_pBackgroundTexture;
 	SDL_Texture* m_pTextTexture;
+	SDL_Texture* m_pDevilTexture;
 
 public:
 	virtual void Enter() override;

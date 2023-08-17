@@ -864,6 +864,10 @@ void PrideLoseState::Exit()
 void LustEnterState::Enter()
 {
 	std::cout << "entering lust enter state.." << std::endl;
+
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/background.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/LustEnter/text.png");
+	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/LustEnter/devil.png");
 }
 
 void LustEnterState::Update(float deltaTime)
@@ -874,6 +878,15 @@ void LustEnterState::Update(float deltaTime)
 void LustEnterState::Render()
 {
 	std::cout << "rendering lust enter state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 250,50,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect devilRect = { 700,475,200,200 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pDevilTexture, NULL, &devilRect);
 }
 
 void LustEnterState::Exit()
