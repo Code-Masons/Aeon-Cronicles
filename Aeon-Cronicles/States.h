@@ -192,6 +192,42 @@ public:
 	virtual void Exit() override;
 };
 
+
+//////////////////////////CHAPTER 7////////////////////////////// 
+class SlothEnterState : public State//chapter 7 start screen
+{
+	GameObject* m_background;
+	GameObject* m_devil;
+	GameObject* m_text;
+
+	SDL_Texture* m_pBackgroundTexture;
+	SDL_Texture* m_pDevilTexture;
+	SDL_Texture* m_pTextTexture;
+
+public:
+	virtual void Enter() override;
+	virtual void Update(float deltaTime) override;
+	virtual void Render() override;
+	virtual void Exit() override;
+};
+
+class SlothChoiceState : public State//chapter 7 start screen
+{
+	GameObject* m_background;
+	GameObject* m_devil;
+	GameObject* m_text;
+
+	SDL_Texture* m_pBackgroundTexture;
+	SDL_Texture* m_pDevilTexture;
+	SDL_Texture* m_pTextTexture;
+
+public:
+	virtual void Enter() override;
+	virtual void Update(float deltaTime) override;
+	virtual void Render() override;
+	virtual void Exit() override;
+};
+
 class PauseState : public State//pause screen
 {
 public:

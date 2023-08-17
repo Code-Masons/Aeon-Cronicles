@@ -19,10 +19,10 @@ void TitleState::Enter()
 void TitleState::Update(float deltaTime)
 {
 
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_G))//press g to go to game state
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_G))//press g to go to office state
 	{
 		std::cout << "changing to game state" << std::endl;
-		StateManager::ChangeState(new OfficeState());//change to new game state
+		StateManager::ChangeState(new SlothEnterState());//change to new office state
 	}
 }
 void TitleState::Render()
@@ -562,6 +562,93 @@ void CasinoChoiceState::Exit()
 	m_pPress2Texture = nullptr;
 }
 
+////////////////////CHAPTER 7 START//////////////////////////////////
+void SlothEnterState::Enter()
+{
+	std::cout << "entering first sloth state.." << std::endl;
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/enterSloth/background.png");
+	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/enterSloth/devil.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/enterSloth/text.png");
+}
+
+void SlothEnterState::Update(float deltaTime)
+{
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_X))//press X to go to sloth choice state
+	{
+		std::cout << "changing to casino choice state" << std::endl;
+		StateManager::ChangeState(new SlothChoiceState());//change to new sloth choice start state
+	}
+}
+
+void SlothEnterState::Render()
+{
+	std::cout << "rendering first sloth state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect devilRect = { 300,200,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pDevilTexture, NULL, &devilRect);
+
+	SDL_Rect textRect = { 500,20,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+}
+
+void SlothEnterState::Exit()
+{
+	std::cout << "exiting first sloth state.." << std::endl;
+
+	delete m_background;
+	m_background = nullptr;
+
+	delete m_text;
+	m_text = nullptr;
+
+	delete m_devil;
+	m_devil = nullptr;
+}
+
+void SlothChoiceState::Enter()
+{
+	std::cout << "entering second sloth state.." << std::endl;
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/enterSloth/background.png");
+	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/enterSloth/devil.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/slothChoice/text.png");
+}
+
+void SlothChoiceState::Update(float deltaTime)
+{
+
+}
+
+void SlothChoiceState::Render()
+{
+	std::cout << "rendering second sloth state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect devilRect = { 300,200,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pDevilTexture, NULL, &devilRect);
+
+	SDL_Rect textRect = { 500,20,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+}
+
+void SlothChoiceState::Exit()
+{
+	std::cout << "exiting second sloth state.." << std::endl;
+
+	delete m_background;
+	m_background = nullptr;
+
+	delete m_text;
+	m_text = nullptr;
+
+	delete m_devil;
+	m_devil = nullptr;
+}
+
 void WinState::Enter()
 {
 	std::cout << "entering win state.." << std::endl;
@@ -586,6 +673,7 @@ void WinState::Exit()
 {
 	std::cout << "exiting lose state.." << std::endl;
 }
+
 
 
 void LoseState::Enter()
