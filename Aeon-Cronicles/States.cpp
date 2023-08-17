@@ -688,22 +688,199 @@ void CasinoLoseState::Exit()
 void PrideEnterState::Enter()
 {
 	std::cout << "entering pride enter state.." << std::endl;
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideEnter/background.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideEnter/text.png");
 }
 
 void PrideEnterState::Update(float deltaTime)
 {
-
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_X))//press X to go to pride choice state
+	{
+		std::cout << "changing to pride choice state" << std::endl;
+		StateManager::ChangeState(new PrideChoiceState());//change to new pride choice state
+	}
 }
 
 void PrideEnterState::Render()
 {
 	std::cout << "rendering pride enter state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 250,575,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
 }
 
 void PrideEnterState::Exit()
 {
 	std::cout << "exiting pride enter state.." << std::endl;
+
+	delete m_background;
+	m_background = nullptr;
+
+	delete m_text;
+	m_text = nullptr;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
 }
+
+void PrideChoiceState::Enter()
+{
+	std::cout << "entering pride choice state.." << std::endl;
+
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideEnter/background.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideChoice/text.png");
+}
+
+void PrideChoiceState::Update(float deltaTime)
+{
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_1))//press 1 to go to pride exit state
+	{
+		std::cout << "changing to pride choice state" << std::endl;
+		StateManager::ChangeState(new PrideExitState());//change to new pride exit state
+	}
+
+	else if (Game::GetInstance().KeyDown(SDL_SCANCODE_2))//press 2 to go to pride lose state
+	{
+		std::cout << "changing to pride choice state" << std::endl;
+		StateManager::ChangeState(new PrideLoseState());//change to new pride lose state
+	}
+}
+
+void PrideChoiceState::Render()
+{
+	std::cout << "rendering pride choice state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 250,575,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+}
+
+void PrideChoiceState::Exit()
+{
+	std::cout << "exiting pride choice state.." << std::endl;
+
+	delete m_background;
+	m_background = nullptr;
+
+	delete m_text;
+	m_text = nullptr;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
+}
+
+void PrideExitState::Enter()
+{
+	std::cout << "entering pride exit state.." << std::endl;
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideExit/background.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideExit/text.png");
+}
+
+void PrideExitState::Update(float deltaTime)
+{
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_C))//press C to go to lust enter state
+	{
+		std::cout << "changing to casino choice state" << std::endl;
+		StateManager::ChangeState(new LustEnterState());//change to new lust enter state
+	}
+}
+
+void PrideExitState::Render()
+{
+	std::cout << "rendering pride exit state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 250,575,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+}
+
+void PrideExitState::Exit()
+{
+	std::cout << "exiting pride exit state.." << std::endl;
+
+	delete m_background;
+	m_background = nullptr;
+
+	delete m_text;
+	m_text = nullptr;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
+}
+
+void PrideLoseState::Enter()
+{
+	std::cout << "enter pride lose state.." << std::endl;
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideEnter/background.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideLose/text.png");
+	m_pPlayerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideLose/player.png");
+}
+
+void PrideLoseState::Update(float deltaTime)
+{
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))//press R to go to title state
+	{
+		std::cout << "changing to casino choice state" << std::endl;
+		StateManager::ChangeState(new TitleState());//change to new title state
+	}
+}
+
+void PrideLoseState::Render()
+{
+	std::cout << "rendering pride lose state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 250,575,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect playerRect = { 370,45,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pPlayerTexture, NULL, &playerRect);
+}
+
+void PrideLoseState::Exit()
+{
+	std::cout << "exiting pride lose state.." << std::endl;
+}
+
+////////////////////CHAPTER 3 START//////////////////////////////////
+void LustEnterState::Enter()
+{
+	std::cout << "entering lust enter state.." << std::endl;
+}
+
+void LustEnterState::Update(float deltaTime)
+{
+
+}
+
+void LustEnterState::Render()
+{
+	std::cout << "rendering lust enter state.." << std::endl;
+}
+
+void LustEnterState::Exit()
+{
+	std::cout << "exiting lust enter state.." << std::endl;
+}
+
 ////////////////////CHAPTER 7 START//////////////////////////////////
 void SlothEnterState::Enter()
 {
