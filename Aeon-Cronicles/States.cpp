@@ -1041,7 +1041,11 @@ void LustLoseState::Enter()
 
 void LustLoseState::Update(float deltaTime)
 {
-
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))//press R to go to title state
+	{
+		std::cout << "changing to casino choice state" << std::endl;
+		StateManager::ChangeState(new TitleState());//change to new title state
+	}
 }
 
 void LustLoseState::Render()
