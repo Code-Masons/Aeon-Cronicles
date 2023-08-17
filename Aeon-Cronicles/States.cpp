@@ -939,13 +939,16 @@ void LustChoiceState::Enter()
 
 void LustChoiceState::Update(float deltaTime)
 {
-	
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_1))//press 1 to go to lust exit state
+	{
+		std::cout << "changing to pride choice state" << std::endl;
+		StateManager::ChangeState(new LustExitState());//change to new lust exit state
+	}
 }
 
 void LustChoiceState::Render()
 {
 	std::cout << "rendering lust choice state.." << std::endl;
-
 
 	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
@@ -969,6 +972,48 @@ void LustChoiceState::Exit()
 
 	delete m_devil;
 	m_devil = nullptr;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pDevilTexture);
+	m_pDevilTexture = nullptr;
+}
+////////////////////CHAPTER 7 START//////////////////////////////////
+void LustExitState::Enter()
+{
+	std::cout << "entering lust exit state.." << std::endl;
+
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/background.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/LustExit/text.png");
+	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/devil.png");
+}
+
+void LustExitState::Update(float deltaTime)
+{
+
+}
+
+void LustExitState::Render()
+{
+	std::cout << "rendering lust exit state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 250,50,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect devilRect = { 700,475,200,200 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pDevilTexture, NULL, &devilRect);
+}
+
+void LustExitState::Exit()
+{
+	std::cout << "exiting lust exit state.." << std::endl;
 
 	SDL_DestroyTexture(m_pBackgroundTexture);
 	m_pBackgroundTexture = nullptr;
