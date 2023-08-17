@@ -438,7 +438,11 @@ void CasinoState::Enter()
 
 void CasinoState::Update(float deltaTime)
 {
-
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_X))//press X to go to casino choice state
+	{
+		std::cout << "changing to casino choice state" << std::endl;
+		StateManager::ChangeState(new CasinoChoiceState());//change to new casino choice start state
+	}
 }
 
 void CasinoState::Render()
@@ -485,6 +489,77 @@ void CasinoState::Exit()
 
 	SDL_DestroyTexture(m_pPressXTexture);
 	m_pPressXTexture = nullptr;
+}
+
+void CasinoChoiceState::Enter()
+{
+	std::cout << "entering casino choice state.. " << std::endl;
+
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casino/background.png");
+	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casino/devil.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casinoChoice/text.png");
+	m_pPress1Texture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casinoChoice/wrongText.png");
+	m_pPress2Texture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casinoChoice/rightText.png");
+}
+
+void CasinoChoiceState::Update(float deltaTime)
+{
+
+}
+
+void CasinoChoiceState::Render()
+{
+	std::cout << "rendering casino choice state.. " << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect devilRect = { 300,275,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pDevilTexture, NULL, &devilRect);
+
+	SDL_Rect textRect = { 300,10,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect TextRect = { 210,700,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pPress1Texture, NULL, &TextRect);
+
+	SDL_Rect Text2Rect = { 750,700,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pPress2Texture, NULL, &Text2Rect);
+}
+
+void CasinoChoiceState::Exit()
+{
+	std::cout << "exiting casino choice state.. " << std::endl;
+
+	delete m_background;
+	m_background = nullptr;
+
+	delete m_text;
+	m_text = nullptr;
+
+	delete m_devil;
+	m_devil = nullptr;
+
+	delete m_press1;
+	m_press1 = nullptr;
+
+	delete m_press2;
+	m_press2 = nullptr;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pDevilTexture);
+	m_pDevilTexture = nullptr;
+
+	SDL_DestroyTexture(m_pPress1Texture);
+	m_pPress1Texture = nullptr;
+
+	SDL_DestroyTexture(m_pPress2Texture);
+	m_pPress2Texture = nullptr;
 }
 
 void WinState::Enter()
