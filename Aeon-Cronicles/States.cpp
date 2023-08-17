@@ -505,13 +505,13 @@ void CasinoChoiceState::Enter()
 void CasinoChoiceState::Update(float deltaTime)
 {
 
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_1))//press C to go to casino lose state
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_1))//press 1 to go to casino lose state
 	{
 		std::cout << "changing to casino choice state" << std::endl;
 		StateManager::ChangeState(new CasinoLoseState());//change to new casino lose start state
 	}
 
-	else if (Game::GetInstance().KeyDown(SDL_SCANCODE_2))//press C to go to casino exit state
+	else if (Game::GetInstance().KeyDown(SDL_SCANCODE_2))//press 2 to go to casino exit state
 	{
 		std::cout << "changing to casino choice state" << std::endl;
 		StateManager::ChangeState(new CasinoExitState());//change to new casino exit start state
@@ -584,7 +584,11 @@ void CasinoExitState::Enter()
 
 void CasinoExitState::Update(float deltaTime)
 {
-	
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_C))//press C to go to pride enter state
+	{
+		std::cout << "changing to casino choice state" << std::endl;
+		StateManager::ChangeState(new PrideEnterState());//change to new casino pride enter state
+	}
 
 }
 
@@ -605,6 +609,24 @@ void CasinoExitState::Render()
 void CasinoExitState::Exit()
 {
 	std::cout << "exiting casino exit state.." << std::endl;
+
+	delete m_background;
+	m_background = nullptr;
+
+	delete m_text;
+	m_text = nullptr;
+
+	delete m_devil;
+	m_devil = nullptr;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pDevilTexture);
+	m_pDevilTexture = nullptr;
 }
 
 void CasinoLoseState::Enter()
@@ -642,8 +664,46 @@ void CasinoLoseState::Render()
 void CasinoLoseState::Exit()
 {
 	std::cout << "exiting casino lose state.." << std::endl;
+	delete m_background;
+	m_background = nullptr;
+
+	delete m_text;
+	m_text = nullptr;
+
+	delete m_player;
+	m_player = nullptr;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pPlayerTexture);
+	m_pPlayerTexture = nullptr;
+
 }
 
+////////////////////CHAPTER 2 START//////////////////////////////////
+void PrideEnterState::Enter()
+{
+	std::cout << "entering pride enter state.." << std::endl;
+}
+
+void PrideEnterState::Update(float deltaTime)
+{
+
+}
+
+void PrideEnterState::Render()
+{
+	std::cout << "rendering pride enter state.." << std::endl;
+}
+
+void PrideEnterState::Exit()
+{
+	std::cout << "exiting pride enter state.." << std::endl;
+}
 ////////////////////CHAPTER 7 START//////////////////////////////////
 void SlothEnterState::Enter()
 {
