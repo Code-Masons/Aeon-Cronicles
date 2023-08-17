@@ -944,6 +944,12 @@ void LustChoiceState::Update(float deltaTime)
 		std::cout << "changing to pride choice state" << std::endl;
 		StateManager::ChangeState(new LustExitState());//change to new lust exit state
 	}
+
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_2))//press 2 to go to lust lose state
+	{
+		std::cout << "changing to pride choice state" << std::endl;
+		StateManager::ChangeState(new LustLoseState());//change to new lust lose state
+	}
 }
 
 void LustChoiceState::Render()
@@ -988,7 +994,7 @@ void LustExitState::Enter()
 	std::cout << "entering lust exit state.." << std::endl;
 
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/background.png");
-	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/LustExit/text.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/lustExit/text.png");
 	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/devil.png");
 }
 
@@ -1023,6 +1029,41 @@ void LustExitState::Exit()
 
 	SDL_DestroyTexture(m_pDevilTexture);
 	m_pDevilTexture = nullptr;
+}
+
+void LustLoseState::Enter()
+{
+	std::cout << "entering lust lose state.." << std::endl;
+
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/lustLose/background.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/lustLose/text.png");
+}
+
+void LustLoseState::Update(float deltaTime)
+{
+
+}
+
+void LustLoseState::Render()
+{
+	std::cout << "rendering lust lose state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 250,50,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+}
+
+void LustLoseState::Exit()
+{
+	std::cout << "exiting lust lose state.." << std::endl;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
 }
 
 ////////////////////CHAPTER 7 START//////////////////////////////////
