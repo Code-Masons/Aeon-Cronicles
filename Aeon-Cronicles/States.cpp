@@ -1000,7 +1000,11 @@ void LustExitState::Enter()
 
 void LustExitState::Update(float deltaTime)
 {
-
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_X))
+	{
+		std::cout << "changing to casino choice state" << std::endl;
+		StateManager::ChangeState(new EnvyEnterState());
+	}
 }
 
 void LustExitState::Render()
@@ -1068,6 +1072,40 @@ void LustLoseState::Exit()
 
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
+}
+////////////////////CHAPTER 4 START//////////////////////////////////
+
+void EnvyEnterState::Enter()
+{
+	std::cout << "entering envy enter state.." << std::endl;
+
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/background.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/envyEnter/text.png");
+	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/devil.png");
+}
+
+void EnvyEnterState::Update(float deltaTime)
+{
+
+}
+
+void EnvyEnterState::Render()
+{
+	std::cout << "rendering envy enter state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 250,50,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect devilRect = { 350,270,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pDevilTexture, NULL, &devilRect);
+}
+
+void EnvyEnterState::Exit()
+{
+	std::cout << "exiting envy enter state.." << std::endl;
 }
 
 ////////////////////CHAPTER 7 START//////////////////////////////////

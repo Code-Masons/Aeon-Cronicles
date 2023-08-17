@@ -359,6 +359,20 @@ public:
 	virtual void Render() override;
 	virtual void Exit() override;
 };
+//////////////////////////CHAPTER 4////////////////////////////// 
+class EnvyEnterState : public State
+{
+	SDL_Texture* m_pBackgroundTexture;
+	SDL_Texture* m_pTextTexture;
+	SDL_Texture* m_pDevilTexture;
+
+public:
+	virtual void Enter() override;
+	virtual void Update(float deltaTime) override;
+	virtual void Render() override;
+	virtual void Exit() override;
+};
+
 
 //////////////////////////CHAPTER 7////////////////////////////// 
 class SlothEnterState : public State//chapter 7 start screen
