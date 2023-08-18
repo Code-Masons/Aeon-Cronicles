@@ -1355,7 +1355,11 @@ void WrathExitState::Enter()
 
 void WrathExitState::Update(float deltaTime)
 {
-
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_X))
+	{
+		std::cout << "changing to gluttony enter state" << std::endl;
+		StateManager::ChangeState(new GluttonyEnterState());
+	}
 }
 
 void WrathExitState::Render()
@@ -1421,8 +1425,54 @@ void WrathLoseState::Exit()
 
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pPlayerTexture);
+	m_pPlayerTexture = nullptr;
 }
 ////////////////////CHAPTER 6 START//////////////////////////////////
+void GluttonyEnterState::Enter()
+{
+	std::cout << "entering gluttony enter state.." << std::endl;
+
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter6/background.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter6/gluttonyEnter/text.png");
+	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter6/devil.png");
+}
+
+void GluttonyEnterState::Update(float deltaTime)
+{
+
+}
+
+void GluttonyEnterState::Render()
+{
+	std::cout << "rendering gluttony enter state.." << std::endl;
+
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 250,50,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect devilRect = { 700,350,300,300 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pDevilTexture, NULL, &devilRect);
+}
+
+void GluttonyEnterState::Exit()
+{
+	std::cout << "exiting gluttony enter state.." << std::endl;
+
+		SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pDevilTexture);
+	m_pDevilTexture = nullptr;
+}
+
 
 ////////////////////CHAPTER 7 START//////////////////////////////////
 void SlothEnterState::Enter()
