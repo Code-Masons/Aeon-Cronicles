@@ -891,7 +891,7 @@ void PrideLoseState::Enter()
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideLose/text.png");
 	m_pPlayerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideLose/player.png");
 	m_pMenuTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/menu.png");
-	mainMenu = new UIButton(800, 650, 200, 200);
+	mainMenu = new UIButton(800, 620, 200, 200);
 
 }
 
@@ -954,15 +954,23 @@ void LustEnterState::Enter()
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/LustEnter/text.png");
 	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/devil.png");
+	m_pNextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/next.png");
+	next = new UIButton(800, 650, 200, 100);
+
 }
 
 void LustEnterState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_X))
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to lust choice state" << std::endl;
-		StateManager::ChangeState(new LustChoiceState());
+		next->HandleEvent();
+		if (next->CheckIsHovered())
+		{
+			std::cout << "changing to lust choice state" << std::endl;
+			StateManager::ChangeState(new LustChoiceState());
+		}
 	}
+
 }
 
 void LustEnterState::Render()
@@ -977,20 +985,14 @@ void LustEnterState::Render()
 
 	SDL_Rect devilRect = { 700,475,200,200 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pDevilTexture, NULL, &devilRect);
+
+	SDL_Rect continueRect = MathManager::ConvertFRect2Rect(next->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pNextTexture, nullptr, &continueRect);
 }
 
 void LustEnterState::Exit()
 {
 	std::cout << "exiting lust enter state.." << std::endl;
-
-	delete m_background;
-	m_background = nullptr;
-
-	delete m_text;
-	m_text = nullptr;
-
-	delete m_devil;
-	m_devil = nullptr;
 
 	SDL_DestroyTexture(m_pBackgroundTexture);
 	m_pBackgroundTexture = nullptr;
@@ -1000,6 +1002,13 @@ void LustEnterState::Exit()
 
 	SDL_DestroyTexture(m_pDevilTexture);
 	m_pDevilTexture = nullptr;
+
+	SDL_DestroyTexture(m_pNextTexture);
+	m_pNextTexture = nullptr;
+
+	delete next;
+	next = nullptr;
+
 }
 
 void LustChoiceState::Enter()
@@ -1008,22 +1017,37 @@ void LustChoiceState::Enter()
 
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/LustChoice/text.png");
+	m_pRightTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/LustChoice/rightText.png");
+	m_pWrongTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/LustChoice/wrongText.png");
 	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/devil.png");
+
+	m_pOptionTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/blank.png");
+	option = new UIButton(20, 650, 200, 100);
+
+	m_pOption2Texture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/blank.png");
+	option2 = new UIButton(800, 650, 200, 100);
+
 }
 
 void LustChoiceState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_1))//press 1 to go to lust exit state
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to pride choice state" << std::endl;
-		StateManager::ChangeState(new LustExitState());//change to new lust exit state
+		option->HandleEvent();
+		option2->HandleEvent();
+		if (option->CheckIsHovered())
+		{
+			std::cout << "changing to casino lose state" << std::endl;
+			StateManager::ChangeState(new LustExitState());
+		}
+
+		else if (option2->CheckIsHovered())
+		{
+			std::cout << "changing to casino exit state" << std::endl;
+			StateManager::ChangeState(new LustLoseState());
+		}
 	}
 
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_2))//press 2 to go to lust lose state
-	{
-		std::cout << "changing to pride choice state" << std::endl;
-		StateManager::ChangeState(new LustLoseState());//change to new lust lose state
-	}
 }
 
 void LustChoiceState::Render()
@@ -1038,20 +1062,25 @@ void LustChoiceState::Render()
 
 	SDL_Rect devilRect = { 700,475,200,200 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pDevilTexture, NULL, &devilRect);
+
+	SDL_Rect optionRect = MathManager::ConvertFRect2Rect(option->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pOptionTexture, nullptr, &optionRect);
+
+	SDL_Rect option2Rect = MathManager::ConvertFRect2Rect(option2->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pOption2Texture, nullptr, &option2Rect);
+
+	SDL_Rect rightRect = { 50,670,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pRightTextTexture, NULL, &rightRect);
+
+	SDL_Rect wrongRect = { 840,670,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pWrongTextTexture, NULL, &wrongRect);
+
 }
 
 void LustChoiceState::Exit()
 {
 	std::cout << "exiting lust choice state" << std::endl;
 
-	delete m_background;
-	m_background = nullptr;
-
-	delete m_text;
-	m_text = nullptr;
-
-	delete m_devil;
-	m_devil = nullptr;
 
 	SDL_DestroyTexture(m_pBackgroundTexture);
 	m_pBackgroundTexture = nullptr;
@@ -1059,10 +1088,29 @@ void LustChoiceState::Exit()
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
 
+	SDL_DestroyTexture(m_pWrongTextTexture);
+	m_pWrongTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pRightTextTexture);
+	m_pRightTextTexture = nullptr;
+
 	SDL_DestroyTexture(m_pDevilTexture);
 	m_pDevilTexture = nullptr;
+
+	SDL_DestroyTexture(m_pOptionTexture);
+	m_pOptionTexture = nullptr;
+
+	delete option;
+	option = nullptr;
+	
+	SDL_DestroyTexture(m_pOption2Texture);
+	m_pOption2Texture = nullptr;
+
+	delete option2;
+	option2 = nullptr;
+
 }
-////////////////////CHAPTER 3 START//////////////////////////////////
+
 void LustExitState::Enter()
 {
 	std::cout << "entering lust exit state.." << std::endl;
@@ -1070,15 +1118,24 @@ void LustExitState::Enter()
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/lustExit/text.png");
 	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/devil.png");
+	m_pNextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/next.png");
+	next = new UIButton(800, 650, 200, 100);
+
+
 }
 
 void LustExitState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_X))
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to casino choice state" << std::endl;
-		StateManager::ChangeState(new EnvyEnterState());
+		next->HandleEvent();
+		if (next->CheckIsHovered())
+		{
+			std::cout << "changing to enevy enter state" << std::endl;
+			StateManager::ChangeState(new EnvyEnterState());//change to new car state
+		}
 	}
+
 }
 
 void LustExitState::Render()
@@ -1093,6 +1150,10 @@ void LustExitState::Render()
 
 	SDL_Rect devilRect = { 700,475,200,200 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pDevilTexture, NULL, &devilRect);
+
+	SDL_Rect continueRect = MathManager::ConvertFRect2Rect(next->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pNextTexture, nullptr, &continueRect);
+
 }
 
 void LustExitState::Exit()
@@ -1107,6 +1168,13 @@ void LustExitState::Exit()
 
 	SDL_DestroyTexture(m_pDevilTexture);
 	m_pDevilTexture = nullptr;
+
+	SDL_DestroyTexture(m_pNextTexture);
+	m_pNextTexture = nullptr;
+
+	delete next;
+	next = nullptr;
+
 }
 
 void LustLoseState::Enter()
@@ -1115,15 +1183,23 @@ void LustLoseState::Enter()
 
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/lustLose/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/lustLose/text.png");
+	m_pMenuTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/main.png");
+	mainMenu = new UIButton(800, 650, 200, 100);
+
 }
 
 void LustLoseState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))//press R to go to title state
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to casino choice state" << std::endl;
-		StateManager::ChangeState(new TitleState());//change to new title state
+		mainMenu->HandleEvent();
+		if (mainMenu->CheckIsHovered())
+		{
+			std::cout << "changing to title state" << std::endl;
+			StateManager::ChangeState(new TitleState());
+		}
 	}
+
 }
 
 void LustLoseState::Render()
@@ -1135,6 +1211,10 @@ void LustLoseState::Render()
 
 	SDL_Rect textRect = { 250,50,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect menuRect = MathManager::ConvertFRect2Rect(next->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pMenuTexture, nullptr, &menuRect);
+
 }
 
 void LustLoseState::Exit()
@@ -1146,6 +1226,14 @@ void LustLoseState::Exit()
 
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
+
+
+	SDL_DestroyTexture(m_pMenuTexture);
+	m_pMenuTexture = nullptr;
+
+	delete mainMenu;
+	mainMenu = nullptr;
+
 }
 ////////////////////CHAPTER 4 START//////////////////////////////////
 
