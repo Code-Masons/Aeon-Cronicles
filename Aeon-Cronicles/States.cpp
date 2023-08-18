@@ -1619,8 +1619,8 @@ void GluttonyLoseState::Exit()
 void SlothEnterState::Enter()
 {
 	std::cout << "entering first sloth state.." << std::endl;
-	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/enterSloth/background.png");
-	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/enterSloth/devil.png");
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/background.png");
+	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/devil.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/enterSloth/text.png");
 }
 
@@ -1664,14 +1664,24 @@ void SlothEnterState::Exit()
 void SlothChoiceState::Enter()
 {
 	std::cout << "entering second sloth state.." << std::endl;
-	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/enterSloth/background.png");
-	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/enterSloth/devil.png");
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/background.png");
+	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/devil.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/slothChoice/text.png");
 }
 
 void SlothChoiceState::Update(float deltaTime)
 {
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_1))
+	{
+		std::cout << "changing to gluttony exit state" << std::endl;
+		StateManager::ChangeState(new SlothExitState());
+	}
 
+	else if (Game::GetInstance().KeyDown(SDL_SCANCODE_2))
+	{
+		std::cout << "changing to gluttony lose state" << std::endl;
+		StateManager::ChangeState(new SlothLoseState());
+	}
 }
 
 void SlothChoiceState::Render()
@@ -1705,6 +1715,9 @@ void SlothChoiceState::Exit()
 void SlothExitState::Enter()
 {
 	std::cout << "entering sloth exit state.." << std::endl;
+
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/background.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/slothExit/text.png");
 }
 
 void SlothExitState::Update(float deltaTime)
@@ -1715,11 +1728,43 @@ void SlothExitState::Update(float deltaTime)
 void SlothExitState::Render()
 {
 	std::cout << "rendering sloth exit state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 300,300,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
 }
 
 void SlothExitState::Exit()
 {
 	std::cout << "exiting sloth exit state.." << std::endl;
+
+	delete m_background;
+	m_background = nullptr;
+
+	delete m_text;
+	m_text = nullptr;
+}
+
+void SlothLoseState::Enter()
+{
+	std::cout << "entering sloth lose state.." << std::endl;
+}
+
+void SlothLoseState::Update(float deltaTime)
+{
+
+}
+
+void SlothLoseState::Render()
+{
+	std::cout << "rendering sloth lose state.." << std::endl;
+}
+
+void SlothLoseState::Exit()
+{
+	std::cout << "exiting sloth lose state.." << std::endl;
 }
 
 void WinState::Enter()
