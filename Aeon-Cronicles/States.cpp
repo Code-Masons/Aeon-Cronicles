@@ -1732,7 +1732,7 @@ void WrathLoseState::Enter()
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter5/wrathLose/text.png");
 	m_pPlayerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter5/wrathLose/player.png");
 	m_pMenuTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/menu.png");
-	mainMenu = new UIButton(800, 650, 200, 100);
+	mainMenu = new UIButton(800, 620, 200, 200);
 
 }
 
