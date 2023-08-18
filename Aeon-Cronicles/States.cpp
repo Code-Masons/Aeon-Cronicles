@@ -1244,15 +1244,23 @@ void EnvyEnterState::Enter()
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/envyEnter/text.png");
 	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/devil.png");
+	m_pNextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/next.png");
+	next = new UIButton(800, 650, 200, 100);
+
 }
 
 void EnvyEnterState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_X))
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to envy choice state" << std::endl;
-		StateManager::ChangeState(new EnvyChoiceState());
+		next->HandleEvent();
+		if (next->CheckIsHovered())
+		{
+			std::cout << "changing to envy choice state" << std::endl;
+			StateManager::ChangeState(new EnvyChoiceState());//change to new car state
+		}
 	}
+
 }
 
 void EnvyEnterState::Render()
@@ -1267,6 +1275,10 @@ void EnvyEnterState::Render()
 
 	SDL_Rect devilRect = { 350,270,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pDevilTexture, NULL, &devilRect);
+
+	SDL_Rect continueRect = MathManager::ConvertFRect2Rect(next->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pNextTexture, nullptr, &continueRect);
+
 }
 
 void EnvyEnterState::Exit()
@@ -1281,6 +1293,12 @@ void EnvyEnterState::Exit()
 
 	SDL_DestroyTexture(m_pDevilTexture);
 	m_pDevilTexture = nullptr;
+
+	SDL_DestroyTexture(m_pNextTexture);
+	m_pNextTexture = nullptr;
+
+	delete next;
+	next = nullptr;
 }
 
 void EnvyChoiceState::Enter()
@@ -1289,23 +1307,38 @@ void EnvyChoiceState::Enter()
 
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/envyChoice/text.png");
+	m_pWrongTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/envyChoice/wrongText.png");
+	m_pRightTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/envyChoice/rightText.png");
 	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/devil.png");
+
+	m_pOptionTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/blank.png");
+	option = new UIButton(20, 650, 200, 100);
+
+	m_pOption2Texture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/blank.png");
+	option2 = new UIButton(800, 650, 200, 100);
+
 }
 
 void EnvyChoiceState::Update(float deltaTime)
 {
 
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_1))
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to envy lose state" << std::endl;
-		StateManager::ChangeState(new EnvyLoseState());
+		option->HandleEvent();
+		option2->HandleEvent();
+		if (option->CheckIsHovered())
+		{
+			std::cout << "changing to envy lose state" << std::endl;
+			StateManager::ChangeState(new EnvyLoseState());//change to new car state
+		}
+
+		else if (option2->CheckIsHovered())
+		{
+			std::cout << "changing to envy exit state" << std::endl;
+			StateManager::ChangeState(new EnvyExitState());//change to new car state
+		}
 	}
 
-	else if (Game::GetInstance().KeyDown(SDL_SCANCODE_2))
-	{
-		std::cout << "changing to envy exit state" << std::endl;
-		StateManager::ChangeState(new EnvyExitState());
-	}
 }
 
 void EnvyChoiceState::Render()
@@ -1320,6 +1353,19 @@ void EnvyChoiceState::Render()
 
 	SDL_Rect devilRect = { 350,270,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pDevilTexture, NULL, &devilRect);
+
+	SDL_Rect optionRect = MathManager::ConvertFRect2Rect(option->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pOptionTexture, nullptr, &optionRect);
+
+	SDL_Rect option2Rect = MathManager::ConvertFRect2Rect(option2->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pOption2Texture, nullptr, &option2Rect);
+
+	SDL_Rect wrongRect = { 40,680,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pWrongTextTexture, NULL, &wrongRect);
+
+	SDL_Rect rightRect = { 820,680,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pRightTextTexture, NULL, &rightRect);
+
 }
 
 void EnvyChoiceState::Exit()
@@ -1332,8 +1378,28 @@ void EnvyChoiceState::Exit()
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
 
+	SDL_DestroyTexture(m_pWrongTextTexture);
+	m_pWrongTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pRightTextTexture);
+	m_pRightTextTexture = nullptr;
+
 	SDL_DestroyTexture(m_pDevilTexture);
 	m_pDevilTexture = nullptr;
+
+	SDL_DestroyTexture(m_pOptionTexture);
+	m_pOptionTexture = nullptr;
+
+	delete option;
+	option = nullptr;
+
+	SDL_DestroyTexture(m_pOption2Texture);
+	m_pOption2Texture = nullptr;
+
+	delete option2;
+	option2 = nullptr;
+
+
 }
 
 void EnvyExitState::Enter()
@@ -1343,15 +1409,23 @@ void EnvyExitState::Enter()
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/envyExit/text.png");
 	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/devil.png");
+	m_pNextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/next.png");
+	next = new UIButton(800, 650, 200, 100);
+
 }
 
 void EnvyExitState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_C))
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to wrath enter state" << std::endl;
-		StateManager::ChangeState(new WrathEnterState());
+		next->HandleEvent();
+		if (next->CheckIsHovered())
+		{
+			std::cout << "changing to wrath enter state" << std::endl;
+			StateManager::ChangeState(new WrathEnterState());
+		}
 	}
+
 }
 
 void EnvyExitState::Render()
@@ -1366,6 +1440,10 @@ void EnvyExitState::Render()
 
 	SDL_Rect devilRect = { 350,270,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pDevilTexture, NULL, &devilRect);
+
+	SDL_Rect continueRect = MathManager::ConvertFRect2Rect(next->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pNextTexture, nullptr, &continueRect);
+
 }
 
 void EnvyExitState::Exit()
@@ -1380,6 +1458,13 @@ void EnvyExitState::Exit()
 
 	SDL_DestroyTexture(m_pDevilTexture);
 	m_pDevilTexture = nullptr;
+
+	SDL_DestroyTexture(m_pNextTexture);
+	m_pNextTexture = nullptr;
+
+	delete next;
+	next = nullptr;
+
 }
 
 void EnvyLoseState::Enter()
@@ -1388,15 +1473,23 @@ void EnvyLoseState::Enter()
 
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/envyLose/text.png");
+	m_pMenuTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/menu.png");
+	mainMenu = new UIButton(800, 650, 200, 100);
+
 }
 
 void EnvyLoseState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))//press R to go to title state
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to casino choice state" << std::endl;
-		StateManager::ChangeState(new TitleState());//change to new title state
+		mainMenu->HandleEvent();
+		if (mainMenu->CheckIsHovered())
+		{
+			std::cout << "changing to title state" << std::endl;
+			StateManager::ChangeState(new TitleState());
+		}
 	}
+
 }
 
 void EnvyLoseState::Render()
@@ -1408,6 +1501,10 @@ void EnvyLoseState::Render()
 
 	SDL_Rect textRect = { 250,300,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect menuRect = MathManager::ConvertFRect2Rect(mainMenu->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pMenuTexture, nullptr, &menuRect);
+
 
 }
 
