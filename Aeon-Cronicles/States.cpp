@@ -1271,7 +1271,11 @@ void WrathEnterState::Enter()
 
 void WrathEnterState::Update(float deltaTime)
 {
-
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_C))
+	{
+		std::cout << "changing to wrath choice state" << std::endl;
+		StateManager::ChangeState(new WrathChoiceState());
+	}
 }
 
 void WrathEnterState::Render()
@@ -1288,6 +1292,41 @@ void WrathEnterState::Render()
 void WrathEnterState::Exit()
 {
 	std::cout << "exiting wrath enter state" << std::endl;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
+}
+
+void WrathChoiceState::Enter()
+{
+	std::cout << "entering wrath choice state.." << std::endl;
+
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter5/background.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter5/wrathChoice/text.png");
+}
+
+void WrathChoiceState::Update(float deltaTime)
+{
+
+}
+
+void WrathChoiceState::Render()
+{
+	std::cout << "rendering wrath choice state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 250,50,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+}
+
+void WrathChoiceState::Exit()
+{
+	std::cout << "exiting wrath choice state.." << std::endl;
 
 	SDL_DestroyTexture(m_pBackgroundTexture);
 	m_pBackgroundTexture = nullptr;
