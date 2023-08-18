@@ -1342,6 +1342,9 @@ void WrathChoiceState::Exit()
 void WrathExitState::Enter()
 {
 	std::cout << "entering wrath exit state.." << std::endl;
+
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter5/background.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter5/wrathExit/text.png");
 }
 
 void WrathExitState::Update(float deltaTime)
@@ -1352,11 +1355,23 @@ void WrathExitState::Update(float deltaTime)
 void WrathExitState::Render()
 {
 	std::cout << "rendering wrath exit state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 250,50,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
 }
 
 void WrathExitState::Exit()
 {
 	std::cout << "exiting wrath exit state.." << std::endl;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
 }
 
 ////////////////////CHAPTER 7 START//////////////////////////////////
