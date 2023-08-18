@@ -1809,7 +1809,11 @@ void EpilogueState::Enter()
 
 void EpilogueState::Update(float deltaTime)
 {
-	
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_C))
+	{
+		std::cout << "changing to win state" << std::endl;
+		StateManager::ChangeState(new WinState());
+	}
 }
 
 void EpilogueState::Render()
@@ -1840,6 +1844,10 @@ void EpilogueState::Exit()
 void WinState::Enter()
 {
 	std::cout << "entering win state.." << std::endl;
+
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/win/background.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/win/text.png");
+	m_pWinTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/win/wintext.png");
 }	 
 void WinState::Update(float deltaTime)
 {
@@ -1851,11 +1859,16 @@ void WinState::Update(float deltaTime)
 }
 void WinState::Render()
 {
-	SDL_Renderer* pRenderer = Game::GetInstance().GetRenderer();
+	std::cout << "rendering win state.." << std::endl;
 
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
 
-	SDL_SetRenderDrawColor(pRenderer, 0, 255, 0, 255);
-	SDL_RenderClear(pRenderer);
+	SDL_Rect textRect = { 270,300,600,600 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect winRect = { 350,20,600,600 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pWinTextTexture, NULL, &winRect);
 }
 void WinState::Exit()
 {

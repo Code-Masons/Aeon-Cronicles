@@ -596,6 +596,10 @@ public:
 
 class WinState : public State//win screen
 {
+	SDL_Texture* m_pBackgroundTexture;
+	SDL_Texture* m_pTextTexture;
+	SDL_Texture* m_pWinTextTexture;
+
 public:
 	virtual void Enter() override;
 	virtual void Update(float deltaTime) override;
