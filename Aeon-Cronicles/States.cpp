@@ -1026,7 +1026,6 @@ void LustChoiceState::Enter()
 
 	m_pOption2Texture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/blank.png");
 	option2 = new UIButton(800, 650, 200, 100);
-
 }
 
 void LustChoiceState::Update(float deltaTime)
@@ -1037,13 +1036,13 @@ void LustChoiceState::Update(float deltaTime)
 		option2->HandleEvent();
 		if (option->CheckIsHovered())
 		{
-			std::cout << "changing to casino lose state" << std::endl;
+			std::cout << "changing to lust exit state" << std::endl;
 			StateManager::ChangeState(new LustExitState());
 		}
 
 		else if (option2->CheckIsHovered())
 		{
-			std::cout << "changing to casino exit state" << std::endl;
+			std::cout << "changing to lust lose state" << std::endl;
 			StateManager::ChangeState(new LustLoseState());
 		}
 	}
@@ -1072,9 +1071,8 @@ void LustChoiceState::Render()
 	SDL_Rect rightRect = { 50,670,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pRightTextTexture, NULL, &rightRect);
 
-	SDL_Rect wrongRect = { 840,670,500,500 };
+	SDL_Rect wrongRect = {840,670,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pWrongTextTexture, NULL, &wrongRect);
-
 }
 
 void LustChoiceState::Exit()
@@ -1183,8 +1181,8 @@ void LustLoseState::Enter()
 
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/lustLose/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter3/lustLose/text.png");
-	m_pMenuTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/main.png");
-	mainMenu = new UIButton(800, 650, 200, 100);
+	m_pMenuTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/menu.png");
+	mainMenu = new UIButton(800, 620, 200, 200);
 
 }
 
@@ -1212,7 +1210,7 @@ void LustLoseState::Render()
 	SDL_Rect textRect = { 250,50,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
 
-	SDL_Rect menuRect = MathManager::ConvertFRect2Rect(next->GetTransform());
+	SDL_Rect menuRect = MathManager::ConvertFRect2Rect(mainMenu->GetTransform());
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pMenuTexture, nullptr, &menuRect);
 
 }
@@ -1912,10 +1910,10 @@ void GluttonyChoiceState::Render()
 	SDL_Rect option2Rect = MathManager::ConvertFRect2Rect(option2->GetTransform());
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pOption2Texture, nullptr, &option2Rect);
 
-	SDL_Rect rightRect = { 845,650,500,500 };
+	SDL_Rect rightRect = { 55,670,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pRightTextTexture, NULL, &rightRect);
 
-	SDL_Rect wrongRect = { 40,650,500,500 };
+	SDL_Rect wrongRect = { 860,670,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pWrongTextTexture, NULL, &wrongRect);
 
 }
@@ -1931,8 +1929,27 @@ void GluttonyChoiceState::Exit()
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
 
+	SDL_DestroyTexture(m_pRightTextTexture);
+	m_pRightTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pWrongTextTexture);
+	m_pWrongTextTexture = nullptr;
+
 	SDL_DestroyTexture(m_pDevilTexture);
 	m_pDevilTexture = nullptr;
+
+	SDL_DestroyTexture(m_pOptionTexture);
+	m_pOptionTexture = nullptr;
+
+	delete option;
+	option = nullptr;
+
+	SDL_DestroyTexture(m_pOption2Texture);
+	m_pOption2Texture = nullptr;
+
+	delete option2;
+	option2 = nullptr;
+
 }
 
 void GluttonyExitState::Enter()
@@ -1941,14 +1958,21 @@ void GluttonyExitState::Enter()
 
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter6/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter6/gluttonyExit/text.png");
+	m_pNextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/next.png");
+	next = new UIButton(800, 650, 200, 100);
+
 }
 
 void GluttonyExitState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_C))
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to sloth enter state" << std::endl;
-		StateManager::ChangeState(new SlothEnterState());
+		next->HandleEvent();
+		if (next->CheckIsHovered())
+		{
+			std::cout << "changing to sloth enter state" << std::endl;
+			StateManager::ChangeState(new SlothEnterState());
+		}
 	}
 }
 
@@ -1961,6 +1985,9 @@ void GluttonyExitState::Render()
 
 	SDL_Rect textRect = { 250,50,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect continueRect = MathManager::ConvertFRect2Rect(next->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pNextTexture, nullptr, &continueRect);
 }
 
 void GluttonyExitState::Exit()
@@ -1972,6 +1999,12 @@ void GluttonyExitState::Exit()
 
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pNextTexture);
+	m_pNextTexture = nullptr;
+
+	delete next;
+	next = nullptr;
 }
 
 void GluttonyLoseState::Enter()
@@ -1981,15 +2014,23 @@ void GluttonyLoseState::Enter()
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter6/background.png");
 	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter6/devil.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter6/gluttonyLose/text.png");
+	m_pMenuTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/menu.png");
+	mainMenu = new UIButton(800, 620, 200, 200);
+
 }
 
 void GluttonyLoseState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to casino choice state" << std::endl;
-		StateManager::ChangeState(new TitleState());
+		mainMenu->HandleEvent();
+		if (mainMenu->CheckIsHovered())
+		{
+			std::cout << "changing to title state" << std::endl;
+			StateManager::ChangeState(new TitleState());
+		}
 	}
+
 }
 
 void GluttonyLoseState::Render()
@@ -2004,6 +2045,10 @@ void GluttonyLoseState::Render()
 
 	SDL_Rect devilRect = { 350,350,300,300 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pDevilTexture, NULL, &devilRect);
+
+	SDL_Rect menuRect = MathManager::ConvertFRect2Rect(mainMenu->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pMenuTexture, nullptr, &menuRect);
+
 }
 
 void GluttonyLoseState::Exit()
@@ -2018,6 +2063,13 @@ void GluttonyLoseState::Exit()
 
 	SDL_DestroyTexture(m_pDevilTexture);
 	m_pDevilTexture = nullptr;
+
+	SDL_DestroyTexture(m_pMenuTexture);
+	m_pMenuTexture = nullptr;
+
+	delete mainMenu;
+	mainMenu = nullptr;
+
 }
 
 ////////////////////CHAPTER 7 START//////////////////////////////////
@@ -2027,15 +2079,23 @@ void SlothEnterState::Enter()
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/background.png");
 	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/devil.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/enterSloth/text.png");
+	m_pNextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/next.png");
+	next = new UIButton(800, 650, 200, 100);
+
 }
 
 void SlothEnterState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_X))//press X to go to sloth choice state
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to casino choice state" << std::endl;
-		StateManager::ChangeState(new SlothChoiceState());//change to new sloth choice start state
+		next->HandleEvent();
+		if (next->CheckIsHovered())
+		{
+			std::cout << "changing to sloth choice state" << std::endl;
+			StateManager::ChangeState(new SlothChoiceState());
+		}
 	}
+
 }
 
 void SlothEnterState::Render()
@@ -2050,20 +2110,22 @@ void SlothEnterState::Render()
 
 	SDL_Rect textRect = { 500,20,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect continueRect = MathManager::ConvertFRect2Rect(next->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pNextTexture, nullptr, &continueRect);
+
 }
 
 void SlothEnterState::Exit()
 {
 	std::cout << "exiting first sloth state.." << std::endl;
 
-	delete m_background;
-	m_background = nullptr;
+	SDL_DestroyTexture(m_pNextTexture);
+	m_pNextTexture = nullptr;
 
-	delete m_text;
-	m_text = nullptr;
+	delete next;
+	next = nullptr;
 
-	delete m_devil;
-	m_devil = nullptr;
 }
 
 void SlothChoiceState::Enter()
@@ -2072,21 +2134,36 @@ void SlothChoiceState::Enter()
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/background.png");
 	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/devil.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/slothChoice/text.png");
+	m_pRightTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/slothChoice/rightText.png");
+	m_pWrongTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/slothChoice/wrongText.png");
+
+	m_pOptionTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/blank.png");
+	option = new UIButton(780, 650, 200, 100);
+
+	m_pOption2Texture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/blank.png");
+	option2 = new UIButton(40, 650, 200, 100);
+
 }
 
 void SlothChoiceState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_1))
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to gluttony exit state" << std::endl;
-		StateManager::ChangeState(new SlothExitState());
+		option->HandleEvent();
+		option2->HandleEvent();
+		if (option->CheckIsHovered())
+		{
+			std::cout << "changing to sloth exit state" << std::endl;
+			StateManager::ChangeState(new SlothExitState());
+		}
+
+		else if (option2->CheckIsHovered())
+		{
+			std::cout << "changing to sloth lose state" << std::endl;
+			StateManager::ChangeState(new SlothLoseState());
+		}
 	}
 
-	else if (Game::GetInstance().KeyDown(SDL_SCANCODE_2))
-	{
-		std::cout << "changing to gluttony lose state" << std::endl;
-		StateManager::ChangeState(new SlothLoseState());
-	}
 }
 
 void SlothChoiceState::Render()
@@ -2101,6 +2178,18 @@ void SlothChoiceState::Render()
 
 	SDL_Rect textRect = { 500,20,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect optionRect = MathManager::ConvertFRect2Rect(option->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pOptionTexture, nullptr, &optionRect);
+
+	SDL_Rect option2Rect = MathManager::ConvertFRect2Rect(option2->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pOption2Texture, nullptr, &option2Rect);
+
+	SDL_Rect rightRect = { 835,670,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pRightTextTexture, NULL, &rightRect);
+
+	SDL_Rect wrongRect = { 80,670,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pWrongTextTexture, NULL, &wrongRect);
 }
 
 void SlothChoiceState::Exit()
@@ -2113,8 +2202,26 @@ void SlothChoiceState::Exit()
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
 
+	SDL_DestroyTexture(m_pRightTextTexture);
+	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pWrongTextTexture);
+	m_pTextTexture = nullptr;
+
 	SDL_DestroyTexture(m_pDevilTexture);
 	m_pDevilTexture = nullptr;
+
+	SDL_DestroyTexture(m_pOptionTexture);
+	m_pOptionTexture = nullptr;
+
+	delete option;
+	option = nullptr;
+
+	SDL_DestroyTexture(m_pOption2Texture);
+	m_pOption2Texture = nullptr;
+
+	delete option2;
+	option2 = nullptr;
 }
 
 void SlothExitState::Enter()
@@ -2123,14 +2230,21 @@ void SlothExitState::Enter()
 
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/slothExit/text.png");
+	m_pNextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/next.png");
+	next = new UIButton(800, 650, 200, 100);
+
 }
 
 void SlothExitState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_C))
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to epilogue state" << std::endl;
-		StateManager::ChangeState(new EpilogueState());
+		next->HandleEvent();
+		if (next->CheckIsHovered())
+		{
+			std::cout << "changing to epilogue state" << std::endl;
+			StateManager::ChangeState(new EpilogueState());
+		}
 	}
 }
 
@@ -2143,6 +2257,10 @@ void SlothExitState::Render()
 
 	SDL_Rect textRect = { 300,300,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect continueRect = MathManager::ConvertFRect2Rect(next->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pNextTexture, nullptr, &continueRect);
+
 }
 
 void SlothExitState::Exit()
@@ -2154,6 +2272,12 @@ void SlothExitState::Exit()
 
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pNextTexture);
+	m_pNextTexture = nullptr;
+
+	delete next;
+	next = nullptr;
 }
 
 void SlothLoseState::Enter()
@@ -2163,15 +2287,23 @@ void SlothLoseState::Enter()
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/slothLose/text.png");
 	m_pPlayerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/slothLose/player.png");
+	m_pMenuTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/menu.png");
+	mainMenu = new UIButton(800, 620, 200, 200);
+
 }
 
 void SlothLoseState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to menu state" << std::endl;
-		StateManager::ChangeState(new TitleState());
+		mainMenu->HandleEvent();
+		if (mainMenu->CheckIsHovered())
+		{
+			std::cout << "changing to title state" << std::endl;
+			StateManager::ChangeState(new TitleState());
+		}
 	}
+
 }
 
 void SlothLoseState::Render()
@@ -2186,6 +2318,10 @@ void SlothLoseState::Render()
 
 	SDL_Rect playerRect = { 400,320,200,200 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pPlayerTexture, NULL, &playerRect);
+
+	SDL_Rect menuRect = MathManager::ConvertFRect2Rect(mainMenu->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pMenuTexture, nullptr, &menuRect);
+
 }
 
 void SlothLoseState::Exit()
@@ -2200,6 +2336,13 @@ void SlothLoseState::Exit()
 
 	SDL_DestroyTexture(m_pPlayerTexture);
 	m_pPlayerTexture = nullptr;
+
+	SDL_DestroyTexture(m_pMenuTexture);
+	m_pMenuTexture = nullptr;
+
+	delete mainMenu;
+	mainMenu = nullptr;
+
 }
 //////////////////////epilogue//////////////////////////////////
 
@@ -2210,15 +2353,22 @@ void EpilogueState::Enter()
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/epilogue/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/epilogue/text.png");
 	m_pPortalTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/epilogue/portal.png");
+	m_pNextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/next.png");
+	next = new UIButton(800, 650, 200, 100);
+
 }
 
 void EpilogueState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_C))
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to win state" << std::endl;
-		StateManager::ChangeState(new WinState());
+		next->HandleEvent();
+		if (next->CheckIsHovered())
+		{
+			std::cout << "changing to Win state" << std::endl;
+			StateManager::ChangeState(new WinState());		}
 	}
+
 }
 
 void EpilogueState::Render()
@@ -2233,6 +2383,9 @@ void EpilogueState::Render()
 
 	SDL_Rect portalRect = { 400,450,200,200 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pPortalTexture, NULL, &portalRect);
+	
+	SDL_Rect continueRect = MathManager::ConvertFRect2Rect(next->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pNextTexture, nullptr, &continueRect);
 }
 
 void EpilogueState::Exit()
@@ -2244,6 +2397,12 @@ void EpilogueState::Exit()
 
 	SDL_DestroyTexture(m_pBackgroundTexture);
 	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pNextTexture);
+	m_pNextTexture = nullptr;
+
+	delete next;
+	next = nullptr;
 }
 
 void WinState::Enter()
@@ -2253,13 +2412,20 @@ void WinState::Enter()
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/win/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/win/text.png");
 	m_pWinTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/win/wintext.png");
+
+	m_pMenuTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/menu.png");
+	mainMenu = new UIButton(800, 650, 200, 100);
+
 }	 
 void WinState::Update(float deltaTime)
 {
-	if (EventManager::KeyPressed(SDL_SCANCODE_R))
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to title state" << std::endl;
-		StateManager::ChangeState(new TitleState());
+		next->HandleEvent();
+		if (next->CheckIsHovered())
+		{
+			std::cout << "changing to title state" << std::endl;
+			StateManager::ChangeState(new TitleState());		}
 	}
 }
 void WinState::Render()
@@ -2274,8 +2440,28 @@ void WinState::Render()
 
 	SDL_Rect winRect = { 350,20,600,600 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pWinTextTexture, NULL, &winRect);
+
+	SDL_Rect menuRect = MathManager::ConvertFRect2Rect(mainMenu->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pMenuTexture, nullptr, &menuRect);
+
 }
 void WinState::Exit()
 {
 	std::cout << "exiting lose state.." << std::endl;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pWinTextTexture);
+	m_pWinTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pMenuTexture);
+	m_pMenuTexture = nullptr;
+
+	delete mainMenu;
+	mainMenu = nullptr;
+
 }

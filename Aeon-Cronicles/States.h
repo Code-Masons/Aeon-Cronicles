@@ -26,8 +26,6 @@ public:
 	UIButton* mainMenu;
 	SDL_Texture* m_pMenuTexture;
 
-	
-
 	//static Game& GetInstance();
 	//criteria for each state each state MUST have the following 
 	virtual void Enter() = 0;//use for initialization of assets
@@ -35,7 +33,6 @@ public:
 	virtual void Render() = 0;// use to render assets
 	virtual void Exit() = 0;//use to destroy assets
 	virtual void Resume() { }
-
 };
 
 class TitleState : public State//main menu screen
@@ -85,7 +82,6 @@ public:
 	virtual void Exit() override;
 };
 
-
 class CarState : public State//win screen
 {
 	SDL_Texture* m_pBackgroundTexture;
@@ -99,13 +95,8 @@ public:
 
 };
 
-class TruckState : public State//win screen
+class TruckState : public State
 {
-	GameObject* m_background;
-	GameObject* m_text;
-	GameObject* m_truck;
-	GameObject* m_pressX;
-
 	SDL_Texture* m_pBackgroundTexture;
 	SDL_Texture* m_pTextTexture;
 	SDL_Texture* m_pTruckTexture;
@@ -115,17 +106,12 @@ public:
 	virtual void Update(float deltaTime) override;
 	virtual void Render() override;
 	virtual void Exit() override;
-
 };
 
 
 ///////////////CHAPTER 1 STATES//////////////////////
 class HellState : public State//hell start screen
 {
-
-	GameObject* m_background;
-	GameObject* m_Text;
-	GameObject* m_PressC;
 
 	SDL_Texture* m_pBackgroundTexture;
 	SDL_Texture* m_pTextTexture;
@@ -141,16 +127,10 @@ class CasinoState : public State
 {
 public:
 
-	GameObject* m_background;
-	GameObject* m_devil;
-	GameObject* m_text;
-	GameObject* m_pressX;
-
 	SDL_Texture* m_pBackgroundTexture;
 	SDL_Texture* m_pDevilTexture;
 	SDL_Texture* m_pTextTexture;
 	SDL_Texture* m_pPressXTexture;
-
 
 	virtual void Enter() override;
 	virtual void Update(float deltaTime) override;
@@ -160,12 +140,6 @@ public:
 
 class CasinoChoiceState : public State
 {
-
-	GameObject* m_background;
-	GameObject* m_devil;
-	GameObject* m_text;
-	GameObject* m_press1;
-	GameObject* m_press2;
 
 	SDL_Texture* m_pBackgroundTexture;
 	SDL_Texture* m_pDevilTexture;
@@ -184,10 +158,6 @@ public:
 class CasinoExitState : public State
 {
 
-	GameObject* m_background;
-	GameObject* m_devil;
-	GameObject* m_text;
-
 	SDL_Texture* m_pBackgroundTexture;
 	SDL_Texture* m_pDevilTexture;
 	SDL_Texture* m_pTextTexture;
@@ -202,11 +172,6 @@ public:
 
 class CasinoLoseState : public State
 {
-
-	GameObject* m_background;
-	GameObject* m_text;
-	GameObject* m_player;
-
 	SDL_Texture* m_pBackgroundTexture;
 	SDL_Texture* m_pTextTexture;
 	SDL_Texture* m_pPlayerTexture;
@@ -221,9 +186,6 @@ public:
 //////////////////////////CHAPTER 2////////////////////////////// 
 class PrideEnterState : public State
 {
-
-	GameObject* m_background;
-	GameObject* m_text;
 	
 	SDL_Texture* m_pBackgroundTexture;
 	SDL_Texture* m_pTextTexture;
@@ -237,10 +199,6 @@ public:
 
 class PrideChoiceState : public State
 {
-
-	GameObject* m_background;
-	GameObject* m_text;
-
 	SDL_Texture* m_pBackgroundTexture;
 	SDL_Texture* m_pTextTexture;
 	SDL_Texture* m_pWrongTextTexture;
@@ -255,10 +213,6 @@ public:
 
 class PrideExitState : public State
 {
-
-	GameObject* m_background;
-	GameObject* m_text;
-
 	SDL_Texture* m_pBackgroundTexture;
 	SDL_Texture* m_pTextTexture;
 
@@ -271,11 +225,6 @@ public:
 
 class PrideLoseState : public State
 {
-
-	GameObject* m_background;
-	GameObject* m_text;
-	GameObject* m_player;
-
 	SDL_Texture* m_pBackgroundTexture;
 	SDL_Texture* m_pTextTexture;
 	SDL_Texture* m_pPlayerTexture;
@@ -290,11 +239,6 @@ public:
 //////////////////////////CHAPTER 7////////////////////////////// 
 class LustEnterState : public State//lust screen
 {
-
-	GameObject* m_background;
-	GameObject* m_text;
-	GameObject* m_devil;
-
 	SDL_Texture* m_pBackgroundTexture;
 	SDL_Texture* m_pTextTexture;
 	SDL_Texture* m_pDevilTexture;
@@ -308,11 +252,6 @@ public:
 
 class LustChoiceState : public State
 {
-
-	GameObject* m_background;
-	GameObject* m_text;
-	GameObject* m_devil;
-
 	SDL_Texture* m_pBackgroundTexture;
 	SDL_Texture* m_pTextTexture;
 	SDL_Texture* m_pRightTextTexture;
@@ -513,10 +452,6 @@ public:
 //////////////////////////CHAPTER 7////////////////////////////// 
 class SlothEnterState : public State//chapter 7 start screen
 {
-	GameObject* m_background;
-	GameObject* m_devil;
-	GameObject* m_text;
-
 	SDL_Texture* m_pBackgroundTexture;
 	SDL_Texture* m_pDevilTexture;
 	SDL_Texture* m_pTextTexture;
@@ -530,13 +465,11 @@ public:
 
 class SlothChoiceState : public State//chapter 7 start screen
 {
-	GameObject* m_background;
-	GameObject* m_devil;
-	GameObject* m_text;
-
 	SDL_Texture* m_pBackgroundTexture;
 	SDL_Texture* m_pDevilTexture;
 	SDL_Texture* m_pTextTexture;
+	SDL_Texture* m_pRightTextTexture;
+	SDL_Texture* m_pWrongTextTexture;
 
 public:
 	virtual void Enter() override;
