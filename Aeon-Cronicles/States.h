@@ -88,14 +88,8 @@ public:
 
 class CarState : public State//win screen
 {
-	
-	GameObject* m_background;
-	GameObject* m_text;
-	GameObject* m_continue;
-
 	SDL_Texture* m_pBackgroundTexture;
-	SDL_Texture* m_pTextTexture;
-	SDL_Texture* m_pContinueTexture;
+	SDL_Texture* m_pTextTexture;	
 
 public:
 	virtual void Enter() override;
@@ -249,6 +243,8 @@ class PrideChoiceState : public State
 
 	SDL_Texture* m_pBackgroundTexture;
 	SDL_Texture* m_pTextTexture;
+	SDL_Texture* m_pWrongTextTexture;
+	SDL_Texture* m_pRightTextTexture;
 
 public:
 	virtual void Enter() override;

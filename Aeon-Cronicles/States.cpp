@@ -478,17 +478,14 @@ void CasinoChoiceState::Update(float deltaTime)
 	if (EventManager::MousePressed(1))
 	{
 		option->HandleEvent();
+		option2->HandleEvent();
 		if (option->CheckIsHovered())
 		{
 			std::cout << "changing to casino lose state" << std::endl;
 			StateManager::ChangeState(new CasinoLoseState());//change to new car state
 		}
-	}
 
-	else if (EventManager::MousePressed(1))
-	{
-		option2->HandleEvent();
-		if (option2->CheckIsHovered())
+		else if (option2->CheckIsHovered())
 		{
 			std::cout << "changing to casino exit state" << std::endl;
 			StateManager::ChangeState(new CasinoExitState());//change to new car state
@@ -626,7 +623,7 @@ void CasinoLoseState::Enter()
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casinoLose/text.png");
 	m_pPlayerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casinoLose/player.png");
 	m_pMenuTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/menu.png");
-	mainMenu = new UIButton(800, 650, 200, 200);
+	mainMenu = new UIButton(800, 620, 200, 200);
 
 }
 
@@ -690,15 +687,22 @@ void PrideEnterState::Enter()
 	std::cout << "entering pride enter state.." << std::endl;
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideEnter/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideEnter/text.png");
+	m_pNextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/next.png");
+	next = new UIButton(800, 650, 200, 100);
+
 }
 
 void PrideEnterState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_X))//press X to go to pride choice state
-	{
-		std::cout << "changing to pride choice state" << std::endl;
-		StateManager::ChangeState(new PrideChoiceState());//change to new pride choice state
-	}
+		if (EventManager::MousePressed(1))
+		{
+			next->HandleEvent();
+			if (next->CheckIsHovered())
+			{
+				std::cout << "changing to pride choice state" << std::endl;
+				StateManager::ChangeState(new PrideChoiceState());//change to new car state
+			}
+		}	
 }
 
 void PrideEnterState::Render()
@@ -710,23 +714,28 @@ void PrideEnterState::Render()
 
 	SDL_Rect textRect = { 250,575,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect continueRect = MathManager::ConvertFRect2Rect(next->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pNextTexture, nullptr, &continueRect);
+
 }
 
 void PrideEnterState::Exit()
 {
 	std::cout << "exiting pride enter state.." << std::endl;
 
-	delete m_background;
-	m_background = nullptr;
-
-	delete m_text;
-	m_text = nullptr;
-
 	SDL_DestroyTexture(m_pBackgroundTexture);
 	m_pBackgroundTexture = nullptr;
 
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pNextTexture);
+	m_pNextTexture = nullptr;
+
+	delete next;
+	next = nullptr;
+
 }
 
 void PrideChoiceState::Enter()
@@ -735,20 +744,33 @@ void PrideChoiceState::Enter()
 
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideEnter/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideChoice/text.png");
+	m_pWrongTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideChoice/wrongText.png");
+	m_pRightTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideChoice/rightText.png");
+
+	m_pOptionTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/blank.png");
+	option = new UIButton(20, 650, 200, 100);
+
+	m_pOption2Texture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/blank.png");
+	option2 = new UIButton(800, 650, 200, 100);
 }
 
 void PrideChoiceState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_1))//press 1 to go to pride exit state
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to pride choice state" << std::endl;
-		StateManager::ChangeState(new PrideExitState());//change to new pride exit state
-	}
+		option->HandleEvent();
+		option2->HandleEvent();
+		if (option->CheckIsHovered())
+		{
+			std::cout << "changing to casino lose state" << std::endl;
+			StateManager::ChangeState(new PrideLoseState());
+		}
 
-	else if (Game::GetInstance().KeyDown(SDL_SCANCODE_2))//press 2 to go to pride lose state
-	{
-		std::cout << "changing to pride choice state" << std::endl;
-		StateManager::ChangeState(new PrideLoseState());//change to new pride lose state
+		else if (option2->CheckIsHovered())
+		{
+			std::cout << "changing to casino exit state" << std::endl;
+			StateManager::ChangeState(new PrideExitState());
+		}
 	}
 }
 
@@ -761,23 +783,49 @@ void PrideChoiceState::Render()
 
 	SDL_Rect textRect = { 250,575,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect optionRect = MathManager::ConvertFRect2Rect(option->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pOptionTexture, nullptr, &optionRect);
+
+	SDL_Rect option2Rect = MathManager::ConvertFRect2Rect(option2->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pOption2Texture, nullptr, &option2Rect);
+
+	SDL_Rect WrongRect = { 50,675,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pWrongTextTexture, NULL, &WrongRect);
+
+	SDL_Rect rightRect = { 825,675,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pRightTextTexture, NULL, &rightRect);
+
 }
 
 void PrideChoiceState::Exit()
 {
 	std::cout << "exiting pride choice state.." << std::endl;
 
-	delete m_background;
-	m_background = nullptr;
-
-	delete m_text;
-	m_text = nullptr;
-
 	SDL_DestroyTexture(m_pBackgroundTexture);
 	m_pBackgroundTexture = nullptr;
 
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pWrongTextTexture);
+	m_pWrongTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pRightTextTexture);
+	m_pRightTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pOptionTexture);
+	m_pOptionTexture = nullptr;
+
+	SDL_DestroyTexture(m_pOption2Texture);
+	m_pOption2Texture = nullptr;
+
+	delete option;
+	option = nullptr;
+
+	delete option2;
+	option2 = nullptr;
+
 }
 
 void PrideExitState::Enter()
@@ -785,14 +833,21 @@ void PrideExitState::Enter()
 	std::cout << "entering pride exit state.." << std::endl;
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideExit/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideExit/text.png");
+	m_pNextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/next.png");
+	next = new UIButton(800, 650, 200, 100);
+
 }
 
 void PrideExitState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_C))//press C to go to lust enter state
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to casino choice state" << std::endl;
-		StateManager::ChangeState(new LustEnterState());//change to new lust enter state
+		next->HandleEvent();
+		if (next->CheckIsHovered())
+		{
+			std::cout << "changing to Lust enter state" << std::endl;
+			StateManager::ChangeState(new LustEnterState());//change to new car state
+		}
 	}
 }
 
@@ -805,23 +860,28 @@ void PrideExitState::Render()
 
 	SDL_Rect textRect = { 250,575,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect continueRect = MathManager::ConvertFRect2Rect(next->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pNextTexture, nullptr, &continueRect);
+
 }
 
 void PrideExitState::Exit()
 {
 	std::cout << "exiting pride exit state.." << std::endl;
 
-	delete m_background;
-	m_background = nullptr;
-
-	delete m_text;
-	m_text = nullptr;
-
 	SDL_DestroyTexture(m_pBackgroundTexture);
 	m_pBackgroundTexture = nullptr;
 
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pNextTexture);
+	m_pNextTexture = nullptr;
+
+	delete next;
+	next = nullptr;
+
 }
 
 void PrideLoseState::Enter()
@@ -830,15 +890,23 @@ void PrideLoseState::Enter()
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideLose/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideLose/text.png");
 	m_pPlayerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter2/prideLose/player.png");
+	m_pMenuTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/menu.png");
+	mainMenu = new UIButton(800, 650, 200, 200);
+
 }
 
 void PrideLoseState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))//press R to go to title state
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to casino choice state" << std::endl;
-		StateManager::ChangeState(new TitleState());//change to new title state
+		mainMenu->HandleEvent();
+		if (mainMenu->CheckIsHovered())
+		{
+			std::cout << "changing to title state" << std::endl;
+			StateManager::ChangeState(new TitleState());//change to new car state
+		}
 	}
+
 }
 
 void PrideLoseState::Render()
@@ -853,23 +921,29 @@ void PrideLoseState::Render()
 
 	SDL_Rect playerRect = { 370,45,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pPlayerTexture, NULL, &playerRect);
+
+	SDL_Rect menuRect = MathManager::ConvertFRect2Rect(mainMenu->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pMenuTexture, nullptr, &menuRect);
+
 }
 
 void PrideLoseState::Exit()
 {
 	std::cout << "exiting pride lose state.." << std::endl;
 
-	delete m_background;
-	m_background = nullptr;
-
-	delete m_text;
-	m_text = nullptr;
-
 	SDL_DestroyTexture(m_pBackgroundTexture);
 	m_pBackgroundTexture = nullptr;
 
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pMenuTexture);
+	m_pMenuTexture = nullptr;
+
+	delete mainMenu;
+	mainMenu = nullptr;
+
+
 }
 
 ////////////////////CHAPTER 3 START//////////////////////////////////
