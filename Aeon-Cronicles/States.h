@@ -572,6 +572,19 @@ public:
 	virtual void Exit() override;
 };
 
+class EpilogueState : public State//chapter 7 start screen
+{
+	SDL_Texture* m_pBackgroundTexture;
+	SDL_Texture* m_pTextTexture;
+	SDL_Texture* m_pPortalTexture;
+
+public:
+	virtual void Enter() override;
+	virtual void Update(float deltaTime) override;
+	virtual void Render() override;
+	virtual void Exit() override;
+};
+
 class PauseState : public State//pause screen
 {
 public:
@@ -582,15 +595,6 @@ public:
 };
 
 class WinState : public State//win screen
-{
-public:
-	virtual void Enter() override;
-	virtual void Update(float deltaTime) override;
-	virtual void Render() override;
-	virtual void Exit() override;
-};
-
-class LoseState : public State//lose screen
 {
 public:
 	virtual void Enter() override;

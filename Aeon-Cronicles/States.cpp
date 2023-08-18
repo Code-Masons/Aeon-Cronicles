@@ -1722,7 +1722,11 @@ void SlothExitState::Enter()
 
 void SlothExitState::Update(float deltaTime)
 {
-
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_C))
+	{
+		std::cout << "changing to epilogue state" << std::endl;
+		StateManager::ChangeState(new EpilogueState());
+	}
 }
 
 void SlothExitState::Render()
@@ -1792,6 +1796,46 @@ void SlothLoseState::Exit()
 	SDL_DestroyTexture(m_pPlayerTexture);
 	m_pPlayerTexture = nullptr;
 }
+//////////////////////epilogue//////////////////////////////////
+
+void EpilogueState::Enter()
+{
+	std::cout << "entering epilogue state.." << std::endl;
+
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/epilogue/background.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/epilogue/text.png");
+	m_pPortalTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/epilogue/portal.png");
+}
+
+void EpilogueState::Update(float deltaTime)
+{
+	
+}
+
+void EpilogueState::Render()
+{
+	std::cout << "rendering epilogue state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 300,20,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect portalRect = { 400,450,200,200 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pPortalTexture, NULL, &portalRect);
+}
+
+void EpilogueState::Exit()
+{
+	std::cout << "exiting epilogue state.." << std::endl;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+}
 
 void WinState::Enter()
 {
@@ -1816,31 +1860,4 @@ void WinState::Render()
 void WinState::Exit()
 {
 	std::cout << "exiting lose state.." << std::endl;
-}
-
-
-
-void LoseState::Enter()
-{
-	std::cout << "entering lose state" << std::endl;
-}
-void LoseState::Update(float deltaTime)
-{
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))
-	{
-		std::cout << "changing to title state" << std::endl;
-		StateManager::ChangeState(new TitleState());
-	}
-}
-void LoseState::Render()
-{
-	SDL_Renderer* pRenderer = Game::GetInstance().GetRenderer();
-
-
-	SDL_SetRenderDrawColor(pRenderer, 255, 0, 0, 255);
-	SDL_RenderClear(pRenderer);
-}
-void LoseState::Exit()
-{
-	std::cout << "exiting lose state" << std::endl;
 }
