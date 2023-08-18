@@ -1796,15 +1796,23 @@ void GluttonyEnterState::Enter()
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter6/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter6/gluttonyEnter/text.png");
 	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter6/devil.png");
+	m_pNextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/next.png");
+	next = new UIButton(800, 650, 200, 100);
+
 }
 
 void GluttonyEnterState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_C))
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to gluttony choice state" << std::endl;
-		StateManager::ChangeState(new GluttonyChoiceState());
+		next->HandleEvent();
+		if (next->CheckIsHovered())
+		{
+			std::cout << "changing to gluttony choice state" << std::endl;
+			StateManager::ChangeState(new GluttonyChoiceState());
+		}
 	}
+
 }
 
 void GluttonyEnterState::Render()
@@ -1820,6 +1828,10 @@ void GluttonyEnterState::Render()
 
 	SDL_Rect devilRect = { 700,350,300,300 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pDevilTexture, NULL, &devilRect);
+
+	SDL_Rect continueRect = MathManager::ConvertFRect2Rect(next->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pNextTexture, nullptr, &continueRect);
+
 }
 
 void GluttonyEnterState::Exit()
@@ -1834,6 +1846,13 @@ void GluttonyEnterState::Exit()
 
 	SDL_DestroyTexture(m_pDevilTexture);
 	m_pDevilTexture = nullptr;
+
+	SDL_DestroyTexture(m_pNextTexture);
+	m_pNextTexture = nullptr;
+
+	delete next;
+	next = nullptr;
+
 }
 
 void GluttonyChoiceState::Enter()
@@ -1842,22 +1861,36 @@ void GluttonyChoiceState::Enter()
 
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter6/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter6/gluttonyChoice/text.png");
+	m_pRightTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter6/gluttonyChoice/rightText.png");
+	m_pWrongTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter6/gluttonyChoice/wrongText.png");
 	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter6/devil.png");
+	m_pOptionTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/blank.png");
+	option = new UIButton(20, 650, 200, 100);
+
+	m_pOption2Texture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/blank.png");
+	option2 = new UIButton(800, 650, 200, 100);
+
 }
 
 void GluttonyChoiceState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_1))
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to gluttony exit state" << std::endl;
-		StateManager::ChangeState(new GluttonyExitState());
+		option->HandleEvent();
+		option2->HandleEvent();
+		if (option->CheckIsHovered())
+		{
+			std::cout << "changing to gluttony exit state" << std::endl;
+			StateManager::ChangeState(new GluttonyExitState());
+		}
+
+		else if (option2->CheckIsHovered())
+		{
+			std::cout << "changing to gluttony lose state" << std::endl;
+			StateManager::ChangeState(new GluttonyLoseState());
+		}
 	}
 
-	else if (Game::GetInstance().KeyDown(SDL_SCANCODE_2))
-	{
-		std::cout << "changing to gluttony lose state" << std::endl;
-		StateManager::ChangeState(new GluttonyLoseState());
-	}
 }
 
 void GluttonyChoiceState::Render()
@@ -1872,6 +1905,19 @@ void GluttonyChoiceState::Render()
 
 	SDL_Rect devilRect = { 350,350,300,300 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pDevilTexture, NULL, &devilRect);
+
+	SDL_Rect optionRect = MathManager::ConvertFRect2Rect(option->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pOptionTexture, nullptr, &optionRect);
+
+	SDL_Rect option2Rect = MathManager::ConvertFRect2Rect(option2->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pOption2Texture, nullptr, &option2Rect);
+
+	SDL_Rect rightRect = { 845,650,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pRightTextTexture, NULL, &rightRect);
+
+	SDL_Rect wrongRect = { 40,650,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pWrongTextTexture, NULL, &wrongRect);
+
 }
 
 void GluttonyChoiceState::Exit()
