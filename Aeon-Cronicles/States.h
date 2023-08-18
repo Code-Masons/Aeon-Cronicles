@@ -6,6 +6,7 @@
 #include <map>
 #include "GameObject.h"
 #include "Game.h"
+#include "UI_Button.h"
 
 class State
 {
@@ -20,11 +21,13 @@ public:
 	virtual void Exit() = 0;//use to destroy assets
 	virtual void Resume() { }
 
-	//std::map<std::string, GameObject*> m_objects;
 };
 
 class TitleState : public State//main menu screen
 {
+	UIButton* start;
+	SDL_Texture* m_pStartTexture;
+
 	GameObject* GameName;
 	SDL_Texture* TitleStateTexture;
 public:

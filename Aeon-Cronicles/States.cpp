@@ -13,7 +13,9 @@ void TitleState::Enter()
 	std::cout << "entering title state " << std::endl;
 
 	GameName = new GameObject(Game::kWidth / 2 - 300, Game::kHeight / 3 - 200, 600, 400, 100, 100, 100, 255);
+	start = new UIButton(Game::kWidth / 2 - 100, Game::kHeight * 3 / 4 - 100, 200, 200);
 
+	m_pStartTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/start.png");
 	TitleStateTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/titleState.png");
 }
 void TitleState::Update(float deltaTime)
@@ -23,6 +25,16 @@ void TitleState::Update(float deltaTime)
 	{
 		std::cout << "changing to game state" << std::endl;
 		StateManager::ChangeState(new OfficeState());//change to new office state
+	}
+
+	if (EventManager::MousePressed(1))
+	{
+		start->HandleEvent();
+		if (start->CheckIsHovered())
+		{
+			std::cout << "changing to game state" << std::endl;
+			StateManager::ChangeState(new OfficeState());//change to new game state
+		}
 	}
 }
 void TitleState::Render()
@@ -35,6 +47,9 @@ void TitleState::Render()
 	SDL_RenderClear(Game::GetInstance().GetRenderer());
 
 	SDL_RenderCopy(pRenderer, TitleStateTexture, nullptr, nullptr);
+
+	SDL_Rect TitleButtonRect = MathManager::ConvertFRect2Rect(start->GetTransform());
+	SDL_RenderCopy(pRenderer, m_pStartTexture, nullptr, &TitleButtonRect);
 }
 void TitleState::Exit()
 {
