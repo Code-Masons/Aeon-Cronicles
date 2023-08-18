@@ -1315,6 +1315,12 @@ void WrathChoiceState::Update(float deltaTime)
 		std::cout << "changing to wrath exit state" << std::endl;
 		StateManager::ChangeState(new WrathExitState());
 	}
+
+	else if (Game::GetInstance().KeyDown(SDL_SCANCODE_2))
+	{
+		std::cout << "changing to wrath lose state" << std::endl;
+		StateManager::ChangeState(new WrathLoseState());
+	}
 }
 
 void WrathChoiceState::Render()
@@ -1373,6 +1379,50 @@ void WrathExitState::Exit()
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
 }
+
+void WrathLoseState::Enter()
+{
+	std::cout << "entering wrath lose state.." << std::endl;
+
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter5/background.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter5/wrathLose/text.png");
+	m_pPlayerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter5/wrathLose/player.png");
+}
+
+void WrathLoseState::Update(float deltaTime)
+{
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))//press R to go to title state
+	{
+		std::cout << "changing to casino choice state" << std::endl;
+		StateManager::ChangeState(new TitleState());//change to new title state
+	}
+}
+
+void WrathLoseState::Render()
+{
+	std::cout << "rendering wrath lose state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 250,50,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect playerRect = { 300,300,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pPlayerTexture, NULL, &playerRect);
+}
+
+void WrathLoseState::Exit()
+{
+	std::cout << "exiting wrath lose state" << std::endl;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
+}
+////////////////////CHAPTER 6 START//////////////////////////////////
 
 ////////////////////CHAPTER 7 START//////////////////////////////////
 void SlothEnterState::Enter()
