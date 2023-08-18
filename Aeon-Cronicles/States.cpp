@@ -1702,14 +1702,14 @@ void SlothChoiceState::Exit()
 {
 	std::cout << "exiting second sloth state.." << std::endl;
 
-	delete m_background;
-	m_background = nullptr;
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
 
-	delete m_text;
-	m_text = nullptr;
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
 
-	delete m_devil;
-	m_devil = nullptr;
+	SDL_DestroyTexture(m_pDevilTexture);
+	m_pDevilTexture = nullptr;
 }
 
 void SlothExitState::Enter()
@@ -1740,31 +1740,57 @@ void SlothExitState::Exit()
 {
 	std::cout << "exiting sloth exit state.." << std::endl;
 
-	delete m_background;
-	m_background = nullptr;
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
 
-	delete m_text;
-	m_text = nullptr;
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
 }
 
 void SlothLoseState::Enter()
 {
 	std::cout << "entering sloth lose state.." << std::endl;
+
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/background.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/slothLose/text.png");
+	m_pPlayerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter7/slothLose/player.png");
 }
 
 void SlothLoseState::Update(float deltaTime)
 {
-
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))
+	{
+		std::cout << "changing to menu state" << std::endl;
+		StateManager::ChangeState(new TitleState());
+	}
 }
 
 void SlothLoseState::Render()
 {
 	std::cout << "rendering sloth lose state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 300,20,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect playerRect = { 400,320,200,200 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pPlayerTexture, NULL, &playerRect);
 }
 
 void SlothLoseState::Exit()
 {
 	std::cout << "exiting sloth lose state.." << std::endl;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pPlayerTexture);
+	m_pPlayerTexture = nullptr;
 }
 
 void WinState::Enter()

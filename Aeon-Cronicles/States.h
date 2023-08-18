@@ -549,12 +549,7 @@ public:
 
 class SlothExitState : public State//chapter 7 start screen
 {
-	GameObject* m_background;
-	GameObject* m_devil;
-	GameObject* m_text;
-
 	SDL_Texture* m_pBackgroundTexture;
-	SDL_Texture* m_pDevilTexture;
 	SDL_Texture* m_pTextTexture;
 
 public:
@@ -568,6 +563,7 @@ class SlothLoseState : public State//chapter 7 start screen
 {
 	SDL_Texture* m_pBackgroundTexture;
 	SDL_Texture* m_pTextTexture;
+	SDL_Texture* m_pPlayerTexture;
 
 public:
 	virtual void Enter() override;
