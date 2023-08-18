@@ -300,7 +300,7 @@ void TruckState::Render()
 	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
 
-	SDL_Rect textRect = { 200,500,700,500 };
+	SDL_Rect textRect = { 100,500,700,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
 
 	SDL_Rect continueRect = MathManager::ConvertFRect2Rect(next->GetTransform());
@@ -338,16 +338,23 @@ void HellState::Enter()
 
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/enterHell/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/enterHell/text.png");
-	m_pPressCTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/enterHell/pressC.png");
+	m_pNextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/next.png");
+	next = new UIButton(800, 650, 200, 100);
+
 }
 
 void HellState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_C))//press X to go to hell start state state
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to casino state" << std::endl;
-		StateManager::ChangeState(new CasinoState());//change to new hell start state
+		next->HandleEvent();
+		if (next->CheckIsHovered())
+		{
+			std::cout << "changing to casino state" << std::endl;
+			StateManager::ChangeState(new CasinoState());//change to new car state
+		}
 	}
+
 }
 
 void HellState::Render()
@@ -360,22 +367,14 @@ void HellState::Render()
 	SDL_Rect textRect = { 200,50,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
 
-	SDL_Rect cRect = { 750,700,200,350 };
-	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pPressCTexture, NULL, &cRect);
+	SDL_Rect continueRect = MathManager::ConvertFRect2Rect(next->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pNextTexture, nullptr, &continueRect);
+
 }
 
 void HellState::Exit()
 {
 	std::cout << "exiting hell state.." << std::endl;
-
-	delete m_background;
-	m_background = nullptr;
-
-	delete m_Text;
-	m_Text = nullptr;
-
-	delete m_PressC;
-	m_PressC = nullptr;
 
 	SDL_DestroyTexture(m_pBackgroundTexture);
 	m_pBackgroundTexture = nullptr;
@@ -383,8 +382,12 @@ void HellState::Exit()
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
 
-	SDL_DestroyTexture(m_pPressCTexture);
-	m_pPressCTexture = nullptr;
+	SDL_DestroyTexture(m_pNextTexture);
+	m_pNextTexture = nullptr;
+
+	delete next;
+	next = nullptr;
+
 }
 
 void CasinoState::Enter()
@@ -394,16 +397,23 @@ void CasinoState::Enter()
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casino/background.png");
 	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casino/devil.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casino/text.png");
-	m_pPressXTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casino/pressX.png");
+	m_pNextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/next.png");
+	next = new UIButton(800, 650, 200, 100);
+
 }
 
 void CasinoState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_X))//press X to go to casino choice state
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to casino choice state" << std::endl;
-		StateManager::ChangeState(new CasinoChoiceState());//change to new casino choice start state
+		next->HandleEvent();
+		if (next->CheckIsHovered())
+		{
+			std::cout << "changing to casino choice state" << std::endl;
+			StateManager::ChangeState(new CasinoChoiceState());//change to new car state
+		}
 	}
+
 }
 
 void CasinoState::Render()
@@ -419,25 +429,14 @@ void CasinoState::Render()
 	SDL_Rect textRect = { 300,10,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
 
-	SDL_Rect xRect = { 750,700,500,500 };
-	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pPressXTexture, NULL, &xRect);
+	SDL_Rect continueRect = MathManager::ConvertFRect2Rect(next->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pNextTexture, nullptr, &continueRect);
+
 }
 
 void CasinoState::Exit()
 {
 	std::cout << " exiting casino state.. " << std::endl;
-
-	delete m_background;
-	m_background = nullptr;
-
-	delete m_text;
-	m_text = nullptr;
-
-	delete m_devil;
-	m_devil = nullptr;
-
-	delete m_pressX;
-	m_pressX = nullptr;
 
 	SDL_DestroyTexture(m_pBackgroundTexture);
 	m_pBackgroundTexture = nullptr;
@@ -448,8 +447,12 @@ void CasinoState::Exit()
 	SDL_DestroyTexture(m_pDevilTexture);
 	m_pDevilTexture = nullptr;
 
-	SDL_DestroyTexture(m_pPressXTexture);
-	m_pPressXTexture = nullptr;
+	SDL_DestroyTexture(m_pNextTexture);
+	m_pNextTexture = nullptr;
+
+	delete next;
+	next = nullptr;
+
 }
 
 void CasinoChoiceState::Enter()
@@ -461,21 +464,35 @@ void CasinoChoiceState::Enter()
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casinoChoice/text.png");
 	m_pPress1Texture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casinoChoice/wrongText.png");
 	m_pPress2Texture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casinoChoice/rightText.png");
+
+	m_pOptionTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/blank.png");
+	m_pOption2Texture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/blank.png");
+	option = new UIButton(200, 650, 200, 100);
+	option2 = new UIButton(700, 650, 200, 100);
+
 }
 
 void CasinoChoiceState::Update(float deltaTime)
 {
 
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_1))//press 1 to go to casino lose state
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to casino choice state" << std::endl;
-		StateManager::ChangeState(new CasinoLoseState());//change to new casino lose start state
+		option->HandleEvent();
+		if (option->CheckIsHovered())
+		{
+			std::cout << "changing to casino lose state" << std::endl;
+			StateManager::ChangeState(new CasinoLoseState());//change to new car state
+		}
 	}
 
-	else if (Game::GetInstance().KeyDown(SDL_SCANCODE_2))//press 2 to go to casino exit state
+	else if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to casino choice state" << std::endl;
-		StateManager::ChangeState(new CasinoExitState());//change to new casino exit start state
+		option2->HandleEvent();
+		if (option2->CheckIsHovered())
+		{
+			std::cout << "changing to casino exit state" << std::endl;
+			StateManager::ChangeState(new CasinoExitState());//change to new car state
+		}
 	}
 }
 
@@ -492,31 +509,22 @@ void CasinoChoiceState::Render()
 	SDL_Rect textRect = { 300,10,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
 
-	SDL_Rect TextRect = { 210,700,500,500 };
-	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pPress1Texture, NULL, &TextRect);
+	SDL_Rect option2Rect = MathManager::ConvertFRect2Rect(option2->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pOption2Texture, nullptr, &option2Rect);
 
-	SDL_Rect Text2Rect = { 750,700,500,500 };
+	SDL_Rect Text2Rect = { 740,680,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pPress2Texture, NULL, &Text2Rect);
+
+	SDL_Rect optionRect = MathManager::ConvertFRect2Rect(option->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pOptionTexture, nullptr, &optionRect);
+
+	SDL_Rect TextRect = { 250,680,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pPress1Texture, NULL, &TextRect);
 }
 
 void CasinoChoiceState::Exit()
 {
 	std::cout << "exiting casino choice state.. " << std::endl;
-
-	delete m_background;
-	m_background = nullptr;
-
-	delete m_text;
-	m_text = nullptr;
-
-	delete m_devil;
-	m_devil = nullptr;
-
-	delete m_press1;
-	m_press1 = nullptr;
-
-	delete m_press2;
-	m_press2 = nullptr;
 
 	SDL_DestroyTexture(m_pBackgroundTexture);
 	m_pBackgroundTexture = nullptr;
@@ -532,6 +540,16 @@ void CasinoChoiceState::Exit()
 
 	SDL_DestroyTexture(m_pPress2Texture);
 	m_pPress2Texture = nullptr;
+
+	SDL_DestroyTexture(m_pOptionTexture);
+	m_pOptionTexture = nullptr;
+
+	delete option2;
+	option2 = nullptr;
+
+	delete option;
+	option = nullptr;
+
 }
 
 void CasinoExitState::Enter()
@@ -541,15 +559,23 @@ void CasinoExitState::Enter()
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casinoExit/background.png");
 	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casino/devil.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casinoExit/text.png");
+	m_pNextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/next.png");
+	next = new UIButton(800, 650, 200, 100);
+
 }
 
 void CasinoExitState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_C))//press C to go to pride enter state
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to casino choice state" << std::endl;
-		StateManager::ChangeState(new PrideEnterState());//change to new casino pride enter state
+		next->HandleEvent();
+		if (next->CheckIsHovered())
+		{
+			std::cout << "changing to pride enter state" << std::endl;
+			StateManager::ChangeState(new PrideEnterState());
+		}
 	}
+
 
 }
 
@@ -563,22 +589,17 @@ void CasinoExitState::Render()
 	SDL_Rect devilRect = { 300,275,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pDevilTexture, NULL, &devilRect);
 
-	SDL_Rect textRect = { 300,10,500,500 };
+	SDL_Rect textRect = { 300,20,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect continueRect = MathManager::ConvertFRect2Rect(next->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pNextTexture, nullptr, &continueRect);
+
 }
 
 void CasinoExitState::Exit()
 {
 	std::cout << "exiting casino exit state.." << std::endl;
-
-	delete m_background;
-	m_background = nullptr;
-
-	delete m_text;
-	m_text = nullptr;
-
-	delete m_devil;
-	m_devil = nullptr;
 
 	SDL_DestroyTexture(m_pBackgroundTexture);
 	m_pBackgroundTexture = nullptr;
@@ -588,6 +609,13 @@ void CasinoExitState::Exit()
 
 	SDL_DestroyTexture(m_pDevilTexture);
 	m_pDevilTexture = nullptr;
+
+	SDL_DestroyTexture(m_pNextTexture);
+	m_pNextTexture = nullptr;
+
+	delete next;
+	next = nullptr;
+
 }
 
 void CasinoLoseState::Enter()
@@ -597,15 +625,23 @@ void CasinoLoseState::Enter()
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casinoExit/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casinoLose/text.png");
 	m_pPlayerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/casinoLose/player.png");
+	m_pMenuTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/menu.png");
+	mainMenu = new UIButton(800, 650, 200, 200);
+
 }
 
 void CasinoLoseState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))//press R to go to title state
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to casino choice state" << std::endl;
-		StateManager::ChangeState(new TitleState());//change to new title state
+		mainMenu->HandleEvent();
+		if (mainMenu->CheckIsHovered())
+		{
+			std::cout << "changing to menu state" << std::endl;
+			StateManager::ChangeState(new TitleState());//change to new title state
+		}
 	}
+
 }
 
 void CasinoLoseState::Render()
@@ -620,19 +656,15 @@ void CasinoLoseState::Render()
 
 	SDL_Rect playerRect = { 270,300,300,300 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pPlayerTexture, NULL, &playerRect);
+
+	SDL_Rect menuRect = MathManager::ConvertFRect2Rect(mainMenu->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pMenuTexture, nullptr, &menuRect);
+
 }
 
 void CasinoLoseState::Exit()
 {
 	std::cout << "exiting casino lose state.." << std::endl;
-	delete m_background;
-	m_background = nullptr;
-
-	delete m_text;
-	m_text = nullptr;
-
-	delete m_player;
-	m_player = nullptr;
 
 	SDL_DestroyTexture(m_pBackgroundTexture);
 	m_pBackgroundTexture = nullptr;
@@ -642,6 +674,13 @@ void CasinoLoseState::Exit()
 
 	SDL_DestroyTexture(m_pPlayerTexture);
 	m_pPlayerTexture = nullptr;
+
+	SDL_DestroyTexture(m_pMenuTexture);
+	m_pMenuTexture = nullptr;
+
+	delete mainMenu;
+	mainMenu = nullptr;
+
 
 }
 

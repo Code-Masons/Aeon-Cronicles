@@ -17,6 +17,17 @@ public:
 	UIButton* next;
 	SDL_Texture* m_pNextTexture;
 
+	UIButton* option;
+	SDL_Texture* m_pOptionTexture;
+	
+	UIButton* option2;
+	SDL_Texture* m_pOption2Texture;
+
+	UIButton* mainMenu;
+	SDL_Texture* m_pMenuTexture;
+
+	
+
 	//static Game& GetInstance();
 	//criteria for each state each state MUST have the following 
 	virtual void Enter() = 0;//use for initialization of assets
