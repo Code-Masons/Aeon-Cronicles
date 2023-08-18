@@ -1310,7 +1310,11 @@ void WrathChoiceState::Enter()
 
 void WrathChoiceState::Update(float deltaTime)
 {
-
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_1))
+	{
+		std::cout << "changing to wrath exit state" << std::endl;
+		StateManager::ChangeState(new WrathExitState());
+	}
 }
 
 void WrathChoiceState::Render()
@@ -1333,6 +1337,26 @@ void WrathChoiceState::Exit()
 
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
+}
+
+void WrathExitState::Enter()
+{
+	std::cout << "entering wrath exit state.." << std::endl;
+}
+
+void WrathExitState::Update(float deltaTime)
+{
+
+}
+
+void WrathExitState::Render()
+{
+	std::cout << "rendering wrath exit state.." << std::endl;
+}
+
+void WrathExitState::Exit()
+{
+	std::cout << "exiting wrath exit state.." << std::endl;
 }
 
 ////////////////////CHAPTER 7 START//////////////////////////////////
