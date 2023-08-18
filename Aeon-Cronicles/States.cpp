@@ -1185,7 +1185,11 @@ void EnvyExitState::Enter()
 
 void EnvyExitState::Update(float deltaTime)
 {
-
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_C))
+	{
+		std::cout << "changing to wrath enter state" << std::endl;
+		StateManager::ChangeState(new WrathEnterState());
+	}
 }
 
 void EnvyExitState::Render()
@@ -1255,6 +1259,41 @@ void EnvyLoseState::Exit()
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
 
+}
+////////////////////CHAPTER 5 START//////////////////////////////////
+void WrathEnterState::Enter()
+{
+	std::cout << "entering wrath enter state.." << std::endl;
+
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter5/background.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter5/wrathEnter/text.png");
+}
+
+void WrathEnterState::Update(float deltaTime)
+{
+
+}
+
+void WrathEnterState::Render()
+{
+	std::cout << "rendering wrath enter state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 250,50,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+}
+
+void WrathEnterState::Exit()
+{
+	std::cout << "exiting wrath enter state" << std::endl;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
 }
 
 ////////////////////CHAPTER 7 START//////////////////////////////////
