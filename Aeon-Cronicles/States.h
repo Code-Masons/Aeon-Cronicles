@@ -421,6 +421,8 @@ class WrathChoiceState : public State
 {
 	SDL_Texture* m_pBackgroundTexture;
 	SDL_Texture* m_pTextTexture;
+	SDL_Texture* m_pRightTextTexture;
+	SDL_Texture* m_pWrongTextTexture;
 
 public:
 	virtual void Enter() override;

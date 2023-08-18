@@ -1474,7 +1474,7 @@ void EnvyLoseState::Enter()
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/envyLose/text.png");
 	m_pMenuTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/menu.png");
-	mainMenu = new UIButton(800, 650, 200, 100);
+	mainMenu = new UIButton(800, 620, 200, 200);
 
 }
 
@@ -1526,14 +1526,21 @@ void WrathEnterState::Enter()
 
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter5/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter5/wrathEnter/text.png");
+	m_pNextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/next.png");
+	next = new UIButton(800, 650, 200, 100);
+
 }
 
 void WrathEnterState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_C))
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to wrath choice state" << std::endl;
-		StateManager::ChangeState(new WrathChoiceState());
+		next->HandleEvent();
+		if (next->CheckIsHovered())
+		{
+			std::cout << "changing to wrath choice state" << std::endl;
+			StateManager::ChangeState(new WrathChoiceState());
+		}
 	}
 }
 
@@ -1546,6 +1553,9 @@ void WrathEnterState::Render()
 
 	SDL_Rect textRect = { 250,50,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect continueRect = MathManager::ConvertFRect2Rect(next->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pNextTexture, nullptr, &continueRect);
 }
 
 void WrathEnterState::Exit()
@@ -1557,6 +1567,14 @@ void WrathEnterState::Exit()
 
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pNextTexture);
+	m_pNextTexture = nullptr;
+
+	delete next;
+	next = nullptr;
+
+
 }
 
 void WrathChoiceState::Enter()
@@ -1565,21 +1583,36 @@ void WrathChoiceState::Enter()
 
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter5/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter5/wrathChoice/text.png");
+	m_pRightTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter5/wrathChoice/rightText.png");
+	m_pWrongTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter5/wrathChoice/wrongText.png");
+
+	m_pOptionTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/blank.png");
+	option = new UIButton(20, 650, 200, 100);
+
+	m_pOption2Texture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/blank.png");
+	option2 = new UIButton(800, 650, 200, 100);
+
 }
 
 void WrathChoiceState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_1))
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to wrath exit state" << std::endl;
-		StateManager::ChangeState(new WrathExitState());
+		option->HandleEvent();
+		option2->HandleEvent();
+		if (option->CheckIsHovered())
+		{
+			std::cout << "changing to wrath exit state" << std::endl;
+			StateManager::ChangeState(new WrathExitState());
+		}
+
+		else if (option2->CheckIsHovered())
+		{
+			std::cout << "changing to wrath lose state" << std::endl;
+			StateManager::ChangeState(new WrathLoseState());
+		}
 	}
 
-	else if (Game::GetInstance().KeyDown(SDL_SCANCODE_2))
-	{
-		std::cout << "changing to wrath lose state" << std::endl;
-		StateManager::ChangeState(new WrathLoseState());
-	}
 }
 
 void WrathChoiceState::Render()
@@ -1591,6 +1624,18 @@ void WrathChoiceState::Render()
 
 	SDL_Rect textRect = { 250,50,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect optionRect = MathManager::ConvertFRect2Rect(option->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pOptionTexture, nullptr, &optionRect);
+
+	SDL_Rect option2Rect = MathManager::ConvertFRect2Rect(option2->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pOption2Texture, nullptr, &option2Rect);
+
+	SDL_Rect rightRect = { 30,680,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pRightTextTexture, NULL, &rightRect);
+
+	SDL_Rect wrongRect = { 840,680,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pWrongTextTexture, NULL, &wrongRect);
 }
 
 void WrathChoiceState::Exit()
@@ -1602,6 +1647,24 @@ void WrathChoiceState::Exit()
 
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pRightTextTexture);
+	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pWrongTextTexture);
+	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pOptionTexture);
+	m_pOptionTexture = nullptr;
+
+	delete option;
+	option = nullptr;
+
+	SDL_DestroyTexture(m_pOption2Texture);
+	m_pOption2Texture = nullptr;
+
+	delete option2;
+	option2 = nullptr;
 }
 
 void WrathExitState::Enter()
@@ -1610,14 +1673,21 @@ void WrathExitState::Enter()
 
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter5/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter5/wrathExit/text.png");
+	m_pNextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter1/next.png");
+	next = new UIButton(800, 650, 200, 100);
+
 }
 
 void WrathExitState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_X))
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to gluttony enter state" << std::endl;
-		StateManager::ChangeState(new GluttonyEnterState());
+		next->HandleEvent();
+		if (next->CheckIsHovered())
+		{
+			std::cout << "changing to gluttony enter state" << std::endl;
+			StateManager::ChangeState(new GluttonyEnterState());
+		}
 	}
 }
 
@@ -1630,6 +1700,10 @@ void WrathExitState::Render()
 
 	SDL_Rect textRect = { 250,50,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect continueRect = MathManager::ConvertFRect2Rect(next->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pNextTexture, nullptr, &continueRect);
+
 }
 
 void WrathExitState::Exit()
@@ -1641,6 +1715,13 @@ void WrathExitState::Exit()
 
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pNextTexture);
+	m_pNextTexture = nullptr;
+
+	delete next;
+	next = nullptr;
+
 }
 
 void WrathLoseState::Enter()
@@ -1650,15 +1731,23 @@ void WrathLoseState::Enter()
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter5/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter5/wrathLose/text.png");
 	m_pPlayerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter5/wrathLose/player.png");
+	m_pMenuTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/menu.png");
+	mainMenu = new UIButton(800, 650, 200, 100);
+
 }
 
 void WrathLoseState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))//press R to go to title state
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to casino choice state" << std::endl;
-		StateManager::ChangeState(new TitleState());//change to new title state
+		mainMenu->HandleEvent();
+		if (mainMenu->CheckIsHovered())
+		{
+			std::cout << "changing to title state" << std::endl;
+			StateManager::ChangeState(new TitleState());
+		}
 	}
+
 }
 
 void WrathLoseState::Render()
@@ -1673,6 +1762,10 @@ void WrathLoseState::Render()
 
 	SDL_Rect playerRect = { 300,300,500,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pPlayerTexture, NULL, &playerRect);
+
+	SDL_Rect menuRect = MathManager::ConvertFRect2Rect(mainMenu->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pMenuTexture, nullptr, &menuRect);
+
 }
 
 void WrathLoseState::Exit()
@@ -1687,6 +1780,13 @@ void WrathLoseState::Exit()
 
 	SDL_DestroyTexture(m_pPlayerTexture);
 	m_pPlayerTexture = nullptr;
+
+	SDL_DestroyTexture(m_pMenuTexture);
+	m_pMenuTexture = nullptr;
+
+	delete mainMenu;
+	mainMenu = nullptr;
+
 }
 ////////////////////CHAPTER 6 START//////////////////////////////////
 void GluttonyEnterState::Enter()
