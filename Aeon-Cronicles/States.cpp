@@ -1493,6 +1493,12 @@ void GluttonyChoiceState::Update(float deltaTime)
 		std::cout << "changing to gluttony exit state" << std::endl;
 		StateManager::ChangeState(new GluttonyExitState());
 	}
+
+	else if (Game::GetInstance().KeyDown(SDL_SCANCODE_2))
+	{
+		std::cout << "changing to gluttony lose state" << std::endl;
+		StateManager::ChangeState(new GluttonyLoseState());
+	}
 }
 
 void GluttonyChoiceState::Render()
@@ -1561,6 +1567,52 @@ void GluttonyExitState::Exit()
 
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
+}
+
+void GluttonyLoseState::Enter()
+{
+	std::cout << "entering gluttony lose state.." << std::endl;
+
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter6/background.png");
+	m_pDevilTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter6/devil.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter6/gluttonyLose/text.png");
+}
+
+void GluttonyLoseState::Update(float deltaTime)
+{
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))
+	{
+		std::cout << "changing to casino choice state" << std::endl;
+		StateManager::ChangeState(new TitleState());
+	}
+}
+
+void GluttonyLoseState::Render()
+{
+	std::cout << "rendering gluttony lose state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 250,50,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+	SDL_Rect devilRect = { 350,350,300,300 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pDevilTexture, NULL, &devilRect);
+}
+
+void GluttonyLoseState::Exit()
+{
+	std::cout << "exiting gluttony lose state.." << std::endl;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
+
+	SDL_DestroyTexture(m_pDevilTexture);
+	m_pDevilTexture = nullptr;
 }
 
 ////////////////////CHAPTER 7 START//////////////////////////////////
