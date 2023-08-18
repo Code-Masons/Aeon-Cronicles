@@ -20,13 +20,6 @@ void TitleState::Enter()
 }
 void TitleState::Update(float deltaTime)
 {
-
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_G))//press g to go to office state
-	{
-		std::cout << "changing to game state" << std::endl;
-		StateManager::ChangeState(new OfficeState());//change to new office state
-	}
-
 	if (EventManager::MousePressed(1))
 	{
 		start->HandleEvent();
@@ -54,6 +47,12 @@ void TitleState::Render()
 void TitleState::Exit()
 {
 	std::cout << "exiting title state" << std::endl;
+
+	SDL_DestroyTexture(m_pNextTexture);
+	m_pNextTexture = nullptr;
+
+	delete next;
+	next = nullptr;
 }
 
 
@@ -62,7 +61,7 @@ void OfficeState::Enter()
 
 	std::cout << "entering game state" << std::endl;
 
-	m_background = new GameObject(0, 0, 2000, Game::kHeight);
+	next = new UIButton(800, 650, 200, 100);
 
 	//load textures for game state here
 	m_pPlayerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/office/playerPrologue.png");
@@ -71,22 +70,19 @@ void OfficeState::Enter()
 	m_pMaleWorkerTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/office/maleOfficeWorker.png");
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/office/officebackground.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/office/officeText.png");
-	m_pContinueTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/office/pressC.png");
+	m_pNextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/continue.png");
 }	
 void OfficeState::Update(float deltaTime)
 {
-	int levelWidth, levelHeight;
-	SDL_QueryTexture(m_pBackgroundTexture, NULL, NULL, &levelWidth, &levelHeight);
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_P))
-	{
-		std::cout << "changing to pause state" << std::endl;
-		StateManager::PushState(new PauseState());
-	}
 
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_C))//press C to go to game state
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to street state" << std::endl;
-		StateManager::ChangeState(new StreetState());//change to new game state
+		next->HandleEvent();
+		if (next->CheckIsHovered())
+		{
+			std::cout << "changing to street state" << std::endl;
+			StateManager::ChangeState(new StreetState());//change to new game state
+		}
 	}
 
 }
@@ -117,8 +113,8 @@ void OfficeState::Render()
 	SDL_Rect officeTextRect = { 250,20,500,350 };
 	SDL_RenderCopy(pRenderer, m_pTextTexture, nullptr, &officeTextRect);
 
-	SDL_Rect continueRect = { 700,700,500,350 };
-	SDL_RenderCopy(pRenderer, m_pContinueTexture, nullptr, &continueRect);
+	SDL_Rect continueRect = MathManager::ConvertFRect2Rect(next->GetTransform());
+	SDL_RenderCopy(pRenderer, m_pNextTexture, nullptr, &continueRect);
  
 }
 void OfficeState::Resume()
@@ -129,27 +125,6 @@ void OfficeState::Exit()
 {
 	std::cout << "exiting office state" << std::endl;
 
-	delete m_player;
-	m_player = nullptr;
-
-	delete m_trophy;
-	m_trophy = nullptr;
-
-	delete m_maleWorker;
-	m_maleWorker = nullptr;
-
-	delete m_womanWorker;
-	m_womanWorker = nullptr;
-
-	delete m_text;
-	m_text = nullptr;
-
-	delete m_continue;
-	m_continue = nullptr;
-
-  
-	delete m_background;
-	m_background = nullptr;
 
 	SDL_DestroyTexture(m_pPlayerTexture);
 	m_pPlayerTexture = nullptr;
@@ -169,42 +144,12 @@ void OfficeState::Exit()
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
 
-	SDL_DestroyTexture(m_pContinueTexture);
-	m_pContinueTexture = nullptr;
+	SDL_DestroyTexture(m_pNextTexture);
+	m_pNextTexture = nullptr;
 
-}
+	delete next;
+	next = nullptr;
 
-
-void PauseState::Enter()
-{
-	std::cout << "entering pause state" << std::endl;
-}
-void PauseState::Update(float deltaTime)
-{
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))
-	{
-		StateManager::popState;
-	}
-}
-void PauseState::Render()
-{
-	std::cout << "rendering Pause State" << std::endl;
-	//first we render the game state 
-	StateManager::GetStates().front()->Render();
-	//now we render the rest of pause state 
-	SDL_SetRenderDrawBlendMode(Game::GetInstance().GetRenderer(), SDL_BLENDMODE_BLEND);
-	SDL_SetRenderDrawColor(Game::GetInstance().GetRenderer(), 128, 128, 128, 128);
-	SDL_Rect rect = { 256, 128, 512, 512 };
-	SDL_RenderFillRect(Game::GetInstance().GetRenderer(), &rect);
-
-	if (EventManager::KeyPressed(SDL_SCANCODE_R))
-	{
-		StateManager::PushState(new OfficeState());
-	}
-}
-void PauseState::Exit()
-{
-	std::cout << "exiting pause state" << std::endl;
 }
 
 void StreetState::Enter()
@@ -213,17 +158,21 @@ void StreetState::Enter()
 
 	m_pBackground = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/street/streetBackground.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/street/streetText.png");
-	m_pContinueTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/street/pressX.png");
-
-
+	m_pNextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/continue.png");
+	next = new UIButton(800, 650, 200, 100);
 }
 
 void StreetState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_X))//press X to go to game state
+
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to car state" << std::endl;
-		StateManager::ChangeState(new CarState());//change to new game state
+		next->HandleEvent();
+		if (next->CheckIsHovered())
+		{
+			std::cout << "changing to street state" << std::endl;
+			StateManager::ChangeState(new CarState());//change to new car state
+		}
 	}
 }
 
@@ -237,25 +186,22 @@ void StreetState::Render()
 	SDL_Rect textRect = { 250,150, 600,450 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
 
-	SDL_Rect continueRect = { 700,700, 600,450 };
-	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pContinueTexture, NULL, &continueRect);
+	SDL_Rect continueRect = MathManager::ConvertFRect2Rect(next->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pNextTexture, nullptr, &continueRect);
 }
 
 void StreetState::Exit()
 {
 	std::cout << "exiting street state.." << std::endl;
 
-	delete m_background;
-	m_background = nullptr;
-
-	delete m_text;
-	m_text = nullptr;
-
 	SDL_DestroyTexture(m_pBackground);
 	m_pBackground = nullptr;
 
-	SDL_DestroyTexture(m_pTextTexture);
-	m_pTextTexture = nullptr;
+	SDL_DestroyTexture(m_pNextTexture);
+	m_pNextTexture = nullptr;
+
+	delete next;
+	next = nullptr;
 
 }
 
@@ -264,17 +210,23 @@ void CarState::Enter()
 	std::cout << "entering car state.." << std::endl;
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/carDash/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/carDash/wrathText.png");
-	m_pContinueTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/carDash/pressC.png");
+	m_pNextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/continue.png");
+	next = new UIButton(800, 650, 200, 100);
 
 }
 
 void CarState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_C))//press c to go to game state
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to truck state" << std::endl;
-		StateManager::ChangeState(new TruckState());//change to new truck state
+		next->HandleEvent();
+		if (next->CheckIsHovered())
+		{
+			std::cout << "changing to truck state" << std::endl;
+			StateManager::ChangeState(new TruckState());//change to new car state
+		}
 	}
+
 }
 
 void CarState::Render()
@@ -287,8 +239,9 @@ void CarState::Render()
 	SDL_Rect textRect = { 300,50,400,350 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
 
-	SDL_Rect cRect = { 750,700,200,350 };
-	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pContinueTexture, NULL, &cRect);
+	SDL_Rect continueRect = MathManager::ConvertFRect2Rect(next->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pNextTexture, nullptr, &continueRect);
+
 
 }
 
@@ -296,24 +249,17 @@ void CarState::Exit()
 {
 	std::cout << "exiting car state.." << std::endl;
 
-	delete m_background;
-	m_background = nullptr;
-
-	delete m_text;
-	m_text = nullptr;
-
-	delete m_continue;
-	m_continue = nullptr;
-
 	SDL_DestroyTexture(m_pBackgroundTexture);
 	m_pBackgroundTexture = nullptr;
 
 	SDL_DestroyTexture(m_pTextTexture);
 	m_pTextTexture = nullptr;
 
-	SDL_DestroyTexture(m_pContinueTexture);
-	m_pContinueTexture = nullptr;
+	SDL_DestroyTexture(m_pNextTexture);
+	m_pNextTexture = nullptr;
 
+	delete next;
+	next = nullptr;
 
 }
 
@@ -324,16 +270,23 @@ void TruckState::Enter()
 	m_pTruckTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/truck/truck.png");
 	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/truck/background.png");
 	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/truck/truckText.png");
-	m_pPressXTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/prologue/truck/pressX.png");
+	m_pNextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/continue.png");
+	next = new UIButton(800, 650, 200, 100);
+
 }
 
 void TruckState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_X))//press X to go to hell start state state
+	if (EventManager::MousePressed(1))
 	{
-		std::cout << "changing to hell state" << std::endl;
-		StateManager::ChangeState(new HellState());//change to new hell start state
+		next->HandleEvent();
+		if (next->CheckIsHovered())
+		{
+			std::cout << "changing to street state" << std::endl;
+			StateManager::ChangeState(new HellState());//change to new car state
+		}
 	}
+
 }
 
 void TruckState::Render()
@@ -350,26 +303,15 @@ void TruckState::Render()
 	SDL_Rect textRect = { 200,500,700,500 };
 	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
 
-	SDL_Rect xRect = { 750,20,500,500 };
-	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pPressXTexture, NULL, &xRect);
+	SDL_Rect continueRect = MathManager::ConvertFRect2Rect(next->GetTransform());
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pNextTexture, nullptr, &continueRect);
+
 
 }
 
 void TruckState::Exit()
 {
 	std::cout << "exiting truck state.." << std::endl;
-
-	delete m_background;
-	m_background = nullptr;
-
-	delete m_text;
-	m_text = nullptr;
-
-	delete m_pressX;
-	m_pressX = nullptr;
-
-	delete m_truck;
-	m_truck = nullptr;
 
 	SDL_DestroyTexture(m_pBackgroundTexture);
 	m_pBackgroundTexture = nullptr;
@@ -382,6 +324,10 @@ void TruckState::Exit()
 
 	SDL_DestroyTexture(m_pTruckTexture);
 	m_pTruckTexture = nullptr;
+
+	delete next;
+	next = nullptr;
+
 }
 
 //////////////////CHAPTER 1 STATES START////////////////////////////

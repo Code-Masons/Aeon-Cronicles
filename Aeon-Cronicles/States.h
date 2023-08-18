@@ -13,6 +13,10 @@ class State
 public:
 	State() = default;
 	virtual ~State() = default;
+
+	UIButton* next;
+	SDL_Texture* m_pNextTexture;
+
 	//static Game& GetInstance();
 	//criteria for each state each state MUST have the following 
 	virtual void Enter() = 0;//use for initialization of assets
@@ -40,24 +44,6 @@ public:
 
 class OfficeState : public State//first scene of prologue
 {
-	 int lWidth = 2500;
-	 int lHeight = Game::kHeight;
-	static const int kPlayerSpeed = 200;
-	static const int kEnemySpeed = 80;
-	static const int kPlayerJumpForce = -1000;
-	SDL_Rect camera = { 0,0, Game::kWidth, Game::kHeight };
-	SDL_FRect m_rectangleTransform;
-
-	//game objects 
-	GameObject* m_player;
-	GameObject* m_womanWorker;
-	GameObject* m_maleWorker;
-	GameObject* m_trophy;
-	GameObject* m_text;
-	GameObject* m_continue;
-
-	GameObject* m_background;
-
 	//textures
 	SDL_Texture* m_pPlayerTexture;
 	SDL_Texture* m_pWomanWorkerTexture;
@@ -79,12 +65,6 @@ public:
 
 class StreetState : public State//win screen
 {
-
-	GameObject* m_background;
-	GameObject* m_text;
-	GameObject* m_continue;
-
-	SDL_Texture* m_pContinueTexture;
 	SDL_Texture* m_pBackground;
 	SDL_Texture* m_pTextTexture;
 public:
