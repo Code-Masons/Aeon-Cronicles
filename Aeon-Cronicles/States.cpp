@@ -1132,7 +1132,14 @@ void EnvyChoiceState::Enter()
 
 void EnvyChoiceState::Update(float deltaTime)
 {
-	if (Game::GetInstance().KeyDown(SDL_SCANCODE_2))
+
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_1))
+	{
+		std::cout << "changing to envy lose state" << std::endl;
+		StateManager::ChangeState(new EnvyLoseState());
+	}
+
+	else if (Game::GetInstance().KeyDown(SDL_SCANCODE_2))
 	{
 		std::cout << "changing to envy exit state" << std::endl;
 		StateManager::ChangeState(new EnvyExitState());
@@ -1207,6 +1214,47 @@ void EnvyExitState::Exit()
 
 	SDL_DestroyTexture(m_pDevilTexture);
 	m_pDevilTexture = nullptr;
+}
+
+void EnvyLoseState::Enter()
+{
+	std::cout << "entering envy lose state.." << std::endl;
+
+	m_pBackgroundTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/background.png");
+	m_pTextTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), "assets/chapter4/envyLose/text.png");
+}
+
+void EnvyLoseState::Update(float deltaTime)
+{
+	if (Game::GetInstance().KeyDown(SDL_SCANCODE_R))//press R to go to title state
+	{
+		std::cout << "changing to casino choice state" << std::endl;
+		StateManager::ChangeState(new TitleState());//change to new title state
+	}
+}
+
+void EnvyLoseState::Render()
+{
+	std::cout << "rendering envy lose state.." << std::endl;
+
+	SDL_Rect backgroundRect = { 0,0,Game::kWidth,Game::kHeight };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pBackgroundTexture, NULL, &backgroundRect);
+
+	SDL_Rect textRect = { 250,300,500,500 };
+	SDL_RenderCopy(Game::GetInstance().GetRenderer(), m_pTextTexture, NULL, &textRect);
+
+}
+
+void EnvyLoseState::Exit()
+{
+	std::cout << "exiting envy lose state.." << std::endl;
+
+	SDL_DestroyTexture(m_pBackgroundTexture);
+	m_pBackgroundTexture = nullptr;
+
+	SDL_DestroyTexture(m_pTextTexture);
+	m_pTextTexture = nullptr;
+
 }
 
 ////////////////////CHAPTER 7 START//////////////////////////////////
